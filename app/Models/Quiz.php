@@ -14,16 +14,32 @@ class Quiz extends Model
         'time_limit',
     ];
 
+    // -------------------------------------------------------
+    // Relationships
+    // -------------------------------------------------------
+
+    /**
+     * Kelas yang memiliki kuis ini.
+     * Quiz → belongsTo Course
+     */
     public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class);
     }
 
+    /**
+     * Semua soal yang ada di dalam kuis ini.
+     * Quiz → hasMany Question
+     */
     public function questions(): HasMany
     {
         return $this->hasMany(Question::class);
     }
 
+    /**
+     * Semua rekam percobaan pengerjaan kuis ini oleh para siswa.
+     * Quiz → hasMany QuizAttempt
+     */
     public function attempts(): HasMany
     {
         return $this->hasMany(QuizAttempt::class);

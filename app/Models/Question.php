@@ -17,6 +17,14 @@ class Question extends Model
         'correct_option',
     ];
 
+    // -------------------------------------------------------
+    // Relationships
+    // -------------------------------------------------------
+
+    /**
+     * Kuis yang memiliki soal ini.
+     * Question → belongsTo Quiz
+     */
     public function quiz(): BelongsTo
     {
         return $this->belongsTo(Quiz::class);

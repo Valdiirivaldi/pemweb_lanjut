@@ -14,6 +14,14 @@ class Module extends Model
         'pdf_path',
     ];
 
+    // -------------------------------------------------------
+    // Relationships
+    // -------------------------------------------------------
+
+    /**
+     * Kelas yang memiliki modul ini.
+     * Module → belongsTo Course
+     */
     public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class);
