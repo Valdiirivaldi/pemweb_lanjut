@@ -11,8 +11,20 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
+
         $enrolledCourses = $user->enrolledCourses()->latest()->get();
 
-        return view('dashboard', compact('user', 'enrolledCourses'));
+        $quizAttempts = $user->quizAttempts()
+            ->with('quiz.course')
+            ->latest()
+            ->get();
+
+        $certificates = $user->quizAttempts()
+            ->whereNotNull('certificate_path')
+            ->with('quiz.course')
+            ->latest()
+            ->get();
+
+        return view('dashboard', compact('user', 'enrolledCourses', 'quizAttempts', 'certificates'));
     }
 }

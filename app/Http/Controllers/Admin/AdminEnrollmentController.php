@@ -14,6 +14,7 @@ class AdminEnrollmentController extends Controller
     public function index(): View
     {
         $siswa  = User::where('role', 'siswa')->orderBy('name')->get();
+        $tentors = User::where('role', 'tentor')->orderBy('name')->get();
         $courses = Course::with('tentor')->orderBy('title')->get();
 
         $enrollments = \DB::table('course_user')
@@ -30,7 +31,7 @@ class AdminEnrollmentController extends Controller
             ->orderBy('course_user.created_at', 'desc')
             ->get();
 
-        return view('admin.enrollments.index', compact('siswa', 'courses', 'enrollments'));
+        return view('admin.enrollments.index', compact('siswa', 'tentors', 'courses', 'enrollments'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -62,6 +63,24 @@ class AdminEnrollmentController extends Controller
 
         return redirect()->route('admin.enrollments.index')
             ->with('success', 'Akses kelas berhasil diberikan kepada siswa!');
+    }
+
+    public function assignTentor(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'tentor_id' => ['required', 'exists:users,id'],
+            'course_id' => ['required', 'exists:courses,id'],
+        ]);
+
+        $tentor = User::findOrFail($request->tentor_id);
+        abort_if($tentor->role !== 'tentor', 400, 'User yang dipilih bukan tentor.');
+
+        $course = Course::findOrFail($request->course_id);
+        $course->tentor_id = $request->tentor_id;
+        $course->save();
+
+        return redirect()->route('admin.enrollments.index', ['tab' => 'tentor'])
+            ->with('success', 'Tentor berhasil ditugaskan ke kelas "' . $course->title . '".');
     }
 
     public function destroy(int $id): RedirectResponse

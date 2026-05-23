@@ -5,7 +5,11 @@ use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Tentor\CourseController;
 use App\Http\Controllers\Tentor\DashboardController as TentorDashboardController;
+use App\Http\Controllers\Tentor\ModuleController;
+use App\Http\Controllers\Tentor\QuizController;
+use App\Http\Controllers\Tentor\StudentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,9 +21,27 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
-    Route::get('/tentor/dashboard', [TentorDashboardController::class, 'index'])
-        ->middleware('role:tentor')
-        ->name('tentor.dashboard');
+    Route::prefix('tentor')->name('tentor.')->middleware('role:tentor')->group(function () {
+        Route::get('/dashboard', [TentorDashboardController::class, 'index'])
+            ->name('dashboard');
+
+        Route::get('/courses', [CourseController::class, 'index'])
+            ->name('courses.index');
+        Route::get('/courses/create', [CourseController::class, 'create'])
+            ->name('courses.create');
+        Route::post('/courses', [CourseController::class, 'store'])
+            ->name('courses.store');
+        Route::get('/modules', [ModuleController::class, 'index'])
+            ->name('modules.index');
+        Route::get('/quizzes', [QuizController::class, 'index'])
+            ->name('quizzes.index');
+        Route::get('/quizzes/create', [QuizController::class, 'create'])
+            ->name('quizzes.create');
+        Route::post('/quizzes', [QuizController::class, 'store'])
+            ->name('quizzes.store');
+        Route::get('/students', [StudentController::class, 'index'])
+            ->name('students.index');
+    });
 
     Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])
@@ -42,11 +64,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('enrollments.index');
         Route::post('/enrollments', [AdminEnrollmentController::class, 'store'])
             ->name('enrollments.store');
+        Route::post('/enrollments/assign-tentor', [AdminEnrollmentController::class, 'assignTentor'])
+            ->name('enrollments.assign-tentor');
         Route::delete('/enrollments/{id}', [AdminEnrollmentController::class, 'destroy'])
             ->name('enrollments.destroy');
     });
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
