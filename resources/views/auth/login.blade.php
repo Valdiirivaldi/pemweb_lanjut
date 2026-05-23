@@ -493,7 +493,7 @@
                 <span id="errorMessage"></span>
             </div>
 
-            <form id="loginForm" autocomplete="off" novalidate>
+            <form id="loginForm" method="POST" action="{{ route('login') }}" autocomplete="off" novalidate>
                 @csrf
 
                 <div class="floating-group">
@@ -893,9 +893,9 @@
                     return;
                 }
 
-                setLoading(true);
-
                 const formData = new FormData(form);
+
+                setLoading(true);
 
                 fetch('{{ route('login') }}', {
                     method: 'POST',

@@ -149,6 +149,55 @@
             font-weight: 400;
         }
 
+        .topbar .live-clock {
+            font-size: 0.8rem;
+            color: #a0aec0;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            border-left: 1px solid #e2e8f0;
+            padding-left: 12px;
+        }
+
+        /* ── Entrance Animations ── */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .animate-on-scroll.delay-1 { transition-delay: 0.1s; }
+        .animate-on-scroll.delay-2 { transition-delay: 0.2s; }
+        .animate-on-scroll.delay-3 { transition-delay: 0.3s; }
+        .animate-on-scroll.delay-4 { transition-delay: 0.4s; }
+        .animate-on-scroll.delay-5 { transition-delay: 0.5s; }
+
+        /* ── Hover Lift Enhancement ── */
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        /* ── Pulse Dot ── */
+        .pulse-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #1cc88a;
+            margin-right: 6px;
+            animation: pulseDot 2s ease-in-out infinite;
+        }
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
         .topbar-right { display: flex; align-items: center; gap: 16px; }
 
         .topbar .btn-icon {
@@ -392,6 +441,7 @@
                 <h5 class="page-title mb-0">
                     @yield('page-title', 'Dashboard')
                 </h5>
+                <span class="live-clock" id="liveClock"></span>
             </div>
 
             <div class="topbar-right">
@@ -404,7 +454,7 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="border-radius: 14px; border: none; padding: 8px;">
                         <li>
-                            <a class="dropdown-item py-2" href="{{ route('profile.edit') }}">
+                            <a class="dropdown-item py-2" href="{{ route('profile') }}">
                                 <i class="fas fa-user me-2" style="color: #4e73df; width: 18px;"></i>Profile
                             </a>
                         </li>
@@ -442,6 +492,57 @@
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('open');
             document.getElementById('sidebarOverlay').style.display = sidebar.classList.contains('open') ? 'block' : 'none';
+        });
+
+        /* ── Live Clock ── */
+        function updateClock() {
+            var now = new Date();
+            var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            var el = document.getElementById('liveClock');
+            if (el) el.textContent = now.toLocaleDateString('id-ID', options);
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        /* ── Entrance Animation on Scroll ── */
+        document.addEventListener('DOMContentLoaded', function() {
+            var animated = document.querySelectorAll('.animate-on-scroll');
+            if (animated.length) {
+                var observer = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.15 });
+                animated.forEach(function(el) { observer.observe(el); });
+            }
+        });
+
+        /* ── Counter Animation ── */
+        document.addEventListener('DOMContentLoaded', function() {
+            var counters = document.querySelectorAll('.counter-animate');
+            if (counters.length) {
+                var observer = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            var el = entry.target;
+                            var target = parseInt(el.getAttribute('data-target'));
+                            if (target === 0) { el.textContent = '0'; return; }
+                            var current = 0;
+                            var step = Math.max(1, Math.ceil(target / 30));
+                            var interval = setInterval(function() {
+                                current += step;
+                                if (current >= target) { current = target; clearInterval(interval); }
+                                el.textContent = current;
+                            }, 30);
+                            observer.unobserve(el);
+                        }
+                    });
+                }, { threshold: 0.5 });
+                counters.forEach(function(c) { observer.observe(c); });
+            }
         });
     </script>
 
