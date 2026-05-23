@@ -43,6 +43,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('students.index');
     });
 
+    Route::prefix('siswa')->name('siswa.')->middleware('role:siswa')->group(function () {
+        Route::get('/my-courses', [\App\Http\Controllers\Siswa\CourseController::class, 'myCourses'])
+            ->name('my-courses.index');
+
+        Route::get('/courses/{course}/learn', [\App\Http\Controllers\Siswa\CourseController::class, 'learn'])
+            ->name('courses.learn');
+
+        Route::get('/quizzes/{quiz}', [\App\Http\Controllers\Siswa\QuizController::class, 'show'])
+            ->name('quizzes.show');
+
+        Route::post('/quizzes/{quiz}/submit', [\App\Http\Controllers\Siswa\QuizController::class, 'submit'])
+            ->name('quizzes.submit');
+
+        Route::get('/quiz-attempts/{attempt}', [\App\Http\Controllers\Siswa\QuizController::class, 'result'])
+            ->name('quiz-attempts.show');
+    });
+
+
     Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])
             ->name('dashboard');
@@ -76,4 +94,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
