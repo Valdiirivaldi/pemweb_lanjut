@@ -41,6 +41,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('quizzes.store');
         Route::get('/students', [StudentController::class, 'index'])
             ->name('students.index');
+
+        Route::get('/quizzes/{quiz}/questions', [\App\Http\Controllers\Tentor\QuestionController::class, 'index'])
+            ->name('quizzes.questions.index');
+        Route::get('/quizzes/{quiz}/questions/create', [\App\Http\Controllers\Tentor\QuestionController::class, 'create'])
+            ->name('quizzes.questions.create');
+        Route::post('/quizzes/{quiz}/questions', [\App\Http\Controllers\Tentor\QuestionController::class, 'store'])
+            ->name('quizzes.questions.store');
+        Route::get('/quizzes/{quiz}/questions/{question}/edit', [\App\Http\Controllers\Tentor\QuestionController::class, 'edit'])
+            ->name('quizzes.questions.edit');
+        Route::put('/quizzes/{quiz}/questions/{question}', [\App\Http\Controllers\Tentor\QuestionController::class, 'update'])
+            ->name('quizzes.questions.update');
+        Route::delete('/quizzes/{quiz}/questions/{question}', [\App\Http\Controllers\Tentor\QuestionController::class, 'destroy'])
+            ->name('quizzes.questions.destroy');
     });
 
     Route::prefix('siswa')->name('siswa.')->middleware('role:siswa')->group(function () {
@@ -48,7 +61,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('my-courses.index');
 
         Route::get('/courses/{course}/learn', [\App\Http\Controllers\Siswa\CourseController::class, 'learn'])
-            ->name('courses.learn');
+            ->name('courses.learn')
+            ->middleware('role:siswa');
 
         Route::get('/quizzes/{quiz}', [\App\Http\Controllers\Siswa\QuizController::class, 'show'])
             ->name('quizzes.show');

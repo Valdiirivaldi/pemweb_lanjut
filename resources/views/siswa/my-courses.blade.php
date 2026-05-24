@@ -1,4 +1,6 @@
-<x-layouts.dashboard :user="$user">
+@extends('layouts.dashboard')
+
+@section('content')
     <div class="max-w-6xl mx-auto p-6">
         <h1 class="text-2xl font-bold mb-6">Kelas Saya</h1>
 
@@ -12,14 +14,16 @@
                     <div class="bg-white shadow rounded p-4">
                         <h2 class="font-semibold text-lg">{{ $course->title }}</h2>
                         <p class="text-sm text-gray-600 mt-1">Tentor: {{ $course->tentor?->name }}</p>
-                        <div class="text-sm text-gray-600 mt-2">Modul: {{ $course->modules_count ?? 0 }} • Kuis:
-                            {{ $course->quizzes_count ?? 0 }}</div>
-                        <a href="{{ route('siswa.courses.learn', $course) }}"
-                            class="inline-block mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">Masuk
-                            Kelas</a>
+                        <div class="text-sm text-gray-600 mt-2">
+                            Modul: {{ $course->modules_count ?? 0 }} • Kuis: {{ $course->quizzes_count ?? 0 }}
+                        </div>
+
+                        <a href="{{ route('siswa.courses.learn', $course->id) }}" class="btn btn-primary px-4 py-2 mt-4">
+                            Masuk Kelas
+                        </a>
                     </div>
                 @endforeach
             </div>
         @endif
     </div>
-</x-layouts.dashboard>
+@endsection

@@ -3,47 +3,39 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
+    /**
+     * Display the login form.
+     */
     public function showLoginForm()
     {
         return view('auth.login');
     }
 
-    public function login(Request $request): JsonResponse
+    /**
+     * Handle an incoming login request.
+     */
+    public function login(Request $request)
     {
         $request->validate([
-            'email'    => ['required', 'string', 'email'],
-            'password' => ['required', 'string', 'min:8'],
+            'email' => ['required', 'string', 'email'],
+            'password' => ['required', 'string'],
         ]);
 
-        if (Auth::attempt(
-            $request->only('email', 'password'),
-            $request->boolean('remember')
-        )) {
-            $request->session()->regenerate();
+        $credentials = $request->only('email', 'password');
 
-            $user = Auth::user();
-            $redirectUrl = match ($user->role) {
-                'admin'  => '/admin/dashboard',
-                'tentor' => '/tentor/dashboard',
-                default  => '/dashboard',
-            };
-
-            return response()->json([
-                'success'      => true,
-                'message'      => 'Login berhasil!',
-                'redirect_url' => $redirectUrl,
-            ]);
+        if (!Auth::attempt($credentials, $request->boolean('remember'))) {
+            return back()->withErrors([
+                'email' => __('The provided credentials are incorrect.'),
+            ])->withInput($request->only('email'));
         }
 
-        throw ValidationException::withMessages([
-            'email' => 'Kredensial yang Anda masukkan tidak cocok dengan data kami.',
-        ]);
+        $request->session()->regenerate();
+
+        return redirect()->intended('/dashboard');
     }
 }

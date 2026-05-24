@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,7 +14,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -30,9 +35,17 @@
         }
 
         @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         body::before {
@@ -75,9 +88,13 @@
             transition: opacity 0.3s;
         }
 
-        .brand a:hover { opacity: 0.85; }
+        .brand a:hover {
+            opacity: 0.85;
+        }
 
-        .brand a i { margin-right: 10px; }
+        .brand a i {
+            margin-right: 10px;
+        }
 
         .brand p {
             color: rgba(255, 255, 255, 0.7);
@@ -158,8 +175,8 @@
             padding: 0 4px;
         }
 
-        .floating-group .form-control:focus ~ label,
-        .floating-group .form-control:not(:placeholder-shown) ~ label {
+        .floating-group .form-control:focus~label,
+        .floating-group .form-control:not(:placeholder-shown)~label {
             top: 12px;
             transform: translateY(0);
             font-size: 0.75rem;
@@ -167,11 +184,11 @@
             font-weight: 600;
         }
 
-        .floating-group .form-control.is-invalid ~ label {
+        .floating-group .form-control.is-invalid~label {
             color: #e53e3e;
         }
 
-        .floating-group .form-control.is-valid ~ label {
+        .floating-group .form-control.is-valid~label {
             color: #38a169;
         }
 
@@ -227,9 +244,13 @@
             z-index: 5;
         }
 
-        .password-toggle:hover { color: #4e73df; }
+        .password-toggle:hover {
+            color: #4e73df;
+        }
 
-        .password-toggle:focus { outline: none; }
+        .password-toggle:focus {
+            outline: none;
+        }
 
         .password-toggle i {
             transition: transform 0.3s ease, opacity 0.2s ease;
@@ -241,9 +262,20 @@
         }
 
         @keyframes iconPop {
-            0% { transform: scale(1) rotate(0deg); opacity: 1; }
-            50% { transform: scale(0.7) rotate(180deg); opacity: 0.4; }
-            100% { transform: scale(1) rotate(360deg); opacity: 1; }
+            0% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(0.7) rotate(180deg);
+                opacity: 0.4;
+            }
+
+            100% {
+                transform: scale(1) rotate(360deg);
+                opacity: 1;
+            }
         }
 
         .password-strength {
@@ -327,14 +359,26 @@
             animation: spin 0.6s linear infinite;
         }
 
-        .btn-login.loading .spinner { display: inline-block; }
-        .btn-login.loading .btn-text { display: none; }
-        .btn-login.loading .btn-text-loading { display: inline; }
+        .btn-login.loading .spinner {
+            display: inline-block;
+        }
 
-        .btn-text-loading { display: none; }
+        .btn-login.loading .btn-text {
+            display: none;
+        }
+
+        .btn-login.loading .btn-text-loading {
+            display: inline;
+        }
+
+        .btn-text-loading {
+            display: none;
+        }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .alert-error {
@@ -403,8 +447,13 @@
             background: #e2e8f0;
         }
 
-        .divider::before { margin-right: 16px; }
-        .divider::after { margin-left: 16px; }
+        .divider::before {
+            margin-right: 16px;
+        }
+
+        .divider::after {
+            margin-left: 16px;
+        }
 
         .back-link {
             text-align: center;
@@ -422,7 +471,9 @@
             color: #fff;
         }
 
-        .back-link a i { margin-right: 6px; }
+        .back-link a i {
+            margin-right: 6px;
+        }
 
         .toast-notification {
             position: fixed;
@@ -468,10 +519,13 @@
                 padding: 28px 20px 24px;
             }
 
-            .brand a { font-size: 1.6rem; }
+            .brand a {
+                font-size: 1.6rem;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <canvas id="particlesCanvas"></canvas>
@@ -496,15 +550,10 @@
             <form id="loginForm" method="POST" action="{{ route('login') }}" autocomplete="off" novalidate>
                 @csrf
 
+
                 <div class="floating-group">
-                    <input type="email"
-                           class="form-control"
-                           id="email"
-                           name="email"
-                           placeholder="nama@email.com"
-                           autocomplete="email"
-                           autofocus
-                           required>
+                    <input type="email" class="form-control" id="email" name="email"
+                        placeholder="nama@email.com" autocomplete="email" autofocus required>
                     <label for="email">
                         <i class="far fa-envelope me-1"></i>Alamat Email
                     </label>
@@ -515,22 +564,13 @@
                 </div>
 
                 <div class="floating-group">
-                    <input type="password"
-                           class="form-control"
-                           id="password"
-                           name="password"
-                           placeholder="Masukkan password"
-                           autocomplete="current-password"
-                           minlength="8"
-                           required>
+                    <input type="password" class="form-control" id="password" name="password"
+                        placeholder="Masukkan password" autocomplete="current-password" minlength="8" required>
                     <label for="password">
                         <i class="fas fa-lock me-1"></i>Kata Sandi
                     </label>
-                    <button type="button"
-                            class="password-toggle"
-                            id="togglePassword"
-                            tabindex="-1"
-                            aria-label="Tampilkan kata sandi">
+                    <button type="button" class="password-toggle" id="togglePassword" tabindex="-1"
+                        aria-label="Tampilkan kata sandi">
                         <i class="far fa-eye-slash" id="toggleIcon"></i>
                     </button>
                 </div>
@@ -590,23 +630,23 @@
         (function() {
             'use strict';
 
-            const form         = document.getElementById('loginForm');
-            const emailInput   = document.getElementById('email');
-            const passInput    = document.getElementById('password');
-            const toggleBtn    = document.getElementById('togglePassword');
-            const toggleIcon   = document.getElementById('toggleIcon');
-            const loginBtn     = document.getElementById('loginBtn');
-            const errorBox     = document.getElementById('errorContainer');
-            const errorMsg     = document.getElementById('errorMessage');
-            const toast        = document.getElementById('toastNotification');
-            const toastMsg     = document.getElementById('toastMessage');
-            const csrfToken    = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const form = document.getElementById('loginForm');
+            const emailInput = document.getElementById('email');
+            const passInput = document.getElementById('password');
+            const toggleBtn = document.getElementById('togglePassword');
+            const toggleIcon = document.getElementById('toggleIcon');
+            const loginBtn = document.getElementById('loginBtn');
+            const errorBox = document.getElementById('errorContainer');
+            const errorMsg = document.getElementById('errorMessage');
+            const toast = document.getElementById('toastNotification');
+            const toastMsg = document.getElementById('toastMessage');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-            const emailFeedback    = document.getElementById('emailFeedback');
+            const emailFeedback = document.getElementById('emailFeedback');
             const emailFeedbackText = document.getElementById('emailFeedbackText');
-            const strengthFill     = document.getElementById('strengthFill');
-            const strengthLabel    = document.getElementById('strengthLabel');
-            const strengthWrap     = document.getElementById('passwordStrength');
+            const strengthFill = document.getElementById('strengthFill');
+            const strengthLabel = document.getElementById('strengthLabel');
+            const strengthWrap = document.getElementById('passwordStrength');
 
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -621,8 +661,8 @@
                     return;
                 }
 
-                const hasAt   = val.includes('@');
-                const hasDot  = val.includes('.');
+                const hasAt = val.includes('@');
+                const hasDot = val.includes('.');
                 const isValid = emailRegex.test(val);
 
                 if (isValid) {
@@ -672,15 +712,25 @@
                 let pct, color, label;
 
                 if (score <= 1) {
-                    pct = 20; color = '#e53e3e'; label = 'Lemah';
+                    pct = 20;
+                    color = '#e53e3e';
+                    label = 'Lemah';
                 } else if (score === 2) {
-                    pct = 40; color = '#dd6b20'; label = 'Kurang';
+                    pct = 40;
+                    color = '#dd6b20';
+                    label = 'Kurang';
                 } else if (score === 3) {
-                    pct = 60; color = '#d69e2e'; label = 'Sedang';
+                    pct = 60;
+                    color = '#d69e2e';
+                    label = 'Sedang';
                 } else if (score === 4) {
-                    pct = 80; color = '#38a169'; label = 'Kuat';
+                    pct = 80;
+                    color = '#38a169';
+                    label = 'Kuat';
                 } else {
-                    pct = 100; color = '#2f855a'; label = 'Sangat Kuat';
+                    pct = 100;
+                    color = '#2f855a';
+                    label = 'Sangat Kuat';
                 }
 
                 strengthFill.style.width = pct + '%';
@@ -796,7 +846,7 @@
             // ── 5. Animated Eye Toggle ──
             toggleBtn.addEventListener('click', function() {
                 const isPassword = passInput.type === 'password';
-                passInput.type   = isPassword ? 'text' : 'password';
+                passInput.type = isPassword ? 'text' : 'password';
                 toggleIcon.className = isPassword ? 'far fa-eye' : 'far fa-eye-slash';
                 toggleBtn.setAttribute('aria-label',
                     isPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'
@@ -806,7 +856,9 @@
                 void toggleBtn.offsetWidth;
                 toggleBtn.classList.add('animating');
 
-                passInput.focus({ preventScroll: true });
+                passInput.focus({
+                    preventScroll: true
+                });
             });
 
             // ── Clear error on input focus ──
@@ -861,81 +913,35 @@
                 }
             }
 
-            // ── Handle Form Submit (AJAX) ──
+            // ── Handle Form Submit (normal, tanpa AJAX) ──
             form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                hideError();
-
                 const email = emailInput.value.trim();
-                const pass  = passInput.value;
+                const pass = passInput.value;
 
                 if (!email) {
                     showError('Masukkan alamat email Anda.');
                     emailInput.focus();
+                    e.preventDefault();
                     return;
                 }
 
                 if (!emailRegex.test(email)) {
                     showError('Format email tidak valid.');
                     emailInput.focus();
+                    e.preventDefault();
                     return;
                 }
 
-                if (!pass) {
-                    showError('Masukkan kata sandi Anda.');
-                    passInput.focus();
-                    return;
-                }
-
-                if (pass.length < 8) {
+                if (!pass || pass.length < 8) {
                     showError('Kata sandi minimal 8 karakter.');
                     passInput.focus();
+                    e.preventDefault();
                     return;
                 }
 
-                const formData = new FormData(form);
-
-                setLoading(true);
-
-                fetch('{{ route('login') }}', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken,
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json',
-                    },
-                    body: formData,
-                })
-                .then(function(res) {
-                    return res.json().then(function(data) {
-                        return { status: res.status, data: data };
-                    });
-                })
-                .then(function(result) {
-                    setLoading(false);
-
-                    if (result.status === 422) {
-                        const errors = result.data.errors;
-                        const firstError = errors ? Object.values(errors)[0][0] : 'Email atau password salah.';
-                        showError(firstError);
-                        return;
-                    }
-
-                    if (result.data.success) {
-                        showToast(result.data.message || 'Login berhasil!', false);
-                        setTimeout(function() {
-                            window.location.href = result.data.redirect_url;
-                        }, 600);
-                    } else {
-                        showError(result.data.message || 'Terjadi kesalahan. Silakan coba lagi.');
-                    }
-                })
-                .catch(function(err) {
-                    setLoading(false);
-                    showError('Terjadi kesalahan jaringan. Silakan coba lagi.');
-                    console.error('Login error:', err);
-                });
+                // Tidak ada preventDefault jika valid -> biarkan Laravel menangani redirect.
             });
+
 
             [emailInput, passInput].forEach(function(input) {
                 input.addEventListener('keydown', function(e) {
@@ -949,4 +955,5 @@
     </script>
 
 </body>
+
 </html>

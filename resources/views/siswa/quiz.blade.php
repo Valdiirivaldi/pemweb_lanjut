@@ -1,4 +1,4 @@
-<x-layouts.dashboard :user="$user">
+<x-app-layout>
     <div class="max-w-3xl mx-auto p-6">
         <div class="flex items-center justify-between">
             <a href="{{ route('siswa.courses.learn', $quiz->course) }}"
@@ -96,4 +96,4 @@
             }, 1000);
         })();
     </script>
-</x-layouts.dashboard>
+</x-app-layout>

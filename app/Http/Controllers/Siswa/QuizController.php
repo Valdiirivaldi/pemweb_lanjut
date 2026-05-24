@@ -27,7 +27,8 @@ class QuizController extends Controller
 
 
 
-        $quiz->load(['questions']);
+        // Pastikan relasi questions tersedia untuk view.
+        $quiz->load('questions');
 
         // Buat attempt baru saat siswa mulai quiz (jika sudah ada, tampilkan yang terakhir)
         $attempt = QuizAttempt::where('siswa_id', $user->id)

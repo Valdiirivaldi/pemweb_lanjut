@@ -1,4 +1,4 @@
-<x-layouts.dashboard :user="$user">
+<x-app-layout> 
     <div class="max-w-3xl mx-auto p-6">
         <a href="{{ route('siswa.courses.learn', $attempt->quiz->course) }}"
             class="text-sm text-gray-600 hover:underline">&larr; Kembali</a>
@@ -32,4 +32,4 @@
             @endif
         </div>
     </div>
-</x-layouts.dashboard>
+    </x-layouts.dashboard>
