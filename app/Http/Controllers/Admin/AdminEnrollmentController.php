@@ -51,7 +51,7 @@ class AdminEnrollmentController extends Controller
 
         if ($exists) {
             return redirect()->route('admin.enrollments.index')
-                ->with('error', 'Siswa sudah terdaftar di kelas ini.');
+                ->with('error', __('messages.enrollment.exists'));
         }
 
         \DB::table('course_user')->insert([
@@ -62,7 +62,7 @@ class AdminEnrollmentController extends Controller
         ]);
 
         return redirect()->route('admin.enrollments.index')
-            ->with('success', 'Akses kelas berhasil diberikan kepada siswa!');
+            ->with('success', __('messages.enrollment.granted'));
     }
 
     public function assignTentor(Request $request): RedirectResponse
@@ -80,7 +80,7 @@ class AdminEnrollmentController extends Controller
         $course->save();
 
         return redirect()->route('admin.enrollments.index', ['tab' => 'tentor'])
-            ->with('success', 'Tentor berhasil ditugaskan ke kelas "' . $course->title . '".');
+            ->with('success', __('messages.enrollment.assigned', ['course' => $course->title]));
     }
 
     public function destroy(int $id): RedirectResponse
@@ -88,6 +88,6 @@ class AdminEnrollmentController extends Controller
         \DB::table('course_user')->where('id', $id)->delete();
 
         return redirect()->route('admin.enrollments.index')
-            ->with('success', 'Enrollment berhasil dihapus.');
+            ->with('success', __('messages.enrollment.deleted'));
     }
 }

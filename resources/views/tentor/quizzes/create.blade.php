@@ -1,23 +1,23 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Buat Kuis - Eduria')
-@section('page-title', 'Buat Kuis Baru')
+@section('title', 'Create Quiz - Eduria')
+@section('page-title', 'Create New Quiz')
 
 @section('sidebar-menu')
     <a href="{{ route('tentor.dashboard') }}" class="nav-link">
         <i class="fas fa-chart-pie"></i>Dashboard
     </a>
     <a href="{{ route('tentor.courses.index') }}" class="nav-link">
-        <i class="fas fa-book"></i>Course Saya
+        <i class="fas fa-book"></i>My Courses
     </a>
     <a href="{{ route('tentor.modules.index') }}" class="nav-link">
-        <i class="fas fa-layer-group"></i>Modul
+        <i class="fas fa-layer-group"></i>Modules
     </a>
     <a href="{{ route('tentor.quizzes.index') }}" class="nav-link active">
-        <i class="fas fa-question-circle"></i>Kuis & Bank Soal
+        <i class="fas fa-question-circle"></i>Quizzes
     </a>
     <a href="{{ route('tentor.students.index') }}" class="nav-link">
-        <i class="fas fa-users"></i>Peserta
+        <i class="fas fa-users"></i>Participants
     </a>
     <a href="{{ route('profile') }}" class="nav-link">
         <i class="fas fa-user-cog"></i>Profile
@@ -89,7 +89,7 @@
         <div class="col-lg-8">
             <div class="content-card shadow-sm">
                 <div class="card-header">
-                    <span><i class="fas fa-plus-circle me-2"></i>Form Kuis Baru</span>
+                    <span><i class="fas fa-plus-circle me-2"></i>New Quiz Form</span>
                 </div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('tentor.quizzes.store') }}">
@@ -97,7 +97,7 @@
 
                         <div class="mb-4">
                             <label for="course_id" class="form-label-custom">
-                                <i class="fas fa-book me-1" style="color: #4e73df;"></i>Pilih Course
+                                <i class="fas fa-book me-1" style="color: #4e73df;"></i>Select Course
                             </label>
                             <div class="input-wrap">
                                 <i class="fas fa-folder-open icon-input"></i>
@@ -105,7 +105,7 @@
                                         id="course_id"
                                         name="course_id"
                                         required>
-                                    <option value="">-- Pilih Course --</option>
+                                    <option value="">-- Select Course --</option>
                                     @foreach ($courses as $course)
                                         <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
                                             {{ $course->title }}
@@ -120,7 +120,7 @@
 
                         <div class="mb-4">
                             <label for="title" class="form-label-custom">
-                                <i class="fas fa-heading me-1" style="color: #4e73df;"></i>Judul Kuis
+                                <i class="fas fa-heading me-1" style="color: #4e73df;"></i>Quiz Title
                             </label>
                             <div class="input-wrap">
                                 <i class="fas fa-question-circle icon-input"></i>
@@ -129,7 +129,7 @@
                                        id="title"
                                        name="title"
                                        value="{{ old('title') }}"
-                                       placeholder="cth: Ujian Tengah Semester"
+                                       placeholder="e.g., Midterm Exam"
                                        required>
                             </div>
                             @error('title')
@@ -139,7 +139,7 @@
 
                         <div class="mb-4">
                             <label for="time_limit" class="form-label-custom">
-                                <i class="fas fa-clock me-1" style="color: #4e73df;"></i>Batas Waktu (menit)
+                                <i class="fas fa-clock me-1" style="color: #4e73df;"></i>Time Limit (minutes)
                             </label>
                             <div class="input-wrap">
                                 <i class="fas fa-hourglass-half icon-input"></i>
@@ -156,17 +156,17 @@
                                 <small class="text-danger mt-1 d-block">{{ $message }}</small>
                             @enderror
                             <small class="text-muted mt-1 d-block" style="font-size: 0.8rem;">
-                                <i class="fas fa-info-circle me-1"></i>Waktu pengerjaan kuis dalam menit. Contoh: 60 = 1 jam.
+                                <i class="fas fa-info-circle me-1"></i>Quiz duration in minutes. Example: 60 = 1 hour.
                             </small>
                         </div>
 
                         <div class="d-flex gap-3 mt-4">
                             <a href="{{ route('tentor.quizzes.index') }}"
                                class="btn btn-outline-secondary btn-secondary-custom px-4">
-                                <i class="fas fa-arrow-left me-1"></i>Kembali
+                                <i class="fas fa-arrow-left me-1"></i>Back
                             </a>
                             <button type="submit" class="btn btn-primary btn-primary-custom flex-grow-1">
-                                <i class="fas fa-check-circle me-2"></i>Simpan Kuis
+                                <i class="fas fa-check-circle me-2"></i>Save Quiz
                             </button>
                         </div>
                     </form>

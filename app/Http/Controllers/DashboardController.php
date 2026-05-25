@@ -12,6 +12,10 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
+        if ($user->role === 'siswa') {
+            return redirect()->route('siswa.dashboard');
+        }
+
         $enrolledCourses = $user->enrolledCourses()->latest()->get();
 
         $quizAttempts = $user->quizAttempts()

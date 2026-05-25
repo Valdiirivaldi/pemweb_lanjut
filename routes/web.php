@@ -9,6 +9,10 @@ use App\Http\Controllers\Tentor\CourseController;
 use App\Http\Controllers\Tentor\DashboardController as TentorDashboardController;
 use App\Http\Controllers\Tentor\ModuleController;
 use App\Http\Controllers\Tentor\QuizController;
+use App\Http\Controllers\Student\CertificateController as StudentCertificateController;
+use App\Http\Controllers\Student\CourseController as StudentCourseController;
+use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
+use App\Http\Controllers\Student\QuizController as StudentQuizController;
 use App\Http\Controllers\Tentor\StudentController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +35,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('courses.create');
         Route::post('/courses', [CourseController::class, 'store'])
             ->name('courses.store');
+        Route::get('/courses/{course}', [CourseController::class, 'show'])
+            ->name('courses.show');
+        Route::get('/modules/create', [ModuleController::class, 'create'])
+            ->name('modules.create');
+        Route::post('/modules', [ModuleController::class, 'store'])
+            ->name('modules.store');
+        Route::get('/modules/{module}/edit', [ModuleController::class, 'edit'])
+            ->name('modules.edit');
+        Route::put('/modules/{module}', [ModuleController::class, 'update'])
+            ->name('modules.update');
+        Route::delete('/modules/{module}', [ModuleController::class, 'destroy'])
+            ->name('modules.destroy');
         Route::get('/modules', [ModuleController::class, 'index'])
             ->name('modules.index');
         Route::get('/quizzes', [QuizController::class, 'index'])
@@ -68,6 +84,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('enrollments.assign-tentor');
         Route::delete('/enrollments/{id}', [AdminEnrollmentController::class, 'destroy'])
             ->name('enrollments.destroy');
+    });
+
+    Route::prefix('siswa')->name('siswa.')->middleware('role:siswa')->group(function () {
+        Route::get('/dashboard', [StudentDashboardController::class, 'index'])
+            ->name('dashboard');
+        Route::get('/courses', [StudentCourseController::class, 'index'])
+            ->name('courses.index');
+        Route::post('/courses/enroll', [StudentCourseController::class, 'enroll'])
+            ->name('courses.enroll');
+        Route::get('/courses/{course}/learn', [StudentCourseController::class, 'learn'])
+            ->name('courses.learn');
+        Route::get('/quizzes', [StudentQuizController::class, 'index'])
+            ->name('quizzes.index');
+        Route::get('/certificates', [StudentCertificateController::class, 'index'])
+            ->name('certificates.index');
     });
 
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');

@@ -42,7 +42,7 @@ class AdminUserController extends Controller
         ]);
 
         return redirect()->route('admin.users.index')
-            ->with('success', 'Akun berhasil ditambahkan.');
+            ->with('success', __('messages.account.created'));
     }
 
     public function edit(int $id): View
@@ -78,7 +78,7 @@ class AdminUserController extends Controller
         $user->update($data);
 
         return redirect()->route('admin.users.index')
-            ->with('success', 'Akun berhasil diperbarui.');
+            ->with('success', __('messages.account.updated'));
     }
 
     public function destroy(int $id): RedirectResponse
@@ -89,6 +89,6 @@ class AdminUserController extends Controller
         $user->delete();
 
         return redirect()->route('admin.users.index')
-            ->with('success', 'Akun berhasil dihapus.');
+            ->with('success', __('messages.account.deleted'));
     }
 }

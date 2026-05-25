@@ -425,7 +425,7 @@
             <a href="{{ route('logout') }}"
                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                style="color: rgba(255,255,255,0.4); font-size: 1.1rem;"
-               title="Keluar">
+               title="Logout">
                 <i class="fas fa-right-from-bracket"></i>
             </a>
         </div>
@@ -463,7 +463,7 @@
                             <form method="POST" action="{{ route('logout') }}" id="logout-form">
                                 @csrf
                                 <button type="submit" class="dropdown-item py-2 text-danger">
-                                    <i class="fas fa-right-from-bracket me-2" style="width: 18px;"></i>Keluar
+                                    <i class="fas fa-right-from-bracket me-2" style="width: 18px;"></i>Logout
                                 </button>
                             </form>
                         </li>
@@ -499,7 +499,7 @@
             var now = new Date();
             var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
             var el = document.getElementById('liveClock');
-            if (el) el.textContent = now.toLocaleDateString('id-ID', options);
+            if (el) el.textContent = now.toLocaleDateString('en-US', options);
         }
         updateClock();
         setInterval(updateClock, 1000);

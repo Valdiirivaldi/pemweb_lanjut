@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Tentor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\Module;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class CourseController extends Controller
@@ -38,6 +40,21 @@ class CourseController extends Controller
         ]);
 
         return redirect()->route('tentor.courses.index')
-            ->with('success', 'Course berhasil dibuat!');
+            ->with('success', __('messages.course.created'));
+    }
+
+    public function show(Course $course): View
+    {
+        $user = Auth::user();
+
+        if ($course->tentor_id !== $user->id) {
+            abort(403);
+        }
+
+        $course->load(['modules' => function ($q) {
+            $q->latest();
+        }]);
+
+        return view('tentor.courses.show', compact('user', 'course'));
     }
 }

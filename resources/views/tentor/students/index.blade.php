@@ -1,23 +1,23 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Peserta - Eduria')
-@section('page-title', 'Peserta')
+@section('title', 'Participants - Eduria')
+@section('page-title', 'Participants')
 
 @section('sidebar-menu')
     <a href="{{ route('tentor.dashboard') }}" class="nav-link">
         <i class="fas fa-chart-pie"></i>Dashboard
     </a>
     <a href="{{ route('tentor.courses.index') }}" class="nav-link">
-        <i class="fas fa-book"></i>Course Saya
+        <i class="fas fa-book"></i>My Courses
     </a>
     <a href="{{ route('tentor.modules.index') }}" class="nav-link">
-        <i class="fas fa-layer-group"></i>Modul
+        <i class="fas fa-layer-group"></i>Modules
     </a>
     <a href="{{ route('tentor.quizzes.index') }}" class="nav-link">
-        <i class="fas fa-question-circle"></i>Kuis & Bank Soal
+        <i class="fas fa-question-circle"></i>Quizzes
     </a>
     <a href="{{ route('tentor.students.index') }}" class="nav-link active">
-        <i class="fas fa-users"></i>Peserta
+        <i class="fas fa-users"></i>Participants
     </a>
     <a href="{{ route('profile') }}" class="nav-link">
         <i class="fas fa-user-cog"></i>Profile
@@ -27,8 +27,8 @@
 @section('content')
     <div class="content-card shadow-sm">
         <div class="card-header">
-            <span>Daftar Siswa Terdaftar</span>
-            <span class="badge bg-primary rounded-pill">{{ $students->count() }} Siswa</span>
+            <span>Enrolled Students</span>
+            <span class="badge bg-primary rounded-pill">{{ $students->count() }} Students</span>
         </div>
         <div class="card-body p-0">
             @if ($students->count() > 0)
@@ -36,10 +36,10 @@
                     <table class="table table-hover mb-0" style="font-size: 0.9rem;">
                         <thead class="table-light">
                             <tr>
-                                <th>Nama</th>
+                                <th>Name</th>
                                 <th>Email</th>
                                 <th>Course</th>
-                                <th>Bergabung</th>
+                                <th>Joined</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -61,8 +61,8 @@
             @else
                 <div class="empty-state">
                     <i class="fas fa-users"></i>
-                    <h6>Belum ada peserta</h6>
-                    <p>Belum ada siswa yang terdaftar di course anda. Enrollment siswa dapat diatur oleh Admin.</p>
+                    <h6>No participants yet</h6>
+                    <p>No students are enrolled in your courses yet. Student enrollment can be managed by Admin.</p>
                 </div>
             @endif
         </div>

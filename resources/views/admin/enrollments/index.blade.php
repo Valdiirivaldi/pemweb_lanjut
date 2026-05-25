@@ -1,8 +1,8 @@
 @php
     $sidebarMenus = [
         ['route' => 'admin.dashboard', 'label' => 'Dashboard', 'icon' => 'fa-chart-pie'],
-        ['route' => 'admin.users.index', 'label' => 'Kelola Pengguna', 'icon' => 'fa-users'],
-        ['route' => 'admin.enrollments.index', 'label' => 'Enrollment Kelas', 'icon' => 'fa-user-graduate', 'active' => true],
+        ['route' => 'admin.users.index', 'label' => 'Manage Users', 'icon' => 'fa-users'],
+        ['route' => 'admin.enrollments.index', 'label' => 'Class Enrollment', 'icon' => 'fa-user-graduate', 'active' => true],
         ['route' => 'profile', 'label' => 'Profile', 'icon' => 'fa-user-cog'],
     ];
 
@@ -11,8 +11,8 @@
 
 @extends('layouts.dashboard')
 
-@section('title', 'Enrollment Kelas - Eduria')
-@section('page-title', 'Enrollment Kelas')
+@section('title', 'Class Enrollment - Eduria')
+@section('page-title', 'Class Enrollment')
 
 @section('sidebar-menu')
     @foreach ($sidebarMenus as $menu)
@@ -82,11 +82,11 @@
     <div class="enrollment-tabs">
         <a href="{{ route('admin.enrollments.index', ['tab' => 'siswa']) }}"
            class="tab-btn {{ $activeTab === 'siswa' ? 'active' : '' }}">
-            <i class="fas fa-user-graduate"></i> Enrollment Siswa
+            <i class="fas fa-user-graduate"></i> Student Enrollment
         </a>
         <a href="{{ route('admin.enrollments.index', ['tab' => 'tentor']) }}"
            class="tab-btn {{ $activeTab === 'tentor' ? 'active' : '' }}">
-            <i class="fas fa-chalkboard-teacher"></i> Enrollment Tentor
+            <i class="fas fa-chalkboard-teacher"></i> Tentor Assignment
         </a>
     </div>
 
@@ -96,7 +96,7 @@
             <div class="col-lg-5">
                 <div class="content-card shadow-sm">
                     <div class="card-header">
-                        <span><i class="fas fa-plus-circle me-2"></i>Berikan Akses Kelas</span>
+                        <span><i class="fas fa-plus-circle me-2"></i>Grant Class Access</span>
                     </div>
                     <div class="card-body">
                         <form method="POST" action="{{ route('admin.enrollments.store') }}">
@@ -104,12 +104,12 @@
 
                             <div class="mb-3">
                                 <label for="user_id" class="form-label fw-semibold" style="color: #2d3748; font-size: 0.9rem;">
-                                    Nama Siswa
+                                    Student Name
                                 </label>
                                 <select class="form-select @error('user_id') is-invalid @enderror"
                                         id="user_id" name="user_id" required
                                         style="height: 48px; border-radius: 12px; font-size: 0.9rem;">
-                                    <option value="">-- Pilih Siswa --</option>
+                                    <option value="">-- Select Student --</option>
                                     @foreach ($siswa as $s)
                                         <option value="{{ $s->id }}" {{ old('user_id') == $s->id ? 'selected' : '' }}>
                                             {{ $s->name }} ({{ $s->email }})
@@ -123,12 +123,12 @@
 
                             <div class="mb-3">
                                 <label for="course_id" class="form-label fw-semibold" style="color: #2d3748; font-size: 0.9rem;">
-                                    Nama Kelas
+                                    Course Name
                                 </label>
                                 <select class="form-select @error('course_id') is-invalid @enderror"
                                         id="course_id" name="course_id" required
                                         style="height: 48px; border-radius: 12px; font-size: 0.9rem;">
-                                    <option value="">-- Pilih Kelas --</option>
+                                    <option value="">-- Select Course --</option>
                                     @foreach ($courses as $c)
                                         <option value="{{ $c->id }}" {{ old('course_id') == $c->id ? 'selected' : '' }}>
                                             {{ $c->title }} (Tentor: {{ $c->tentor->name ?? '-' }})
@@ -142,7 +142,7 @@
 
                             <button type="submit" class="btn btn-primary w-100"
                                     style="border-radius: 12px; height: 48px; font-weight: 700;">
-                                <i class="fas fa-check-circle me-2"></i>Berikan Akses
+                                <i class="fas fa-check-circle me-2"></i>Grant Access
                             </button>
                         </form>
                     </div>
@@ -152,7 +152,7 @@
             <div class="col-lg-7">
                 <div class="content-card shadow-sm">
                     <div class="card-header">
-                        <span><i class="fas fa-list me-2"></i>Daftar Enrollment</span>
+                        <span><i class="fas fa-list me-2"></i>Enrollment List</span>
                         <span class="badge bg-primary rounded-pill">{{ count($enrollments) }}</span>
                     </div>
                     <div class="card-body p-0">
@@ -162,10 +162,10 @@
                                     <thead class="table-light">
                                         <tr>
                                             <th>#</th>
-                                            <th>Siswa</th>
-                                            <th>Kelas</th>
-                                            <th>Tanggal Enrollment</th>
-                                            <th style="width: 60px;">Aksi</th>
+                                            <th>Student</th>
+                                            <th>Course</th>
+                                            <th>Enrollment Date</th>
+                                            <th style="width: 60px;">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -178,7 +178,7 @@
                                                 <td>
                                                     <form action="{{ route('admin.enrollments.destroy', $en->id) }}"
                                                           method="POST"
-                                                          onsubmit="return confirm('Hapus enrollment ini?')">
+                                                          onsubmit="return confirm('Delete this enrollment?')">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit"
@@ -197,8 +197,8 @@
                         @else
                             <div class="empty-state">
                                 <i class="fas fa-user-graduate"></i>
-                                <h6>Belum ada enrollment</h6>
-                                <p>Belum ada siswa yang terdaftar di kelas manapun. Gunakan form di samping untuk memberikan akses.</p>
+                                <h6>No enrollments yet</h6>
+                                <p>No students are enrolled in any classes yet. Use the form to grant access.</p>
                             </div>
                         @endif
                     </div>
@@ -211,7 +211,7 @@
             <div class="col-lg-5">
                 <div class="content-card shadow-sm">
                     <div class="card-header">
-                        <span><i class="fas fa-chalkboard-teacher me-2"></i>Tugaskan Tentor ke Kelas</span>
+                        <span><i class="fas fa-chalkboard-teacher me-2"></i>Assign Tentor to Course</span>
                     </div>
                     <div class="card-body">
                         <form method="POST" action="{{ route('admin.enrollments.assign-tentor') }}">
@@ -219,12 +219,12 @@
 
                             <div class="mb-3">
                                 <label for="tentor_id" class="form-label fw-semibold" style="color: #2d3748; font-size: 0.9rem;">
-                                    Pilih Tentor
+                                    Select Tentor
                                 </label>
                                 <select class="form-select @error('tentor_id') is-invalid @enderror"
                                         id="tentor_id" name="tentor_id" required
                                         style="height: 48px; border-radius: 12px; font-size: 0.9rem;">
-                                    <option value="">-- Pilih Tentor --</option>
+                                    <option value="">-- Select Tentor --</option>
                                     @foreach ($tentors as $t)
                                         <option value="{{ $t->id }}" {{ old('tentor_id') == $t->id ? 'selected' : '' }}>
                                             {{ $t->name }} ({{ $t->email }})
@@ -238,12 +238,12 @@
 
                             <div class="mb-3">
                                 <label for="course_id_tentor" class="form-label fw-semibold" style="color: #2d3748; font-size: 0.9rem;">
-                                    Pilih Kelas
+                                    Select Course
                                 </label>
                                 <select class="form-select @error('course_id') is-invalid @enderror"
                                         id="course_id_tentor" name="course_id" required
                                         style="height: 48px; border-radius: 12px; font-size: 0.9rem;">
-                                    <option value="">-- Pilih Kelas --</option>
+                                    <option value="">-- Select Course --</option>
                                     @foreach ($courses as $c)
                                         <option value="{{ $c->id }}" {{ old('course_id') == $c->id ? 'selected' : '' }}>
                                             {{ $c->title }}
@@ -257,7 +257,7 @@
 
                             <button type="submit" class="btn btn-primary w-100"
                                     style="border-radius: 12px; height: 48px; font-weight: 700;">
-                                <i class="fas fa-check-circle me-2"></i>Tugaskan Tentor
+                                <i class="fas fa-check-circle me-2"></i>Assign Tentor
                             </button>
                         </form>
                     </div>
@@ -267,7 +267,7 @@
             <div class="col-lg-7">
                 <div class="content-card shadow-sm">
                     <div class="card-header">
-                        <span><i class="fas fa-list me-2"></i>Daftar Kelas & Tentor</span>
+                        <span><i class="fas fa-list me-2"></i>Courses & Tentors</span>
                         <span class="badge bg-primary rounded-pill">{{ count($courses) }}</span>
                     </div>
                     <div class="card-body p-0">
@@ -277,9 +277,9 @@
                                     <thead class="table-light">
                                         <tr>
                                             <th>#</th>
-                                            <th>Nama Kelas</th>
-                                            <th>Tentor Pengampu</th>
-                                            <th>Dibuat</th>
+                                            <th>Course Name</th>
+                                            <th>Assigned Tentor</th>
+                                            <th>Created</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -294,7 +294,7 @@
                                                         </span>
                                                     @else
                                                         <span class="badge bg-secondary bg-opacity-10 text-secondary">
-                                                            <i class="fas fa-times me-1"></i>Belum ada tentor
+                                                            <i class="fas fa-times me-1"></i>No tentor
                                                         </span>
                                                     @endif
                                                 </td>
@@ -307,8 +307,8 @@
                         @else
                             <div class="empty-state">
                                 <i class="fas fa-book"></i>
-                                <h6>Belum ada kelas</h6>
-                                <p>Belum ada kelas yang tersedia di sistem.</p>
+                                <h6>No courses yet</h6>
+                                <p>No courses available in the system.</p>
                             </div>
                         @endif
                     </div>

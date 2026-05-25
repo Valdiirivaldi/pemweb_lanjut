@@ -51,6 +51,6 @@ class QuizController extends Controller
         ]);
 
         return redirect()->route('tentor.quizzes.index')
-            ->with('success', 'Kuis berhasil dibuat!');
+            ->with('success', __('messages.quiz.created'));
     }
 }

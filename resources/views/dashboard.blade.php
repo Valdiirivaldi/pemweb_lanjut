@@ -1,20 +1,20 @@
 @extends('layouts.dashboard')
 
 @section('title', 'Dashboard - Eduria')
-@section('page-title', 'Dashboard Siswa')
+@section('page-title', 'Student Dashboard')
 
 @section('sidebar-menu')
     <a href="{{ route('dashboard') }}" class="nav-link active">
         <i class="fas fa-chart-pie"></i>Dashboard
     </a>
     <a href="#" class="nav-link sidebar-tab-link" data-target="#tab-kelas">
-        <i class="fas fa-book"></i>Kelas Saya
+        <i class="fas fa-book"></i>My Courses
     </a>
     <a href="#" class="nav-link sidebar-tab-link" data-target="#tab-riwayat">
-        <i class="fas fa-history"></i>Riwayat Kuis
+        <i class="fas fa-history"></i>Quiz History
     </a>
     <a href="#" class="nav-link sidebar-tab-link" data-target="#tab-sertifikat">
-        <i class="fas fa-certificate"></i>Sertifikat
+        <i class="fas fa-certificate"></i>Certificates
     </a>
     <a href="{{ route('profile') }}" class="nav-link">
         <i class="fas fa-user-cog"></i>Profile
@@ -198,9 +198,9 @@
                     <i class="fas fa-graduation-cap" style="font-size: 2.5rem; opacity: 0.3;"></i>
                 </div>
                 <div>
-                    <h4 class="fw-bold mb-1" style="color: #fff;" id="siswaGreeting">Selamat Datang, {{ $user->name }}!</h4>
+                    <h4 class="fw-bold mb-1" style="color: #fff;" id="siswaGreeting">Welcome, {{ $user->name }}!</h4>
                     <p class="mb-0" style="color: rgba(255,255,255,0.7); font-size: 0.9rem;" id="siswaGreetingMsg">
-                        Terus semangat belajar dan raih prestasi terbaikmu!
+                        Keep learning and reach your best achievements!
                     </p>
                 </div>
             </div>
@@ -215,7 +215,7 @@
                         <div class="stat-number">
                             <span class="counter-animate" data-target="{{ $enrolledCourses->count() }}">0</span>
                         </div>
-                        <div class="stat-label">Kelas Terdaftar</div>
+                        <div class="stat-label">Enrolled Courses</div>
                     </div>
                 </div>
             </div>
@@ -227,15 +227,15 @@
         <div class="tab-nav-container px-3 pt-3">
             <button class="tab-btn active" data-target="#tab-kelas">
                 <i class="fas fa-book"></i>
-                Kelas Saya
+                My Courses
             </button>
             <button class="tab-btn" data-target="#tab-riwayat">
                 <i class="fas fa-history"></i>
-                Riwayat Kuis
+                Quiz History
             </button>
             <button class="tab-btn" data-target="#tab-sertifikat">
                 <i class="fas fa-certificate"></i>
-                Sertifikat
+                Certificates
             </button>
         </div>
 
@@ -264,8 +264,8 @@
                                             <small class="text-muted">
                                                 <i class="far fa-calendar-alt me-1"></i>{{ $course->created_at->format('d M Y') }}
                                             </small>
-                                            <a href="#" class="btn btn-sm btn-primary rounded-pill px-3">
-                                                Masuk Kelas
+                                            <a href="{{ route('siswa.courses.learn', $course->id) }}" class="btn btn-sm btn-primary rounded-pill px-3">
+                                                Enter Class
                                             </a>
                                         </div>
                                     </div>
@@ -278,8 +278,8 @@
                         <div class="empty-state-img">
                             <i class="fas fa-book-open"></i>
                         </div>
-                        <h6>Kelas Anda masih kosong</h6>
-                        <p>Silakan hubungi Admin untuk aktivasi akses kelas.</p>
+                        <h6>You have no courses yet</h6>
+                        <p>Please contact Admin to activate class access.</p>
                     </div>
                 @endif
             </div>
@@ -320,8 +320,8 @@
                         <div class="empty-state-img">
                             <i class="fas fa-pencil-alt"></i>
                         </div>
-                        <h6>Tidak ada kuis</h6>
-                        <p>Kamu belum mengerjakan kuis apapun. Ikuti pembelajaran di kelas untuk memulai kuis.</p>
+                        <h6>No quizzes yet</h6>
+                        <p>You haven't taken any quizzes yet. Follow your courses to start.</p>
                     </div>
                 @endif
             </div>
@@ -336,7 +336,7 @@
                             </div>
                             <div class="flex-grow-1 min-width-0">
                                 <div class="cert-title text-truncate">
-                                    {{ $cert->quiz->title ?? 'Sertifikat' }}
+                                    {{ $cert->quiz->title ?? 'Certificate' }}
                                 </div>
                                 <div class="cert-meta mt-1">
                                     <i class="far fa-calendar-alt me-1"></i>
@@ -350,7 +350,7 @@
                                class="btn btn-primary btn-download"
                                target="_blank"
                                download>
-                                <i class="fas fa-download me-1"></i> Unduh
+                                <i class="fas fa-download me-1"></i> Download
                             </a>
                         </div>
                     </div>
@@ -359,8 +359,8 @@
                         <div class="empty-state-img">
                             <i class="fas fa-certificate"></i>
                         </div>
-                        <h6>Belum ada sertifikat</h6>
-                        <p>Selesaikan kuis dengan nilai lulus untuk mendapatkan sertifikat kelulusan.</p>
+                        <h6>No certificates yet</h6>
+                        <p>Complete quizzes with a passing score to earn your certificate.</p>
                     </div>
                 @endforelse
             </div>
@@ -378,20 +378,20 @@
         var msgEl = document.getElementById('siswaGreetingMsg');
         if (greetingEl) {
             var name = greetingEl.textContent.split(', ').pop() || '';
-            var greet = 'Selamat ';
-            if (hour >= 3 && hour < 11) greet += 'Pagi';
-            else if (hour >= 11 && hour < 15) greet += 'Siang';
-            else if (hour >= 15 && hour < 18) greet += 'Sore';
-            else greet += 'Malam';
+            var greet = 'Good ';
+            if (hour >= 3 && hour < 11) greet += 'Morning';
+            else if (hour >= 11 && hour < 15) greet += 'Afternoon';
+            else if (hour >= 15 && hour < 18) greet += 'Evening';
+            else greet += 'Night';
             greetingEl.textContent = greet + ', ' + name + '!';
         }
         if (msgEl) {
             var msgs = [
-                'Terus semangat belajar dan raih prestasi terbaikmu!',
-                'Setiap langkah kecil membawamu lebih dekat ke impian!',
-                'Jangan pernah menyerah, kesuksesan menunggu di depan!',
-                'Belajar hari ini, pemimpin di masa depan!',
-                'Konsistensi adalah kunci menuju keberhasilan!'
+                'Keep learning and reach your best achievements!',
+                'Every small step brings you closer to your dreams!',
+                'Never give up, success is waiting ahead!',
+                'Learn today, lead tomorrow!',
+                'Consistency is the key to success!'
             ];
             var dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
             msgEl.textContent = msgs[dayOfYear % msgs.length];
