@@ -15,6 +15,133 @@
     @stack('styles')
 
     <style>
+        /* ── Login Success Toast ── */
+        .toast-login-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 99999;
+            opacity: 0;
+            transform: translateX(120%) scale(0.9);
+            transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+            pointer-events: none;
+            max-width: 420px;
+            width: 100%;
+        }
+        .toast-login-container.show {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+            pointer-events: auto;
+        }
+        .toast-login-container.hiding {
+            opacity: 0;
+            transform: translateX(60%) scale(0.9);
+        }
+        .toast-login {
+            display: flex;
+            align-items: stretch;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            position: relative;
+        }
+        .toast-login-accent {
+            width: 5px;
+            flex-shrink: 0;
+            background: linear-gradient(180deg, #1e3c72, #2a5298);
+        }
+        .toast-login-body {
+            flex: 1;
+            padding: 18px 20px 16px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .toast-login-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .toast-login-icon .check-ring {
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            border: 2px solid rgba(46, 82, 152, 0.25);
+            animation: toastPing 1.5s ease-in-out infinite;
+        }
+        @keyframes toastPing {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.15); opacity: 0; }
+        }
+        .toast-login-text h6 {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #1e3c72;
+            margin: 0 0 2px;
+            line-height: 1.3;
+        }
+        .toast-login-text p {
+            font-size: 0.8rem;
+            color: #718096;
+            margin: 0;
+            line-height: 1.4;
+        }
+        .toast-login-text p span {
+            font-weight: 600;
+            color: #4e73df;
+            text-transform: capitalize;
+        }
+        .toast-login-close {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #a0aec0;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            line-height: 1;
+        }
+        .toast-login-close:hover {
+            background: #f7fafc;
+            color: #4a5568;
+        }
+        .toast-login-progress {
+            position: absolute;
+            bottom: 0;
+            left: 5px;
+            right: 0;
+            height: 3px;
+            background: #e9edf4;
+            border-radius: 0 0 16px 0;
+            overflow: hidden;
+        }
+        .toast-login-progress-bar {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #1e3c72, #4e73df);
+            border-radius: 0 0 16px 0;
+            transform-origin: left;
+            animation: toastShrink 5s linear forwards;
+        }
+        @keyframes toastShrink {
+            from { transform: scaleX(1); }
+            to { transform: scaleX(0); }
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
@@ -401,6 +528,32 @@
 </head>
 <body>
 
+    {{-- Login Success Toast --}}
+    @if (session('login-success'))
+        @php $loginData = session('login-success'); @endphp
+        <div class="toast-login-container show" id="loginToast">
+            <div class="toast-login">
+                <div class="toast-login-accent"></div>
+                <div class="toast-login-body">
+                    <div class="toast-login-icon">
+                        <div class="check-ring"></div>
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="toast-login-text">
+                        <h6><i class="fas fa-key me-1" style="color: #fbbf24;"></i> Login Successful!</h6>
+                        <p>Welcome back, <strong>{{ $loginData['name'] }}</strong> &middot; <span>{{ $loginData['role'] }}</span></p>
+                    </div>
+                    <button class="toast-login-close" onclick="dismissLoginToast()" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="toast-login-progress">
+                    <div class="toast-login-progress-bar" id="toastProgress"></div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     {{-- Sidebar --}}
     <aside class="sidebar" id="sidebar">
         <a href="{{ route('home') }}" class="sidebar-brand">
@@ -517,6 +670,21 @@
                     });
                 }, { threshold: 0.15 });
                 animated.forEach(function(el) { observer.observe(el); });
+            }
+        });
+
+        /* ── Login Toast Dismiss ── */
+        function dismissLoginToast() {
+            var toast = document.getElementById('loginToast');
+            if (!toast) return;
+            toast.classList.remove('show');
+            toast.classList.add('hiding');
+            setTimeout(function() { toast.remove(); }, 500);
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            var toast = document.getElementById('loginToast');
+            if (toast) {
+                setTimeout(dismissLoginToast, 5200);
             }
         });
 

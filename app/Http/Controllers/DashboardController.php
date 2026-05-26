@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Course;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -13,22 +11,17 @@ class DashboardController extends Controller
         $user = Auth::user();
 
         if ($user->role === 'siswa') {
-            return redirect()->route('siswa.dashboard');
+            return redirect()->route('siswa.dashboard')->with('login-success', session('login-success'));
         }
 
-        $enrolledCourses = $user->enrolledCourses()->latest()->get();
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard')->with('login-success', session('login-success'));
+        }
 
-        $quizAttempts = $user->quizAttempts()
-            ->with('quiz.course')
-            ->latest()
-            ->get();
+        if ($user->role === 'tentor') {
+            return redirect()->route('tentor.dashboard')->with('login-success', session('login-success'));
+        }
 
-        $certificates = $user->quizAttempts()
-            ->whereNotNull('certificate_path')
-            ->with('quiz.course')
-            ->latest()
-            ->get();
-
-        return view('dashboard', compact('user', 'enrolledCourses', 'quizAttempts', 'certificates'));
+        return view('dashboard', compact('user'));
     }
 }

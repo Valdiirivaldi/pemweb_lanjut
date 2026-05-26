@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Tentor;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Quiz;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller

@@ -8,6 +8,9 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
+
+
 
 class AdminEnrollmentController extends Controller
 {
@@ -17,7 +20,8 @@ class AdminEnrollmentController extends Controller
         $tentors = User::where('role', 'tentor')->orderBy('name')->get();
         $courses = Course::with('tentor')->orderBy('title')->get();
 
-        $enrollments = \DB::table('course_user')
+        $enrollments = DB::table('course_user')
+
             ->join('users', 'course_user.user_id', '=', 'users.id')
             ->join('courses', 'course_user.course_id', '=', 'courses.id')
             ->select(
@@ -44,7 +48,8 @@ class AdminEnrollmentController extends Controller
         $siswa = User::findOrFail($request->user_id);
         abort_if($siswa->role !== 'siswa', 400, 'User yang dipilih bukan siswa.');
 
-        $exists = \DB::table('course_user')
+        $exists = DB::table('course_user')
+
             ->where('user_id', $request->user_id)
             ->where('course_id', $request->course_id)
             ->exists();
@@ -54,7 +59,8 @@ class AdminEnrollmentController extends Controller
                 ->with('error', __('messages.enrollment.exists'));
         }
 
-        \DB::table('course_user')->insert([
+        DB::table('course_user')->insert([
+
             'user_id'    => $request->user_id,
             'course_id'  => $request->course_id,
             'created_at' => now(),
@@ -85,7 +91,8 @@ class AdminEnrollmentController extends Controller
 
     public function destroy(int $id): RedirectResponse
     {
-        \DB::table('course_user')->where('id', $id)->delete();
+        DB::table('course_user')->where('id', $id)->delete();
+
 
         return redirect()->route('admin.enrollments.index')
             ->with('success', __('messages.enrollment.deleted'));

@@ -63,7 +63,7 @@ class CourseController extends Controller
             abort(403, 'You are not enrolled in this course.');
         }
 
-        $course->load(['modules', 'tentor']);
+        $course->load(['modules', 'tentor', 'quizzes.questions']);
 
         return view('student.courses.learn', compact('user', 'course'));
     }

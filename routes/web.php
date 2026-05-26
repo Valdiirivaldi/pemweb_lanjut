@@ -57,6 +57,47 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('quizzes.store');
         Route::get('/students', [StudentController::class, 'index'])
             ->name('students.index');
+
+        Route::get('/quizzes/{quiz}/questions', [\App\Http\Controllers\Tentor\QuestionController::class, 'index'])
+            ->name('quizzes.questions.index');
+        Route::get('/quizzes/{quiz}/questions/create', [\App\Http\Controllers\Tentor\QuestionController::class, 'create'])
+            ->name('quizzes.questions.create');
+        Route::post('/quizzes/{quiz}/questions', [\App\Http\Controllers\Tentor\QuestionController::class, 'store'])
+            ->name('quizzes.questions.store');
+        Route::get('/quizzes/{quiz}/questions/{question}/edit', [\App\Http\Controllers\Tentor\QuestionController::class, 'edit'])
+            ->name('quizzes.questions.edit');
+        Route::put('/quizzes/{quiz}/questions/{question}', [\App\Http\Controllers\Tentor\QuestionController::class, 'update'])
+            ->name('quizzes.questions.update');
+        Route::delete('/quizzes/{quiz}/questions/{question}', [\App\Http\Controllers\Tentor\QuestionController::class, 'destroy'])
+            ->name('quizzes.questions.destroy');
+    });
+
+    Route::prefix('siswa')->name('siswa.')->middleware('role:siswa')->group(function () {
+        Route::get('/dashboard', [StudentDashboardController::class, 'index'])
+            ->name('dashboard');
+
+        Route::get('/courses', [StudentCourseController::class, 'index'])
+            ->name('courses.index');
+        Route::post('/courses/enroll', [StudentCourseController::class, 'enroll'])
+            ->name('courses.enroll');
+        Route::get('/courses/{course}/learn', [StudentCourseController::class, 'learn'])
+            ->name('courses.learn');
+
+        Route::get('/my-courses', [\App\Http\Controllers\Siswa\CourseController::class, 'myCourses'])
+            ->name('my-courses.index');
+
+        Route::get('/quizzes', [StudentQuizController::class, 'index'])
+            ->name('quizzes.index');
+        Route::get('/quizzes/{quiz}', [\App\Http\Controllers\Siswa\QuizController::class, 'show'])
+            ->name('quizzes.show');
+        Route::post('/quizzes/{quiz}/submit', [\App\Http\Controllers\Siswa\QuizController::class, 'submit'])
+            ->name('quizzes.submit');
+
+        Route::get('/quiz-attempts/{attempt}', [\App\Http\Controllers\Siswa\QuizController::class, 'result'])
+            ->name('quiz-attempts.show');
+
+        Route::get('/certificates', [StudentCertificateController::class, 'index'])
+            ->name('certificates.index');
     });
 
     Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function () {
@@ -86,25 +127,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('enrollments.destroy');
     });
 
-    Route::prefix('siswa')->name('siswa.')->middleware('role:siswa')->group(function () {
-        Route::get('/dashboard', [StudentDashboardController::class, 'index'])
-            ->name('dashboard');
-        Route::get('/courses', [StudentCourseController::class, 'index'])
-            ->name('courses.index');
-        Route::post('/courses/enroll', [StudentCourseController::class, 'enroll'])
-            ->name('courses.enroll');
-        Route::get('/courses/{course}/learn', [StudentCourseController::class, 'learn'])
-            ->name('courses.learn');
-        Route::get('/quizzes', [StudentQuizController::class, 'index'])
-            ->name('quizzes.index');
-        Route::get('/certificates', [StudentCertificateController::class, 'index'])
-            ->name('certificates.index');
-    });
-
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/unique-id', [ProfileController::class, 'updateUniqueId'])
+        ->name('profile.unique-id')
+        ->middleware('role:admin');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

@@ -332,7 +332,7 @@
             area.querySelector('.upload-hint').textContent = (this.files[0].size / 1024 / 1024).toFixed(2) + ' MB';
         } else {
             area.classList.remove('has-file');
-            area.querySelector('.upload-text').textContent = 'Click to upload to replace file';
+            area.querySelector('.upload-text').textContent = 'Click to upload or drag a file here';
             area.querySelector('.upload-hint').textContent = 'Supported: PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX, TXT, ZIP, RAR (max 100MB)';
         }
     });

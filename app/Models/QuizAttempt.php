@@ -14,11 +14,24 @@ class QuizAttempt extends Model
         'certificate_path',
     ];
 
+    // -------------------------------------------------------
+    // Relationships
+    // -------------------------------------------------------
+
+    /**
+     * Siswa yang mengerjakan kuis ini.
+     * QuizAttempt → belongsTo User (sebagai Siswa)
+     * Menggunakan foreign key 'siswa_id' (non-konvensional, wajib dideklarasikan).
+     */
     public function siswa(): BelongsTo
     {
         return $this->belongsTo(User::class, 'siswa_id');
     }
 
+    /**
+     * Kuis yang dikerjakan pada attempt ini.
+     * QuizAttempt → belongsTo Quiz
+     */
     public function quiz(): BelongsTo
     {
         return $this->belongsTo(Quiz::class);

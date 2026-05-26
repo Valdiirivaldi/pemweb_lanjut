@@ -225,6 +225,85 @@
         background: rgba(78,115,223,0.06);
         color: #4e73df;
     }
+
+    .quiz-card {
+        border: none;
+        border-radius: 14px;
+        background: #fff;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .quiz-card:hover {
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        transform: translateY(-2px);
+    }
+
+    .quiz-card .quiz-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+    }
+
+    .quiz-card .quiz-body {
+        padding: 18px 20px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .quiz-card .quiz-info h6 {
+        font-weight: 700;
+        color: #1e3c72;
+        font-size: 0.92rem;
+        margin-bottom: 3px;
+    }
+
+    .quiz-card .quiz-info .quiz-meta {
+        font-size: 0.78rem;
+        color: #a0aec0;
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+    }
+
+    .quiz-card .quiz-info .quiz-meta span {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .quiz-card .quiz-info .quiz-meta i {
+        font-size: 0.7rem;
+        color: #cbd5e0;
+    }
+
+    .btn-start-quiz {
+        border-radius: 10px;
+        padding: 8px 20px;
+        font-weight: 600;
+        font-size: 0.82rem;
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: #fff;
+        border: none;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .btn-start-quiz:hover {
+        background: linear-gradient(135deg, #d97706, #b45309);
+        color: #fff;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+    }
 </style>
 @endpush
 
@@ -314,6 +393,57 @@
                             <h6 style="color: #1e3c72; font-weight: 700;">No Materials Yet</h6>
                             <p style="color: #a0aec0; font-size: 0.9rem;">The tentor hasn't added any modules to this course yet. Please check back later.</p>
                         </div>
+                    </div>
+                </div>
+            </div>
+        @endforelse
+    </div>
+
+    {{-- Quiz List --}}
+    <div class="mt-5 mb-2">
+        <h5 class="fw-bold text-dark mb-3">
+            <i class="fas fa-question-circle me-2" style="color: #f59e0b;"></i>Course Quizzes
+        </h5>
+
+        @forelse ($course->quizzes as $quiz)
+            <div class="quiz-card shadow-sm mb-3">
+                <div class="quiz-body">
+                    <div class="quiz-icon">
+                        <i class="fas fa-pencil-alt"></i>
+                    </div>
+                    <div class="quiz-info flex-grow-1">
+                        <h6>{{ $quiz->title }}</h6>
+                        <div class="quiz-meta">
+                            <span><i class="fas fa-list"></i>{{ $quiz->questions->count() }} Questions</span>
+                            <span><i class="fas fa-clock"></i>{{ $quiz->time_limit }} min</span>
+                            @php
+                                $attempted = $quiz->attempts()->where('siswa_id', $user->id)->first();
+                            @endphp
+                            @if ($attempted)
+                                <span class="text-{{ $attempted->score >= $quiz->passing_score ? 'success' : 'danger' }}">
+                                    <i class="fas {{ $attempted->score >= $quiz->passing_score ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
+                                    Score: {{ $attempted->score }}%
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+                    @if ($attempted)
+                        <a href="{{ route('siswa.quiz-attempts.show', $attempted) }}" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-semibold" style="font-size: 0.78rem;">
+                            <i class="fas fa-history me-1"></i>Review
+                        </a>
+                    @endif
+                    <a href="{{ route('siswa.quizzes.show', $quiz) }}" class="btn-start-quiz">
+                        <i class="fas fa-play me-1"></i>{{ $attempted ? 'Retry' : 'Start' }}
+                    </a>
+                </div>
+            </div>
+        @empty
+            <div class="content-card shadow-sm" style="border-radius: 16px;">
+                <div class="card-body">
+                    <div class="empty-state">
+                        <i class="fas fa-question-circle" style="font-size: 3rem;"></i>
+                        <h6 style="color: #1e3c72; font-weight: 700;">No Quizzes Yet</h6>
+                        <p style="color: #a0aec0; font-size: 0.9rem;">The tentor hasn't added any quizzes for this course yet.</p>
                     </div>
                 </div>
             </div>

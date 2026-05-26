@@ -337,6 +337,57 @@
                             <span class="info-value">#{{ $user->id }}</span>
                         </div>
                         <div class="info-item">
+                            <span class="info-label"><i class="fas fa-qrcode me-2"></i>Unique ID</span>
+                            <span class="info-value">
+                                @if ($user->unique_id)
+                                    <span class="badge-role" style="background:#e8ecf4;color:#1e3c72;font-family:monospace;">
+                                        {{ $user->unique_id }}
+                                    </span>
+                                    @if(Auth::user()->isAdmin())
+                                    <button class="btn btn-sm btn-link p-0 ms-1" type="button"
+                                            onclick="toggleUniqueIdEdit()"
+                                            style="color:#4e73df;text-decoration:none;font-size:0.75rem;">
+                                        <i class="fas fa-pen"></i>
+                                    </button>
+                                    @endif
+                                @else
+                                    <span class="text-muted" style="font-size:0.85rem;">—</span>
+                                @endif
+                            </span>
+                        </div>
+                        @if(Auth::user()->isAdmin())
+                        {{-- Inline edit form for Unique ID --}}
+                        <div id="uniqueIdEditForm" style="display:none; padding: 8px 0 4px;">
+                            <form method="post" action="{{ route('profile.unique-id') }}">
+                                @csrf
+                                @method('patch')
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" name="unique_id"
+                                           value="{{ $user->unique_id }}" maxlength="20"
+                                           style="border-radius:8px 0 0 8px;font-family:monospace;"
+                                           placeholder="S-2026-XXXX" required>
+                                    <button class="btn btn-success btn-sm" type="submit"
+                                            style="border-radius:0 8px 8px 0;">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="btn btn-outline-secondary btn-sm" type="button"
+                                            onclick="toggleUniqueIdEdit()"
+                                            style="border-radius:8px;margin-left:4px;">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                @error('unique_id')
+                                    <small class="text-danger mt-1 d-block">{{ $message }}</small>
+                                @enderror
+                                @if (session('status') === 'unique-id-updated')
+                                    <small class="text-success mt-1 d-block">
+                                        <i class="fas fa-check-circle me-1"></i>Unique ID updated!
+                                    </small>
+                                @endif
+                            </form>
+                        </div>
+                        @endif
+                        <div class="info-item">
                             <span class="info-label"><i class="fas fa-envelope me-2"></i>Email</span>
                             <span class="info-value">{{ $user->email }}</span>
                         </div>
@@ -390,6 +441,59 @@
                             <span class="info-label"><i class="fas fa-id-card me-2"></i>User ID</span>
                             <span class="info-value">#{{ $user->id }}</span>
                         </div>
+                        @if ($user->role !== 'admin')
+                        <div class="info-item">
+                            <span class="info-label"><i class="fas fa-qrcode me-2"></i>Unique ID</span>
+                            <span class="info-value">
+                                @if ($user->unique_id)
+                                    <span class="badge-role" style="background:#e8ecf4;color:#1e3c72;font-family:monospace;">
+                                        {{ $user->unique_id }}
+                                    </span>
+                                    @if(Auth::user()->isAdmin())
+                                    <button class="btn btn-sm btn-link p-0 ms-1" type="button"
+                                            onclick="toggleUniqueIdEdit()"
+                                            style="color:#4e73df;text-decoration:none;font-size:0.75rem;">
+                                        <i class="fas fa-pen"></i>
+                                    </button>
+                                    @endif
+                                @else
+                                    <span class="text-muted" style="font-size:0.85rem;">—</span>
+                                @endif
+                            </span>
+                        </div>
+                        @if(Auth::user()->isAdmin())
+                        {{-- Inline edit form for Unique ID --}}
+                        <div id="uniqueIdEditForm" style="display:none; padding: 8px 0 4px;">
+                            <form method="post" action="{{ route('profile.unique-id') }}">
+                                @csrf
+                                @method('patch')
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" name="unique_id"
+                                           value="{{ $user->unique_id }}" maxlength="20"
+                                           style="border-radius:8px 0 0 8px;font-family:monospace;"
+                                           placeholder="S-2026-XXXX" required>
+                                    <button class="btn btn-success btn-sm" type="submit"
+                                            style="border-radius:0 8px 8px 0;">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="btn btn-outline-secondary btn-sm" type="button"
+                                            onclick="toggleUniqueIdEdit()"
+                                            style="border-radius:8px;margin-left:4px;">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                @error('unique_id')
+                                    <small class="text-danger mt-1 d-block">{{ $message }}</small>
+                                @enderror
+                                @if (session('status') === 'unique-id-updated')
+                                    <small class="text-success mt-1 d-block">
+                                        <i class="fas fa-check-circle me-1"></i>Unique ID updated!
+                                    </small>
+                                @endif
+                            </form>
+                        </div>
+                        @endif
+                        @endif
                         <div class="info-item">
                             <span class="info-label"><i class="fas fa-envelope me-2"></i>Email</span>
                             <span class="info-value">{{ $user->email }}</span>
@@ -486,5 +590,11 @@
             editForm.classList.add('show');
         @endif
     });
+
+    /* ── Toggle Unique ID Edit ── */
+    function toggleUniqueIdEdit() {
+        var el = document.getElementById('uniqueIdEditForm');
+        if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
 </script>
 @endpush

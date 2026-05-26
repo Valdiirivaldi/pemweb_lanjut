@@ -52,7 +52,7 @@
                                             {{ $student->enrolled_course }}
                                         </span>
                                     </td>
-                                    <td class="text-muted">{{ $student->created_at->format('d M Y') }}</td>
+                                    <td class="text-muted">{{ $student->pivot->created_at->format('d M Y') }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

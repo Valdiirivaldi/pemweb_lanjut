@@ -72,7 +72,7 @@
                                     </td>
                                     <td class="text-muted">{{ $module->created_at->format('d M Y') }}</td>
                                     <td class="text-end">
-                                        <a href="#" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                        <a href="{{ route('tentor.courses.show', $module->course_id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
                                             <i class="fas fa-eye me-1"></i>Details
                                         </a>
                                     </td>

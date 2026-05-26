@@ -31,7 +31,7 @@ class ModuleController extends Controller
         $courses = $user->courses()->latest()->get();
         $selectedCourseId = $request->query('course_id');
 
-        if ($selectedCourseId && !$courses->contains($selectedCourseId)) {
+        if ($selectedCourseId && !$courses->pluck('id')->contains($selectedCourseId)) {
             abort(403);
         }
 
