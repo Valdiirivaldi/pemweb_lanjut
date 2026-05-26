@@ -102,6 +102,22 @@
                             @enderror
                         </div>
 
+                        <div class="mb-4">
+                            <label for="unique_id" class="form-label fw-semibold" style="color: #2d3748; font-size: 0.9rem;">
+                                Unique ID
+                            </label>
+                            <input type="text"
+                                   class="form-control @error('unique_id') is-invalid @enderror"
+                                   id="unique_id"
+                                   name="unique_id"
+                                   value="{{ old('unique_id', $user->unique_id) }}"
+                                   placeholder="Auto-generated, can be edited"
+                                   style="height: 48px; border-radius: 12px; font-size: 0.9rem; font-family: monospace;">
+                            @error('unique_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-primary px-4"
                                     style="border-radius: 12px; height: 48px; font-weight: 700;">

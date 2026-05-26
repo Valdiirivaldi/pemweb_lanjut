@@ -48,6 +48,7 @@
                                 <th>Full Name</th>
                                 <th>Email</th>
                                 <th>Role</th>
+                                <th>Unique ID</th>
                                 <th>Registration Date</th>
                                 <th style="width: 140px;">Actions</th>
                             </tr>
@@ -60,6 +61,15 @@
                                     <td class="text-muted">{{ $u->email }}</td>
                                     <td>
                                         <span class="badge-role {{ $u->role }}">{{ ucfirst($u->role) }}</span>
+                                    </td>
+                                    <td>
+                                        @if ($u->unique_id)
+                                            <span style="font-family:monospace;font-size:0.85rem;color:#1e3c72;font-weight:600;">
+                                                {{ $u->unique_id }}
+                                            </span>
+                                        @else
+                                            <span class="text-muted" style="font-size:0.8rem;">—</span>
+                                        @endif
                                     </td>
                                     <td class="text-muted">{{ $u->created_at->format('d M Y') }}</td>
                                     <td>
