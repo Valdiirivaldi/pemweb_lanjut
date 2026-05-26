@@ -3,15 +3,6 @@
 @section('title', 'Dashboard - Eduria')
 @section('page-title', 'Dashboard')
 
-@section('sidebar-menu')
-    <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-        <i class="fas fa-chart-pie"></i>Dashboard
-    </a>
-    <a href="{{ route('profile') }}" class="nav-link {{ request()->routeIs('profile') ? 'active' : '' }}">
-        <i class="fas fa-user-cog"></i>Profile
-    </a>
-@endsection
-
 @push('styles')
     <style>
         .empty-state-img {

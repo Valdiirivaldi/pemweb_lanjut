@@ -12,15 +12,6 @@
 @section('title', 'Add Account - Eduria')
 @section('page-title', 'Add New Account')
 
-@section('sidebar-menu')
-    @foreach ($sidebarMenus as $menu)
-        <a href="{{ route($menu['route']) }}"
-           class="nav-link {{ ($menu['active'] ?? false) || request()->routeIs($menu['route']) ? 'active' : '' }}">
-            <i class="fas {{ $menu['icon'] }}"></i>{{ $menu['label'] }}
-        </a>
-    @endforeach
-@endsection
-
 @section('content')
     <div class="row justify-content-center">
         <div class="col-lg-8">

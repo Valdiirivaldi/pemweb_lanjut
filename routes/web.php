@@ -55,6 +55,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('quizzes.create');
         Route::post('/quizzes', [QuizController::class, 'store'])
             ->name('quizzes.store');
+        Route::get('/quizzes/{quiz}/edit', [QuizController::class, 'edit'])
+            ->name('quizzes.edit');
+        Route::put('/quizzes/{quiz}', [QuizController::class, 'update'])
+            ->name('quizzes.update');
+        Route::delete('/quizzes/{quiz}', [QuizController::class, 'destroy'])
+            ->name('quizzes.destroy');
         Route::get('/students', [StudentController::class, 'index'])
             ->name('students.index');
 
@@ -83,17 +89,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/courses/{course}/learn', [StudentCourseController::class, 'learn'])
             ->name('courses.learn');
 
-        Route::get('/my-courses', [\App\Http\Controllers\Siswa\CourseController::class, 'myCourses'])
+        Route::get('/my-courses', [StudentCourseController::class, 'index'])
             ->name('my-courses.index');
 
         Route::get('/quizzes', [StudentQuizController::class, 'index'])
             ->name('quizzes.index');
-        Route::get('/quizzes/{quiz}', [\App\Http\Controllers\Siswa\QuizController::class, 'show'])
+        Route::get('/quizzes/{quiz}', [StudentQuizController::class, 'show'])
             ->name('quizzes.show');
-        Route::post('/quizzes/{quiz}/submit', [\App\Http\Controllers\Siswa\QuizController::class, 'submit'])
+        Route::post('/quizzes/{quiz}/submit', [StudentQuizController::class, 'submit'])
             ->name('quizzes.submit');
 
-        Route::get('/quiz-attempts/{attempt}', [\App\Http\Controllers\Siswa\QuizController::class, 'result'])
+        Route::get('/quiz-attempts/{attempt}', [StudentQuizController::class, 'result'])
             ->name('quiz-attempts.show');
 
         Route::get('/certificates', [StudentCertificateController::class, 'index'])

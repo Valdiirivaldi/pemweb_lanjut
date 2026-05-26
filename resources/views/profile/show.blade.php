@@ -3,25 +3,6 @@
 @section('title', 'My Profile - Eduria')
 @section('page-title', 'My Profile')
 
-@section('sidebar-menu')
-    @if(Auth::user()->role == 'admin')
-        <a href="{{ route('admin.dashboard') }}" class="nav-link">
-            <i class="fas fa-chart-pie"></i>Dashboard
-        </a>
-    @elseif(Auth::user()->role == 'tentor')
-        <a href="{{ route('tentor.dashboard') }}" class="nav-link">
-            <i class="fas fa-chart-pie"></i>Dashboard
-        </a>
-    @else
-        <a href="{{ route('dashboard') }}" class="nav-link">
-            <i class="fas fa-chart-pie"></i>Dashboard
-        </a>
-    @endif
-    <a href="{{ route('profile') }}" class="nav-link active">
-        <i class="fas fa-user-cog"></i>Profile
-    </a>
-@endsection
-
 @push('styles')
 <style>
     /* ── Profile Avatar ── */

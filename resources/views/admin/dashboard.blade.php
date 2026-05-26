@@ -1,25 +1,7 @@
-@php
-    $sidebarMenus = [
-        ['route' => 'admin.dashboard', 'label' => 'Dashboard', 'icon' => 'fa-chart-pie', 'active' => true],
-        ['route' => 'admin.users.index', 'label' => 'Manage Users', 'icon' => 'fa-users'],
-        ['route' => 'admin.enrollments.index', 'label' => 'Class Enrollment', 'icon' => 'fa-user-graduate'],
-        ['route' => 'profile.edit', 'label' => 'Profile', 'icon' => 'fa-user-cog'],
-    ];
-@endphp
-
 @extends('layouts.dashboard')
 
 @section('title', 'Admin Dashboard - Eduria')
 @section('page-title', 'Admin Dashboard')
-
-@section('sidebar-menu')
-    @foreach ($sidebarMenus as $menu)
-        <a href="{{ route($menu['route']) }}"
-           class="nav-link {{ ($menu['active'] ?? false) || request()->routeIs($menu['route']) ? 'active' : '' }}">
-            <i class="fas {{ $menu['icon'] }}"></i>{{ $menu['label'] }}
-        </a>
-    @endforeach
-@endsection
 
 @section('content')
     {{-- Welcome Card --}}

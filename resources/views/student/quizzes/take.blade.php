@@ -3,29 +3,6 @@
 @section('title', $quiz->title . ' - Eduria')
 @section('page-title', $quiz->course->title)
 
-@section('sidebar-menu')
-    <a href="{{ route('siswa.dashboard') }}"
-       class="nav-link {{ request()->routeIs('siswa.dashboard') ? 'active' : '' }}">
-        <i class="fas fa-chart-pie"></i>Dashboard
-    </a>
-    <a href="{{ route('siswa.courses.index') }}"
-       class="nav-link {{ request()->routeIs('siswa.courses.*') ? 'active' : '' }}">
-        <i class="fas fa-book"></i>My Courses
-    </a>
-    <a href="{{ route('siswa.quizzes.index') }}"
-       class="nav-link {{ request()->routeIs('siswa.quizzes.*') ? 'active' : '' }}">
-        <i class="fas fa-history"></i>Quiz History
-    </a>
-    <a href="{{ route('siswa.certificates.index') }}"
-       class="nav-link {{ request()->routeIs('siswa.certificates.*') ? 'active' : '' }}">
-        <i class="fas fa-certificate"></i>Certificates
-    </a>
-    <a href="{{ route('profile') }}"
-       class="nav-link {{ request()->routeIs('profile') ? 'active' : '' }}">
-        <i class="fas fa-user-cog"></i>Profile
-    </a>
-@endsection
-
 @push('styles')
 <style>
     .quiz-container {

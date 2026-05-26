@@ -3,27 +3,6 @@
 @section('title', 'Quizzes - Eduria')
 @section('page-title', 'Quizzes')
 
-@section('sidebar-menu')
-    <a href="{{ route('tentor.dashboard') }}" class="nav-link">
-        <i class="fas fa-chart-pie"></i>Dashboard
-    </a>
-    <a href="{{ route('tentor.courses.index') }}" class="nav-link">
-        <i class="fas fa-book"></i>My Courses
-    </a>
-    <a href="{{ route('tentor.modules.index') }}" class="nav-link">
-        <i class="fas fa-layer-group"></i>Modules
-    </a>
-    <a href="{{ route('tentor.quizzes.index') }}" class="nav-link active">
-        <i class="fas fa-question-circle"></i>Quizzes
-    </a>
-    <a href="{{ route('tentor.students.index') }}" class="nav-link">
-        <i class="fas fa-users"></i>Participants
-    </a>
-    <a href="{{ route('profile') }}" class="nav-link">
-        <i class="fas fa-user-cog"></i>Profile
-    </a>
-@endsection
-
 @section('content')
     <div class="content-card shadow-sm">
         <div class="card-header">
@@ -65,9 +44,21 @@
                                     <td class="text-muted">{{ $quiz->time_limit }} minutes</td>
                                     <td class="text-muted">{{ $quiz->created_at->format('d M Y') }}</td>
                                     <td class="text-end">
-                                        <a href="{{ route('tentor.quizzes.questions.index', $quiz->id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                                            <i class="fas fa-eye me-1"></i>Details
-                                        </a>
+                                        <div class="d-flex gap-2 justify-content-end">
+                                            <a href="{{ route('tentor.quizzes.questions.index', $quiz->id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                                <i class="fas fa-eye me-1"></i>Questions
+                                            </a>
+                                            <a href="{{ route('tentor.quizzes.edit', $quiz->id) }}" class="btn btn-sm btn-outline-warning rounded-pill px-3">
+                                                <i class="fas fa-edit me-1"></i>Edit
+                                            </a>
+                                            <form action="{{ route('tentor.quizzes.destroy', $quiz->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus quiz ini? Semua data soal dan attempt akan ikut terhapus.');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                                                    <i class="fas fa-trash me-1"></i>Hapus
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

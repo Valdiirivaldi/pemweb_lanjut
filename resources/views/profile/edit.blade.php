@@ -3,26 +3,6 @@
 @section('title', 'Edit Profile - Eduria')
 @section('page-title', 'Edit Profile')
 
-@section('sidebar-menu')
-    <a href="{{ route('profile') }}"
-       class="nav-link {{ request()->routeIs('profile') ? 'active' : '' }}">
-        <i class="fas fa-user-cog"></i>Profile
-    </a>
-    @if(Auth::user()->role == 'tentor')
-        <a href="{{ route('tentor.dashboard') }}" class="nav-link">
-            <i class="fas fa-chart-pie"></i>Dashboard
-        </a>
-    @elseif(Auth::user()->role == 'admin')
-        <a href="{{ route('admin.dashboard') }}" class="nav-link">
-            <i class="fas fa-chart-pie"></i>Dashboard
-        </a>
-    @else
-        <a href="{{ route('dashboard') }}" class="nav-link">
-            <i class="fas fa-chart-pie"></i>Dashboard
-        </a>
-    @endif
-@endsection
-
 @section('content')
     <div class="row justify-content-center">
         <div class="col-lg-8">

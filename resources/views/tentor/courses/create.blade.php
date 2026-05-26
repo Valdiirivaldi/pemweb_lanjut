@@ -3,27 +3,6 @@
 @section('title', 'Create Course - Eduria')
 @section('page-title', 'Create New Course')
 
-@section('sidebar-menu')
-    <a href="{{ route('tentor.dashboard') }}" class="nav-link">
-        <i class="fas fa-chart-pie"></i>Dashboard
-    </a>
-    <a href="{{ route('tentor.courses.index') }}" class="nav-link">
-        <i class="fas fa-book"></i>My Courses
-    </a>
-    <a href="{{ route('tentor.modules.index') }}" class="nav-link">
-        <i class="fas fa-layer-group"></i>Modules
-    </a>
-    <a href="{{ route('tentor.quizzes.index') }}" class="nav-link">
-        <i class="fas fa-question-circle"></i>Quizzes
-    </a>
-    <a href="{{ route('tentor.students.index') }}" class="nav-link">
-        <i class="fas fa-users"></i>Participants
-    </a>
-    <a href="{{ route('profile') }}" class="nav-link">
-        <i class="fas fa-user-cog"></i>Profile
-    </a>
-@endsection
-
 @push('styles')
 <style>
     .form-input {

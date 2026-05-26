@@ -563,9 +563,68 @@
 
         <div class="nav-section">Menu</div>
 
-        @section('sidebar-menu')
-            {{-- Override this section in each dashboard --}}
-        @show
+        @switch(auth()->user()->role)
+            @case('tentor')
+                <a href="{{ route('tentor.dashboard') }}"
+                   class="nav-link {{ request()->routeIs('tentor.dashboard') ? 'active' : '' }}">
+                    <i class="fas fa-chart-pie"></i>Dashboard
+                </a>
+                <a href="{{ route('tentor.courses.index') }}"
+                   class="nav-link {{ request()->routeIs('tentor.courses.*') ? 'active' : '' }}">
+                    <i class="fas fa-book"></i>My Courses
+                </a>
+                <a href="{{ route('tentor.modules.index') }}"
+                   class="nav-link {{ request()->routeIs('tentor.modules.*') ? 'active' : '' }}">
+                    <i class="fas fa-layer-group"></i>Modules
+                </a>
+                <a href="{{ route('tentor.quizzes.index') }}"
+                   class="nav-link {{ request()->routeIs('tentor.quizzes.*') ? 'active' : '' }}">
+                    <i class="fas fa-question-circle"></i>Quizzes
+                </a>
+                <a href="{{ route('tentor.students.index') }}"
+                   class="nav-link {{ request()->routeIs('tentor.students.*') ? 'active' : '' }}">
+                    <i class="fas fa-users"></i>Participants
+                </a>
+                <a href="{{ route('profile') }}"
+                   class="nav-link {{ request()->routeIs('profile') ? 'active' : '' }}">
+                    <i class="fas fa-user-cog"></i>Profile
+                </a>
+                @break
+
+            @case('admin')
+                <a href="{{ route('admin.dashboard') }}"
+                   class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                    <i class="fas fa-chart-pie"></i>Dashboard
+                </a>
+                <a href="{{ route('admin.users.index') }}"
+                   class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                    <i class="fas fa-users-cog"></i>Manage Users
+                </a>
+                <a href="{{ route('admin.enrollments.index') }}"
+                   class="nav-link {{ request()->routeIs('admin.enrollments.*') ? 'active' : '' }}">
+                    <i class="fas fa-user-graduate"></i>Enrollments
+                </a>
+                @break
+
+            @default
+                {{-- Siswa --}}
+                <a href="{{ route('siswa.dashboard') }}"
+                   class="nav-link {{ request()->routeIs('siswa.dashboard') ? 'active' : '' }}">
+                    <i class="fas fa-chart-pie"></i>Dashboard
+                </a>
+                <a href="{{ route('siswa.courses.index') }}"
+                   class="nav-link {{ request()->routeIs('siswa.courses.*') ? 'active' : '' }}">
+                    <i class="fas fa-book"></i>My Courses
+                </a>
+                <a href="{{ route('siswa.quizzes.index') }}"
+                   class="nav-link {{ request()->routeIs('siswa.quizzes.*') ? 'active' : '' }}">
+                    <i class="fas fa-history"></i>Quiz History
+                </a>
+                <a href="{{ route('siswa.certificates.index') }}"
+                   class="nav-link {{ request()->routeIs('siswa.certificates.*') ? 'active' : '' }}">
+                    <i class="fas fa-certificate"></i>Certificates
+                </a>
+        @endswitch
 
         <div class="sidebar-user d-flex align-items-center gap-3">
             <div class="avatar" style="background: linear-gradient(135deg, #4e73df, #224abe);">

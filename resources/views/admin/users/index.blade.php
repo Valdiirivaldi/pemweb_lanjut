@@ -12,15 +12,6 @@
 @section('title', 'Manage Users - Eduria')
 @section('page-title', 'Manage Users')
 
-@section('sidebar-menu')
-    @foreach ($sidebarMenus as $menu)
-        <a href="{{ route($menu['route']) }}"
-           class="nav-link {{ ($menu['active'] ?? false) || request()->routeIs($menu['route']) ? 'active' : '' }}">
-            <i class="fas {{ $menu['icon'] }}"></i>{{ $menu['label'] }}
-        </a>
-    @endforeach
-@endsection
-
 @section('content')
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2"

@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Create Quiz - Eduria')
-@section('page-title', 'Create New Quiz')
+@section('title', 'Edit Quiz - Eduria')
+@section('page-title', 'Edit Quiz')
 
 @push('styles')
 <style>
@@ -68,11 +68,12 @@
         <div class="col-lg-8">
             <div class="content-card shadow-sm">
                 <div class="card-header">
-                    <span><i class="fas fa-plus-circle me-2"></i>New Quiz Form</span>
+                    <span><i class="fas fa-edit me-2"></i>Edit Quiz</span>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('tentor.quizzes.store') }}">
+                    <form method="POST" action="{{ route('tentor.quizzes.update', $quiz) }}">
                         @csrf
+                        @method('PUT')
 
                         <div class="mb-4">
                             <label for="course_id" class="form-label-custom">
@@ -86,7 +87,7 @@
                                         required>
                                     <option value="">-- Select Course --</option>
                                     @foreach ($courses as $course)
-                                        <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
+                                        <option value="{{ $course->id }}" {{ (old('course_id', $quiz->course_id) == $course->id) ? 'selected' : '' }}>
                                             {{ $course->title }}
                                         </option>
                                     @endforeach
@@ -107,7 +108,7 @@
                                        class="form-control form-input @error('title') is-invalid @enderror"
                                        id="title"
                                        name="title"
-                                       value="{{ old('title') }}"
+                                       value="{{ old('title', $quiz->title) }}"
                                        placeholder="e.g., Midterm Exam"
                                        required>
                             </div>
@@ -126,7 +127,7 @@
                                        class="form-control form-input @error('time_limit') is-invalid @enderror"
                                        id="time_limit"
                                        name="time_limit"
-                                       value="{{ old('time_limit', 60) }}"
+                                       value="{{ old('time_limit', $quiz->time_limit) }}"
                                        min="1"
                                        max="999"
                                        required>
@@ -142,10 +143,10 @@
                         <div class="d-flex gap-3 mt-4">
                             <a href="{{ route('tentor.quizzes.index') }}"
                                class="btn btn-outline-secondary btn-secondary-custom px-4">
-                                <i class="fas fa-arrow-left me-1"></i>Back
+                                <i class="fas fa-arrow-left me-1"></i>Cancel
                             </a>
                             <button type="submit" class="btn btn-primary btn-primary-custom flex-grow-1">
-                                <i class="fas fa-check-circle me-2"></i>Save Quiz
+                                <i class="fas fa-save me-2"></i>Update Quiz
                             </button>
                         </div>
                     </form>

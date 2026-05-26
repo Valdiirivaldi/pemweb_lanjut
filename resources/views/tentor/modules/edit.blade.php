@@ -3,33 +3,6 @@
 @section('title', 'Edit Module - Eduria')
 @section('page-title', 'Edit Module')
 
-@section('sidebar-menu')
-    <a href="{{ route('tentor.dashboard') }}"
-       class="nav-link {{ request()->routeIs('tentor.dashboard') ? 'active' : '' }}">
-        <i class="fas fa-chart-pie"></i>Dashboard
-    </a>
-    <a href="{{ route('tentor.courses.index') }}"
-       class="nav-link {{ request()->routeIs('tentor.courses.*') ? 'active' : '' }}">
-        <i class="fas fa-book"></i>My Courses
-    </a>
-    <a href="{{ route('tentor.modules.index') }}"
-       class="nav-link {{ request()->routeIs('tentor.modules.*') ? 'active' : '' }}">
-        <i class="fas fa-layer-group"></i>Modules
-    </a>
-    <a href="{{ route('tentor.quizzes.index') }}"
-       class="nav-link {{ request()->routeIs('tentor.quizzes.*') ? 'active' : '' }}">
-        <i class="fas fa-question-circle"></i>Quizzes
-    </a>
-    <a href="{{ route('tentor.students.index') }}"
-       class="nav-link {{ request()->routeIs('tentor.students.*') ? 'active' : '' }}">
-        <i class="fas fa-users"></i>Participants
-    </a>
-    <a href="{{ route('profile') }}"
-       class="nav-link {{ request()->routeIs('profile') ? 'active' : '' }}">
-        <i class="fas fa-user-cog"></i>Profile
-    </a>
-@endsection
-
 @push('styles')
 <style>
     .form-card {

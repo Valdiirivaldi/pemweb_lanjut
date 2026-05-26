@@ -14,15 +14,6 @@
 @section('title', 'Class Enrollment - Eduria')
 @section('page-title', 'Class Enrollment')
 
-@section('sidebar-menu')
-    @foreach ($sidebarMenus as $menu)
-        <a href="{{ route($menu['route']) }}"
-           class="nav-link {{ ($menu['active'] ?? false) || request()->routeIs($menu['route']) ? 'active' : '' }}">
-            <i class="fas {{ $menu['icon'] }}"></i>{{ $menu['label'] }}
-        </a>
-    @endforeach
-@endsection
-
 @push('styles')
 <style>
     .enrollment-tabs {
