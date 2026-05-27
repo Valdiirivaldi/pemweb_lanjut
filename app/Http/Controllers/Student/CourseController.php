@@ -29,7 +29,7 @@ class CourseController extends Controller
             ->latest()
             ->get();
 
-        $enrolledIds = $user->enrolledCourses()->pluck('course_id')->toArray();
+        $enrolledIds = $myCourses->pluck('id')->toArray();
 
         return view('student.courses.index', compact('myCourses', 'allCourses', 'enrolledIds', 'search'));
     }
@@ -63,7 +63,9 @@ class CourseController extends Controller
             abort(403, 'You are not enrolled in this course.');
         }
 
-        $course->load(['modules', 'tentor', 'quizzes.questions']);
+        $course->load(['modules', 'tentor', 'quizzes.questions', 'quizzes.attempts' => function ($q) use ($user) {
+            $q->where('siswa_id', $user->id);
+        }]);
 
         return view('student.courses.learn', compact('user', 'course'));
     }

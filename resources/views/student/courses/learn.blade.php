@@ -394,7 +394,7 @@
                             <span><i class="fas fa-list"></i>{{ $quiz->questions->count() }} Questions</span>
                             <span><i class="fas fa-clock"></i>{{ $quiz->time_limit }} min</span>
                             @php
-                                $attempted = $quiz->attempts()->where('siswa_id', $user->id)->first();
+                                $attempted = $quiz->attempts->first();
                             @endphp
                             @if ($attempted)
                                 <span class="text-{{ $attempted->score >= $quiz->passing_score ? 'success' : 'danger' }}">

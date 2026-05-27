@@ -1,5 +1,7 @@
 @extends('layouts.dashboard')
 
+
+
 @section('title', 'Admin Dashboard - Eduria')
 @section('page-title', 'Admin Dashboard')
 

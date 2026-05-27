@@ -36,17 +36,21 @@ class RegisterController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
-        $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'role'     => 'siswa',
-        ]);
+        $user = DB::transaction(function () use ($request) {
+            $user = User::create([
+                'name'     => $request->name,
+                'email'    => $request->email,
+                'password' => Hash::make($request->password),
+                'role'     => 'siswa',
+            ]);
 
-        Siswa::create([
-            'user_id'   => $user->id,
-            'unique_id' => $this->generateSiswaId(),
-        ]);
+            Siswa::create([
+                'user_id'   => $user->id,
+                'unique_id' => $this->generateSiswaId(),
+            ]);
+
+            return $user;
+        });
 
         Auth::login($user);
 

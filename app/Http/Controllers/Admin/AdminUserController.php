@@ -8,6 +8,7 @@ use App\Models\Tentor;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
@@ -37,24 +38,28 @@ class AdminUserController extends Controller
             'role'     => ['required', 'in:siswa,tentor'],
         ]);
 
-        $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'role'     => $request->role,
-        ]);
+        $user = DB::transaction(function () use ($request) {
+            $user = User::create([
+                'name'     => $request->name,
+                'email'    => $request->email,
+                'password' => Hash::make($request->password),
+                'role'     => $request->role,
+            ]);
 
-        if ($user->role === 'siswa') {
-            Siswa::create([
-                'user_id'   => $user->id,
-                'unique_id' => $this->generateSiswaId(),
-            ]);
-        } elseif ($user->role === 'tentor') {
-            Tentor::create([
-                'user_id'   => $user->id,
-                'unique_id' => $this->generateTentorId(),
-            ]);
-        }
+            if ($user->role === 'siswa') {
+                Siswa::create([
+                    'user_id'   => $user->id,
+                    'unique_id' => $this->generateSiswaId(),
+                ]);
+            } elseif ($user->role === 'tentor') {
+                Tentor::create([
+                    'user_id'   => $user->id,
+                    'unique_id' => $this->generateTentorId(),
+                ]);
+            }
+
+            return $user;
+        });
 
         return redirect()->route('admin.users.index')
             ->with('success', __('messages.account.created'));
@@ -125,6 +130,7 @@ class AdminUserController extends Controller
         $year = date('Y');
         $last = Siswa::where('unique_id', 'like', "S-{$year}-%")
             ->orderBy('unique_id', 'desc')
+            ->lockForUpdate()
             ->value('unique_id');
 
         if ($last) {
@@ -141,6 +147,7 @@ class AdminUserController extends Controller
         $year = date('Y');
         $last = Tentor::where('unique_id', 'like', "T-{$year}-%")
             ->orderBy('unique_id', 'desc')
+            ->lockForUpdate()
             ->value('unique_id');
 
         if ($last) {

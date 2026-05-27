@@ -2,7 +2,7 @@
 
 return [
     'enroll.already' => 'You are already enrolled in this class.',
-    'enroll.success' => 'Successfully joined <strong>:course</strong>!',
+    'enroll.success' => 'Successfully joined :course!',
     'course.created' => 'Course created successfully!',
     'quiz.created' => 'Quiz created successfully!',
     'enrollment.exists' => 'Student is already enrolled in this class.',

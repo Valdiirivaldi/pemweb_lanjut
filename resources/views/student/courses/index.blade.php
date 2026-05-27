@@ -461,7 +461,7 @@
             <div class="alert alert-success alert-dismissible fade show alert-flash d-flex align-items-center gap-2"
                  style="border-radius: 14px; border: none; font-size: 0.9rem; font-weight: 500;" role="alert">
                 <i class="fas fa-check-circle" style="font-size: 1.2rem;"></i>
-                <span>{!! session('success') !!}</span>
+                <span>{{ session('success') }}</span>
                 <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
             </div>
         @endif

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
@@ -19,20 +19,9 @@ class LoginController extends Controller
     /**
      * Handle an incoming login request.
      */
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $request->validate([
-            'email' => ['required', 'string', 'email'],
-            'password' => ['required', 'string'],
-        ]);
-
-        $credentials = $request->only('email', 'password');
-
-        if (!Auth::attempt($credentials, $request->boolean('remember'))) {
-            return back()->withErrors([
-                'email' => __('The provided credentials are incorrect.'),
-            ])->withInput($request->only('email'));
-        }
+        $request->authenticate();
 
         $request->session()->regenerate();
 

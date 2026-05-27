@@ -76,6 +76,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('quizzes.questions.update');
         Route::delete('/quizzes/{quiz}/questions/{question}', [\App\Http\Controllers\Tentor\QuestionController::class, 'destroy'])
             ->name('quizzes.questions.destroy');
+
+        Route::get('/quizzes/{quiz}/attempts', [QuizController::class, 'attemptsIndex'])
+            ->name('quizzes.attempts.index');
+        Route::get('/quizzes/{quiz}/attempts/{attempt}', [QuizController::class, 'attemptShow'])
+            ->name('quizzes.attempts.show');
     });
 
     Route::prefix('siswa')->name('siswa.')->middleware('role:siswa')->group(function () {
@@ -98,6 +103,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('quizzes.show');
         Route::post('/quizzes/{quiz}/submit', [StudentQuizController::class, 'submit'])
             ->name('quizzes.submit');
+
+        Route::get('/quizzes/{quiz}/submit', function (\App\Models\Quiz $quiz) {
+            return redirect()->route('siswa.quizzes.show', $quiz)
+                ->with('error', 'Gunakan tombol "Submit" untuk mengirim jawaban.');
+        })->name('quizzes.submit.get');
 
         Route::get('/quiz-attempts/{attempt}', [StudentQuizController::class, 'result'])
             ->name('quiz-attempts.show');

@@ -1,15 +1,8 @@
-@php
-    $sidebarMenus = [
-        ['route' => 'admin.dashboard', 'label' => 'Dashboard', 'icon' => 'fa-chart-pie'],
-        ['route' => 'admin.users.index', 'label' => 'Manage Users', 'icon' => 'fa-users'],
-        ['route' => 'admin.enrollments.index', 'label' => 'Class Enrollment', 'icon' => 'fa-user-graduate', 'active' => true],
-        ['route' => 'profile', 'label' => 'Profile', 'icon' => 'fa-user-cog'],
-    ];
+@extends('layouts.dashboard')
 
+@php
     $activeTab = request('tab', 'siswa');
 @endphp
-
-@extends('layouts.dashboard')
 
 @section('title', 'Class Enrollment - Eduria')
 @section('page-title', 'Class Enrollment')

@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Siswa;
 use App\Models\Tentor;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
@@ -23,38 +24,42 @@ class UserSeeder extends Seeder
         );
 
         // 2. Akun Tentor + buat record di tabel tentors
-        $tentor = User::updateOrCreate(
-            ['email' => 'tentor@gmail.com'],
-            [
-                'name'     => 'Tentor Pengajar',
-                'password' => Hash::make('password'),
-                'role'     => 'tentor',
-            ]
-        );
+        DB::transaction(function () {
+            $tentor = User::updateOrCreate(
+                ['email' => 'tentor@gmail.com'],
+                [
+                    'name'     => 'Tentor Pengajar',
+                    'password' => Hash::make('password'),
+                    'role'     => 'tentor',
+                ]
+            );
 
-        if (!$tentor->tentor) {
-            Tentor::create([
-                'user_id'   => $tentor->id,
-                'unique_id' => $this->generateTentorId(),
-            ]);
-        }
+            if (!$tentor->tentor) {
+                Tentor::create([
+                    'user_id'   => $tentor->id,
+                    'unique_id' => $this->generateTentorId(),
+                ]);
+            }
+        });
 
         // 3. Akun Siswa + buat record di tabel siswas
-        $siswa = User::updateOrCreate(
-            ['email' => 'siswa@gmail.com'],
-            [
-                'name'     => 'Siswa Belajar',
-                'password' => Hash::make('password'),
-                'role'     => 'siswa',
-            ]
-        );
+        DB::transaction(function () {
+            $siswa = User::updateOrCreate(
+                ['email' => 'siswa@gmail.com'],
+                [
+                    'name'     => 'Siswa Belajar',
+                    'password' => Hash::make('password'),
+                    'role'     => 'siswa',
+                ]
+            );
 
-        if (!$siswa->siswa) {
-            Siswa::create([
-                'user_id'   => $siswa->id,
-                'unique_id' => $this->generateSiswaId(),
-            ]);
-        }
+            if (!$siswa->siswa) {
+                Siswa::create([
+                    'user_id'   => $siswa->id,
+                    'unique_id' => $this->generateSiswaId(),
+                ]);
+            }
+        });
     }
 
     private function generateSiswaId(): string
@@ -62,6 +67,7 @@ class UserSeeder extends Seeder
         $year = date('Y');
         $last = Siswa::where('unique_id', 'like', "S-{$year}-%")
             ->orderBy('unique_id', 'desc')
+            ->lockForUpdate()
             ->value('unique_id');
 
         if ($last) {
@@ -78,6 +84,7 @@ class UserSeeder extends Seeder
         $year = date('Y');
         $last = Tentor::where('unique_id', 'like', "T-{$year}-%")
             ->orderBy('unique_id', 'desc')
+            ->lockForUpdate()
             ->value('unique_id');
 
         if ($last) {

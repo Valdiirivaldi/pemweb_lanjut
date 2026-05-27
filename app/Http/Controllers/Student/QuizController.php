@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use App\Models\Quiz;
 use App\Models\QuizAttempt;
+use App\Models\QuizAttemptAnswer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,27 +32,27 @@ class QuizController extends Controller
         $user = Auth::user();
 
         $course = $quiz->course;
-        $enrolled = QuizAttempt::query()
-            ->from('course_user')
-            ->where('course_id', $course->id)
-            ->where('user_id', $user->id)
-            ->exists();
+        $enrolled = $course->students()->where('user_id', $user->id)->exists();
         abort_if(!$enrolled, 403);
 
         $quiz->load('questions');
 
-        $attempt = QuizAttempt::where('siswa_id', $user->id)
-            ->where('quiz_id', $quiz->id)
-            ->latest()
-            ->first();
+        $attempt = QuizAttempt::firstOrCreate([
+            'siswa_id' => $user->id,
+            'quiz_id' => $quiz->id,
+        ], [
+            'score' => 0,
+            'certificate_path' => null,
+        ]);
 
-        if (!$attempt) {
-            $attempt = QuizAttempt::create([
-                'siswa_id' => $user->id,
-                'quiz_id' => $quiz->id,
-                'score' => 0,
-                'certificate_path' => null,
-            ]);
+        if ($attempt->score > 0 || $attempt->answers()->exists()) {
+            return redirect()->route('siswa.quiz-attempts.show', ['attempt' => $attempt->id]);
+        }
+
+        if ($attempt->wasRecentlyCreated === false) {
+            $attempt->created_at = now();
+            $attempt->save();
+            $attempt->refresh();
         }
 
         return view('student.quizzes.take', compact('user', 'quiz', 'attempt'));
@@ -62,19 +63,38 @@ class QuizController extends Controller
         $user = Auth::user();
 
         $course = $quiz->course;
-        $enrolled = QuizAttempt::query()
-            ->from('course_user')
-            ->where('course_id', $course->id)
-            ->where('user_id', $user->id)
-            ->exists();
+        $enrolled = $course->students()->where('user_id', $user->id)->exists();
 
         abort_if(!$enrolled, 403);
 
         $request->validate([
-            'answers' => ['required', 'array'],
+            'answers' => ['nullable', 'array'],
         ]);
 
         $quiz->load(['questions']);
+
+        $attempt = QuizAttempt::firstOrCreate([
+            'siswa_id' => $user->id,
+            'quiz_id' => $quiz->id,
+        ], [
+            'score' => 0,
+            'certificate_path' => null,
+        ]);
+
+        if ($attempt->score > 0 || $attempt->answers()->count() > 0) {
+            return redirect()->route('siswa.quiz-attempts.show', ['attempt' => $attempt->id]);
+        }
+
+        if ($quiz->time_limit) {
+            $startTime = $attempt->created_at;
+            $maxDeadline = $startTime->copy()->addMinutes((int) $quiz->time_limit + 5);
+            if (now()->greaterThan($maxDeadline)) {
+                return redirect()->route('siswa.quiz-attempts.show', ['attempt' => $attempt->id])
+                    ->with('error', 'Waktu pengerjaan kuis telah habis.');
+            }
+        }
+
+        QuizAttemptAnswer::where('quiz_attempt_id', $attempt->id)->delete();
 
         $total = $quiz->questions->count();
         $correctCount = 0;
@@ -92,28 +112,48 @@ class QuizController extends Controller
 
                 $validKeys = array_keys($question->options ?? []);
                 $invalid = array_diff($given, $validKeys);
-                if (!empty($invalid)) continue;
+                if (!empty($invalid)) {
+                    QuizAttemptAnswer::create([
+                        'quiz_attempt_id' => $attempt->id,
+                        'question_id' => $question->id,
+                        'given_answer' => json_encode($given),
+                        'is_correct' => false,
+                    ]);
+                    continue;
+                }
 
-                if ($given === $correct) {
+                $isCorrect = $given === $correct;
+                if ($isCorrect) {
                     $correctCount++;
                 }
+
+                QuizAttemptAnswer::create([
+                    'quiz_attempt_id' => $attempt->id,
+                    'question_id' => $question->id,
+                    'given_answer' => json_encode($given),
+                    'is_correct' => $isCorrect,
+                ]);
             } else {
                 $given = strtoupper((string) $given);
                 $correct = $question->correct_options ?? [];
-                if ($given && in_array($given, array_map('strtoupper', $correct))) {
+
+                $isCorrect = $given && in_array($given, array_map('strtoupper', $correct));
+                if ($isCorrect) {
                     $correctCount++;
                 }
+
+                QuizAttemptAnswer::create([
+                    'quiz_attempt_id' => $attempt->id,
+                    'question_id' => $question->id,
+                    'given_answer' => json_encode([$given]),
+                    'is_correct' => $isCorrect,
+                ]);
             }
         }
 
         $scorePercent = $total > 0 ? (int) round(($correctCount / $total) * 100) : 0;
         $quizPassingScore = (int) ($quiz->passing_score ?? 70);
         $passed = $scorePercent >= $quizPassingScore;
-
-        $attempt = QuizAttempt::where('siswa_id', $user->id)
-            ->where('quiz_id', $quiz->id)
-            ->latest()
-            ->firstOrFail();
 
         $certificatePath = null;
         if ($passed) {
@@ -151,7 +191,7 @@ class QuizController extends Controller
         $user = Auth::user();
         abort_if($attempt->siswa_id !== $user->id, 403);
 
-        $attempt->load(['quiz.course', 'siswa']);
+        $attempt->load(['quiz.course', 'siswa', 'answers.question']);
 
         return view('student.quizzes.result', compact('user', 'attempt'));
     }

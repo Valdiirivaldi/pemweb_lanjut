@@ -8,6 +8,17 @@
     .quiz-container {
         max-width: 800px;
         margin: 0 auto;
+        position: relative;
+    }
+
+    #quizOverlay {
+        display: none;
+        position: absolute;
+        inset: 0;
+        background: rgba(255, 255, 255, 0.45);
+        z-index: 999;
+        border-radius: 14px;
+        cursor: not-allowed;
     }
 
     .quiz-header {
@@ -241,7 +252,7 @@
                             @if ($isMulti)
                                 <input type="checkbox" name="answers[{{ $question->id }}][]" value="{{ $key }}">
                             @else
-                                <input type="radio" name="answers[{{ $question->id }}]" value="{{ $key }}" required>
+                                <input type="radio" name="answers[{{ $question->id }}]" value="{{ $key }}">
                             @endif
                             <span class="option-label">{{ $key }}.</span>
                             <span class="option-text">{{ $text }}</span>
@@ -267,6 +278,8 @@
                 </div>
             @endif
         </form>
+
+        <div id="quizOverlay"></div>
     </div>
 @endsection
 
@@ -279,6 +292,7 @@
         const timerEl = document.getElementById('timerDisplay');
         const timerContainer = document.getElementById('timerContainer');
         const form = document.getElementById('quizForm');
+        const submitBtn = document.querySelector('.btn-submit-quiz');
         let submitted = false;
 
         function pad(n) {
@@ -295,19 +309,34 @@
             }
         }
 
+        function lockForm() {
+            document.getElementById('quizOverlay').style.display = 'block';
+        }
+
         function submitIfNeeded() {
             if (submitted) return;
             submitted = true;
+
+            clearInterval(t);
+
+            timerEl.textContent = '00:00';
+
+            lockForm();
+
+            if (submitBtn) {
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...';
+                submitBtn.disabled = true;
+            }
+
             form.submit();
         }
 
         render();
 
-        const t = setInterval(function() {
+        var t = setInterval(function() {
             seconds--;
             if (seconds <= 0) {
                 clearInterval(t);
-                timerEl.textContent = '00:00';
                 submitIfNeeded();
                 return;
             }

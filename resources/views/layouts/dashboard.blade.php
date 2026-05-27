@@ -606,8 +606,7 @@
                 </a>
                 @break
 
-            @default
-                {{-- Siswa --}}
+            @case('siswa')
                 <a href="{{ route('siswa.dashboard') }}"
                    class="nav-link {{ request()->routeIs('siswa.dashboard') ? 'active' : '' }}">
                     <i class="fas fa-chart-pie"></i>Dashboard
@@ -623,6 +622,13 @@
                 <a href="{{ route('siswa.certificates.index') }}"
                    class="nav-link {{ request()->routeIs('siswa.certificates.*') ? 'active' : '' }}">
                     <i class="fas fa-certificate"></i>Certificates
+                </a>
+                @break
+
+            @default
+                <a href="{{ route('dashboard') }}"
+                   class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                    <i class="fas fa-chart-pie"></i>Dashboard
                 </a>
         @endswitch
 
@@ -685,6 +691,30 @@
         </div>
 
         <div class="content-wrapper">
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show rounded-4 shadow-sm d-flex align-items-center gap-2 border-0"
+                     style="background: #d1fae5; color: #065f46; font-weight: 500; font-size: 0.9rem;">
+                    <i class="fas fa-check-circle" style="font-size: 1.1rem;"></i>
+                    {{ session('success') }}
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show rounded-4 shadow-sm d-flex align-items-center gap-2 border-0"
+                     style="background: #fee2e2; color: #991b1b; font-weight: 500; font-size: 0.9rem;">
+                    <i class="fas fa-exclamation-circle" style="font-size: 1.1rem;"></i>
+                    {{ session('error') }}
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+            @if (session('warning'))
+                <div class="alert alert-warning alert-dismissible fade show rounded-4 shadow-sm d-flex align-items-center gap-2 border-0"
+                     style="background: #fef3c7; color: #92400e; font-weight: 500; font-size: 0.9rem;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 1.1rem;"></i>
+                    {{ session('warning') }}
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
             @yield('content')
         </div>
     </div>

@@ -1,12 +1,3 @@
-@php
-    $sidebarMenus = [
-        ['route' => 'admin.dashboard', 'label' => 'Dashboard', 'icon' => 'fa-chart-pie'],
-        ['route' => 'admin.users.index', 'label' => 'Manage Users', 'icon' => 'fa-users', 'active' => true],
-        ['route' => 'admin.enrollments.index', 'label' => 'Class Enrollment', 'icon' => 'fa-user-graduate'],
-        ['route' => 'profile.edit', 'label' => 'Profile', 'icon' => 'fa-user-cog'],
-    ];
-@endphp
-
 @extends('layouts.dashboard')
 
 @section('title', 'Manage Users - Eduria')

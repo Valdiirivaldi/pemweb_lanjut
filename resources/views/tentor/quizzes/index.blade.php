@@ -45,6 +45,9 @@
                                     <td class="text-muted">{{ $quiz->created_at->format('d M Y') }}</td>
                                     <td class="text-end">
                                         <div class="d-flex gap-2 justify-content-end">
+                                            <a href="{{ route('tentor.quizzes.attempts.index', $quiz->id) }}" class="btn btn-sm btn-outline-success rounded-pill px-3">
+                                                <i class="fas fa-users me-1"></i>Attempts
+                                            </a>
                                             <a href="{{ route('tentor.quizzes.questions.index', $quiz->id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
                                                 <i class="fas fa-eye me-1"></i>Questions
                                             </a>

@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Tentor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
-use App\Models\Module;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class CourseController extends Controller
