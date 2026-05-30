@@ -67,6 +67,7 @@
 
     {{-- Tab Navigation --}}
     <div class="enrollment-tabs">
+
         <a href="{{ route('admin.enrollments.index', ['tab' => 'siswa']) }}"
             class="tab-btn {{ $activeTab === 'siswa' ? 'active' : '' }}">
             <i class="fas fa-user-graduate"></i> Student Enrollment
@@ -79,6 +80,21 @@
 
     @if ($activeTab === 'siswa')
         {{-- ═══════════════════════════════════════════ TAB SISWA ═══════════════════════════════════════════ --}}
+        <div class="d-flex gap-2 mb-3">
+            <a href="{{ route('admin.enrollments.index', array_merge(request()->query(), ['tab' => 'siswa', 'status' => 'pending'])) }}"
+                class="btn btn-sm {{ request('status') === 'pending' ? 'btn-warning' : 'btn-outline-warning' }}">
+                Pending
+            </a>
+            <a href="{{ route('admin.enrollments.index', array_merge(request()->query(), ['tab' => 'siswa', 'status' => 'active'])) }}"
+                class="btn btn-sm {{ request('status') === 'active' ? 'btn-success' : 'btn-outline-success' }}">
+                Active
+            </a>
+            <a href="{{ route('admin.enrollments.index', array_merge(request()->query(), ['tab' => 'siswa', 'status' => null])) }}"
+                class="btn btn-sm btn-outline-secondary">
+                All
+            </a>
+        </div>
+
         <div class="row g-4">
             <div class="col-lg-5">
                 <div class="content-card shadow-sm">

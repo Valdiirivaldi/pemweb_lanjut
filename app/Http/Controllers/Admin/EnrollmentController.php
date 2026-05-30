@@ -15,14 +15,29 @@ class EnrollmentController extends Controller
 
         abort_if(!$row, 404);
 
-        $newValue = (int) (!$row->is_unlocked);
+        $currentStatus = $row->status ?? 'pending';
+        $isActiveNow = $currentStatus === 'active';
+
+        $newStatus = $isActiveNow ? 'pending' : 'active';
+        $newIsUnlocked = $newStatus === 'active' ? 1 : 0;
+
+        $adminId = auth()->id();
+        $unlockedAt = $newStatus === 'active' ? now() : null;
+        $unlockedBy = $newStatus === 'active' ? $adminId : null;
 
         DB::table('course_user')->where('id', $id)->update([
-            'is_unlocked' => $newValue,
+            // sinkronkan boolean lama agar middleware tetap bekerja
+            'is_unlocked' => $newIsUnlocked,
+
+            // workflow + audit trail
+            'status' => $newStatus,
+            'unlocked_at' => $unlockedAt,
+            'unlocked_by' => $unlockedBy,
+
             'updated_at' => now(),
         ]);
 
         return redirect()->route('admin.enrollments.index')
-            ->with('success', $newValue ? 'Akses dibuka.' : 'Akses dikunci.');
+            ->with('success', $newStatus === 'active' ? 'Akses dibuka.' : 'Status di-set pending.');
     }
 }
