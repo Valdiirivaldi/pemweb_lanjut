@@ -26,6 +26,7 @@ class AdminEnrollmentController extends Controller
             ->join('courses', 'course_user.course_id', '=', 'courses.id')
             ->select(
                 'course_user.id',
+                'course_user.is_unlocked',
                 'users.name as user_name',
                 'users.email as user_email',
                 'courses.title as course_title',
@@ -60,12 +61,13 @@ class AdminEnrollmentController extends Controller
         }
 
         DB::table('course_user')->insert([
-
-            'user_id'    => $request->user_id,
-            'course_id'  => $request->course_id,
-            'created_at' => now(),
-            'updated_at' => now(),
+            'user_id'      => $request->user_id,
+            'course_id'    => $request->course_id,
+            'is_unlocked'  => 0, // default: terkunci sampai admin unlock manual
+            'created_at'   => now(),
+            'updated_at'   => now(),
         ]);
+
 
         return redirect()->route('admin.enrollments.index')
             ->with('success', __('messages.enrollment.granted'));
