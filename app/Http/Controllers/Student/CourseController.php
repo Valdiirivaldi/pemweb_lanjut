@@ -7,6 +7,7 @@ use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
 class CourseController extends Controller
 {
     public function index(Request $request)
@@ -47,9 +48,17 @@ class CourseController extends Controller
             return redirect()->back()->with('error', __('messages.enroll.already'));
         }
 
-        $user->enrolledCourses()->attach($courseId);
+        $user->enrolledCourses()->attach($courseId, [
+            'is_unlocked' => 0,
+            'status' => 'pending',
+            'unlocked_at' => null,
+            'unlocked_by' => null,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
         $courseTitle = Course::find($courseId)->title;
+
 
         return redirect()->route('siswa.courses.index')
             ->with('success', __('messages.enroll.success', ['course' => $courseTitle]));
