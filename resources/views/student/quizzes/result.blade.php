@@ -434,15 +434,6 @@
         <i class="fas fa-arrow-left"></i> Kembali ke Kelas
     </a>
 
-    @if (session('error'))
-        <div class="alert alert-danger alert-dismissible fade show rounded-4 shadow-sm d-flex align-items-center gap-2 border-0 mb-4"
-             style="background: #fee2e2; color: #991b1b; font-weight: 500; font-size: 0.9rem; max-width: 640px; margin-left: auto; margin-right: auto;">
-            <i class="fas fa-exclamation-circle" style="font-size: 1.1rem;"></i>
-            {{ session('error') }}
-            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
     <div class="hero-score-wrap" data-anim="hero">
         <div class="hero-score-card">
             <div class="hero-icon {{ $passed ? 'passed' : 'failed' }}">
@@ -489,6 +480,55 @@
             </div>
         </div>
     </div>
+
+    @if ($allAttempts->count() > 1)
+        <div class="review-wrap" style="margin-top: 24px;">
+            <div class="review-head">
+                <i class="fas fa-history"></i>
+                Riwayat Attempt
+                <span class="review-head-suffix">{{ $allAttempts->count() }} attempts</span>
+            </div>
+            <div class="content-card shadow-sm" style="border-radius: var(--radius-card);">
+                <div class="card-body p-3">
+                    <table class="table table-quiz mb-0">
+                        <thead>
+                            <tr>
+                                <th>Attempt</th>
+                                <th>Score</th>
+                                <th>Status</th>
+                                <th>Tanggal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($allAttempts as $i => $a)
+                                @php
+                                    $aPassed = $a->score >= (int) ($attempt->quiz->passing_score ?? 70);
+                                @endphp
+                                <tr class="{{ $a->id === $attempt->id ? 'table-primary' : '' }}">
+                                    <td class="fw-semibold">Attempt #{{ $i + 1 }}</td>
+                                    <td>
+                                        <span class="score-badge {{ $aPassed ? 'score-pass' : 'score-fail' }}">
+                                            {{ $a->score }}%
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @if ($aPassed)
+                                            <span class="text-success fw-semibold"><i class="fas fa-check"></i> Lulus</span>
+                                        @else
+                                            <span class="text-danger fw-semibold"><i class="fas fa-times"></i> Gagal</span>
+                                        @endif
+                                    </td>
+                                    <td style="color: #a0aec0; font-size: 0.85rem;">
+                                        {{ $a->finished_at ? $a->finished_at->format('d M Y, H:i') : $a->created_at->format('d M Y, H:i') }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    @endif
 
     @if ($attempt->relationLoaded('answers') && $attempt->answers->isNotEmpty())
         <div class="review-wrap">

@@ -13,6 +13,11 @@ class QuizAttempt extends Model
         'quiz_id',
         'score',
         'certificate_path',
+        'finished_at',
+    ];
+
+    protected $casts = [
+        'finished_at' => 'datetime',
     ];
 
     // -------------------------------------------------------

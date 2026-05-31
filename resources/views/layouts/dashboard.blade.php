@@ -691,30 +691,6 @@
         </div>
 
         <div class="content-wrapper">
-            @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show rounded-4 shadow-sm d-flex align-items-center gap-2 border-0"
-                     style="background: #d1fae5; color: #065f46; font-weight: 500; font-size: 0.9rem;">
-                    <i class="fas fa-check-circle" style="font-size: 1.1rem;"></i>
-                    {{ session('success') }}
-                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
-                </div>
-            @endif
-            @if (session('error'))
-                <div class="alert alert-danger alert-dismissible fade show rounded-4 shadow-sm d-flex align-items-center gap-2 border-0"
-                     style="background: #fee2e2; color: #991b1b; font-weight: 500; font-size: 0.9rem;">
-                    <i class="fas fa-exclamation-circle" style="font-size: 1.1rem;"></i>
-                    {{ session('error') }}
-                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
-                </div>
-            @endif
-            @if (session('warning'))
-                <div class="alert alert-warning alert-dismissible fade show rounded-4 shadow-sm d-flex align-items-center gap-2 border-0"
-                     style="background: #fef3c7; color: #92400e; font-weight: 500; font-size: 0.9rem;">
-                    <i class="fas fa-exclamation-triangle" style="font-size: 1.1rem;"></i>
-                    {{ session('warning') }}
-                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
-                </div>
-            @endif
             @yield('content')
         </div>
     </div>
@@ -723,6 +699,35 @@
     <div id="sidebarOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.3); z-index:999;"
          onclick="closeSidebar()"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @php
+        $__flash = [];
+        if ($msg = session('success')) { $__flash['success'] = $msg; }
+        if ($msg = session('error'))   { $__flash['error']   = $msg; }
+        if ($msg = session('warning')) { $__flash['warning'] = $msg; }
+        if ($msg = session('info'))    { $__flash['info']    = $msg; }
+    @endphp
+    @if ($__flash)
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var flash = @json($__flash);
+                var icons = { success: 'success', error: 'error', warning: 'warning', info: 'info' };
+                Object.entries(flash).forEach(function(_a) {
+                    var type = _a[0], message = _a[1];
+                    if (!message) return;
+                    Swal.fire({
+                        icon: icons[type] || 'info',
+                        title: message,
+                        toast: true,
+                        position: 'top-end',
+                        timer: 3000,
+                        showConfirmButton: false,
+                        timerProgressBar: true,
+                    });
+                });
+            });
+        </script>
+    @endif
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function closeSidebar() {

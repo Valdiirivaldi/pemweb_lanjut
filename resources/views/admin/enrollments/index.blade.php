@@ -44,24 +44,6 @@
 @endpush
 
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2"
-             style="border-radius: 14px; border: none; font-size: 0.9rem; font-weight: 500;" role="alert">
-            <i class="fas fa-check-circle"></i>
-            {{ session('success') }}
-            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center gap-2"
-             style="border-radius: 14px; border: none; font-size: 0.9rem; font-weight: 500;" role="alert">
-            <i class="fas fa-exclamation-circle"></i>
-            {{ session('error') }}
-            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
     {{-- Tab Navigation --}}
     <div class="enrollment-tabs">
         <a href="{{ route('admin.enrollments.index', ['tab' => 'siswa']) }}"

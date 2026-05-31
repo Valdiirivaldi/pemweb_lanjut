@@ -4,15 +4,6 @@
 @section('page-title', 'Manage Users')
 
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2"
-             style="border-radius: 14px; border: none; font-size: 0.9rem; font-weight: 500;" role="alert">
-            <i class="fas fa-check-circle"></i>
-            {{ session('success') }}
-            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
     <div class="content-card shadow-sm">
         <div class="card-header">
             <span><i class="fas fa-users me-2"></i>Student & Tentor Accounts</span>

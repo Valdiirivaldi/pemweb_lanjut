@@ -22,7 +22,16 @@ class QuizController extends Controller
         $quizAttempts = $user->quizAttempts()
             ->with('quiz.course')
             ->latest()
-            ->get();
+            ->get()
+            ->groupBy('quiz_id')
+            ->map(function ($attempts) {
+                return $attempts->values()->map(function ($attempt, $index) {
+                    $attempt->attempt_number = $index + 1;
+                    return $attempt;
+                });
+            })
+            ->flatten(1)
+            ->sortByDesc('created_at');
 
         return view('student.quizzes.index', compact('user', 'quizAttempts'));
     }
@@ -37,22 +46,19 @@ class QuizController extends Controller
 
         $quiz->load('questions');
 
-        $attempt = QuizAttempt::firstOrCreate([
-            'siswa_id' => $user->id,
-            'quiz_id' => $quiz->id,
-        ], [
-            'score' => 0,
-            'certificate_path' => null,
-        ]);
+        $attempt = QuizAttempt::where('siswa_id', $user->id)
+            ->where('quiz_id', $quiz->id)
+            ->whereNull('finished_at')
+            ->latest()
+            ->first();
 
-        if ($attempt->score > 0 || $attempt->answers()->exists()) {
-            return redirect()->route('siswa.quiz-attempts.show', ['attempt' => $attempt->id]);
-        }
-
-        if ($attempt->wasRecentlyCreated === false) {
-            $attempt->created_at = now();
-            $attempt->save();
-            $attempt->refresh();
+        if (!$attempt) {
+            $attempt = QuizAttempt::create([
+                'siswa_id' => $user->id,
+                'quiz_id' => $quiz->id,
+                'score' => 0,
+                'certificate_path' => null,
+            ]);
         }
 
         return view('student.quizzes.take', compact('user', 'quiz', 'attempt'));
@@ -73,24 +79,23 @@ class QuizController extends Controller
 
         $quiz->load(['questions']);
 
-        $attempt = QuizAttempt::firstOrCreate([
-            'siswa_id' => $user->id,
-            'quiz_id' => $quiz->id,
-        ], [
-            'score' => 0,
-            'certificate_path' => null,
-        ]);
+        $attempt = QuizAttempt::where('siswa_id', $user->id)
+            ->where('quiz_id', $quiz->id)
+            ->whereNull('finished_at')
+            ->latest()
+            ->first();
 
-        if ($attempt->score > 0 || $attempt->answers()->count() > 0) {
-            return redirect()->route('siswa.quiz-attempts.show', ['attempt' => $attempt->id]);
+        if (!$attempt) {
+            return redirect()->route('siswa.quizzes.show', $quiz)
+                ->with('error', 'Tidak ada sesi kuis yang aktif.');
         }
 
+        $timeExpired = false;
         if ($quiz->time_limit) {
             $startTime = $attempt->created_at;
             $maxDeadline = $startTime->copy()->addMinutes((int) $quiz->time_limit + 5);
             if (now()->greaterThan($maxDeadline)) {
-                return redirect()->route('siswa.quiz-attempts.show', ['attempt' => $attempt->id])
-                    ->with('error', 'Waktu pengerjaan kuis telah habis.');
+                $timeExpired = true;
             }
         }
 
@@ -181,9 +186,11 @@ class QuizController extends Controller
         $attempt->update([
             'score' => $scorePercent,
             'certificate_path' => $certificatePath,
+            'finished_at' => now(),
         ]);
 
-        return redirect()->route('siswa.quiz-attempts.show', ['attempt' => $attempt->id]);
+        return redirect()->route('siswa.quiz-attempts.show', ['attempt' => $attempt->id])
+            ->with('error', $timeExpired ? 'Waktu pengerjaan kuis telah habis.' : null);
     }
 
     public function result(QuizAttempt $attempt): View
@@ -193,6 +200,12 @@ class QuizController extends Controller
 
         $attempt->load(['quiz.course', 'siswa', 'answers.question']);
 
-        return view('student.quizzes.result', compact('user', 'attempt'));
+        $allAttempts = QuizAttempt::where('siswa_id', $user->id)
+            ->where('quiz_id', $attempt->quiz_id)
+            ->whereNotNull('finished_at')
+            ->orderBy('created_at')
+            ->get();
+
+        return view('student.quizzes.result', compact('user', 'attempt', 'allAttempts'));
     }
 }

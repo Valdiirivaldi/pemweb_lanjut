@@ -214,6 +214,12 @@
         <i class="fas fa-arrow-left"></i> Kembali ke Kelas
     </a>
 
+    @php
+        $timeLimitSeconds = (int) $quiz->time_limit * 60;
+        $elapsedSeconds = now()->diffInSeconds($attempt->created_at);
+        $remainingSeconds = max(0, $timeLimitSeconds - $elapsedSeconds);
+    @endphp
+
     <div class="quiz-container">
         <div class="quiz-header">
             <h1><i class="fas fa-pencil-alt me-2" style="color: #f59e0b;"></i>{{ $quiz->title }}</h1>
@@ -286,8 +292,7 @@
 @push('scripts')
 <script>
     (function() {
-        const minutes = {{ (int) $quiz->time_limit }};
-        let seconds = minutes * 60;
+        let seconds = {{ $remainingSeconds }};
 
         const timerEl = document.getElementById('timerDisplay');
         const timerContainer = document.getElementById('timerContainer');

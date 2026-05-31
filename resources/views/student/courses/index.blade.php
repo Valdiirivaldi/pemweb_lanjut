@@ -456,25 +456,6 @@
             </div>
         </div>
 
-        {{-- Flash Messages --}}
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show alert-flash d-flex align-items-center gap-2"
-                 style="border-radius: 14px; border: none; font-size: 0.9rem; font-weight: 500;" role="alert">
-                <i class="fas fa-check-circle" style="font-size: 1.2rem;"></i>
-                <span>{{ session('success') }}</span>
-                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="alert alert-danger alert-dismissible fade show alert-flash d-flex align-items-center gap-2"
-                 style="border-radius: 14px; border: none; font-size: 0.9rem; font-weight: 500;" role="alert">
-                <i class="fas fa-exclamation-circle" style="font-size: 1.2rem;"></i>
-                <span>{{ session('error') }}</span>
-                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
-
         {{-- Search Bar --}}
         <div class="content-card shadow-sm" style="border-radius: var(--card-radius);">
             <div class="card-body p-4">

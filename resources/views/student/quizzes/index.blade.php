@@ -114,6 +114,7 @@
                                 <th>#</th>
                                 <th>Quiz Name</th>
                                 <th>Course</th>
+                                <th>Attempt</th>
                                 <th>Score</th>
                                 <th>Date</th>
                             </tr>
@@ -124,6 +125,7 @@
                                     <td>{{ $index + 1 }}</td>
                                     <td class="fw-semibold">{{ $attempt->quiz->title ?? '-' }}</td>
                                     <td>{{ $attempt->quiz->course->title ?? '-' }}</td>
+                                    <td>#{{ $attempt->attempt_number ?? 1 }}</td>
                                     <td>
                                         <span class="score-badge {{ $attempt->certificate_path ? 'score-pass' : 'score-fail' }}">
                                             {{ $attempt->score }}

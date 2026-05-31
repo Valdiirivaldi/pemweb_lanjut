@@ -211,13 +211,6 @@
         <i class="fas fa-arrow-left"></i> Back to My Courses
     </a>
 
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert" style="border-radius: 12px;">
-            <i class="fas fa-check-circle me-1"></i> {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
     <div class="course-hero shadow-sm mb-4">
         <div class="position-relative" style="z-index: 1;">
             <h3><i class="fas fa-book me-2"></i>{{ $course->title }}</h3>

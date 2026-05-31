@@ -249,13 +249,6 @@
             </div>
         </div>
 
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert" style="border-radius: 12px;">
-                <i class="fas fa-check-circle me-1"></i> {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
-
         <div class="content-card shadow-sm" style="border-radius: var(--card-radius);">
             <div class="card-body p-4">
                 <div class="search-wrapper">
