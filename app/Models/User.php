@@ -51,6 +51,25 @@ class User extends Authenticatable
     }
 
     // -------------------------------------------------------
+    // Course Access
+    // -------------------------------------------------------
+
+    /**
+     * Cek apakah user punya akses untuk membuka konten course.
+     * Akses dianggap valid jika:
+     * - user terdaftar (enrolled) pada course
+     * - pivot `course_user.is_unlocked` bernilai true
+     */
+    public function canAccessCourse(Course $course): bool
+    {
+        return $this->enrolledCourses()
+            ->where('course_user.course_id', $course->id)
+            ->wherePivot('is_unlocked', true)
+            ->exists();
+    }
+
+
+    // -------------------------------------------------------
     // Relationships
     // -------------------------------------------------------
 
@@ -70,7 +89,7 @@ class User extends Authenticatable
     public function enrolledCourses(): BelongsToMany
     {
         return $this->belongsToMany(Course::class, 'course_user')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
 
     /**

@@ -92,7 +92,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/courses/enroll', [StudentCourseController::class, 'enroll'])
             ->name('courses.enroll');
         Route::get('/courses/{course}/learn', [StudentCourseController::class, 'learn'])
-            ->name('courses.learn');
+            ->name('courses.learn')
+            ->middleware('course.access');
+
 
         Route::get('/my-courses', [StudentCourseController::class, 'index'])
             ->name('my-courses.index');
@@ -141,6 +143,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('enrollments.assign-tentor');
         Route::delete('/enrollments/{id}', [AdminEnrollmentController::class, 'destroy'])
             ->name('enrollments.destroy');
+
+        Route::post('/enrollments/{id}/toggle-access', [\App\Http\Controllers\Admin\EnrollmentController::class, 'toggleAccess'])
+            ->name('enrollments.toggle-access');
     });
 
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');

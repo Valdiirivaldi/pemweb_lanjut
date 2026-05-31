@@ -15,7 +15,31 @@
 @endpush
 
 @section('content')
+    {{-- Flash Message (percantik) --}}
+    @if (session('success'))
+        <div class="alert alert-success bb-alert alert-dismissible fade show d-flex align-items-start" role="alert"
+            style="border-radius:14px; box-shadow:0 10px 30px rgba(0,0,0,.08); padding:14px 16px;">
+            <div class="me-2" style="font-size:1.1rem; line-height:1;">✅</div>
+            <div class="flex-grow-1">
+                <strong>Berhasil!</strong> {{ session('success') }}
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger bb-alert alert-dismissible fade show d-flex align-items-start" role="alert"
+            style="border-radius:14px; box-shadow:0 10px 30px rgba(0,0,0,.08); padding:14px 16px;">
+            <div class="me-2" style="font-size:1.1rem; line-height:1;">⛔</div>
+            <div class="flex-grow-1">
+                <strong>Gagal!</strong> {{ session('error') }}
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     {{-- Welcome --}}
+
     <div class="row g-4 mb-4">
         <div class="col-12">
             <div class="stat-card shadow-sm d-flex align-items-center gap-4"
@@ -37,9 +61,21 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.bb-alert');
+            alerts.forEach(function(el) {
+                setTimeout(function() {
+                    try {
+                        const bsAlert = bootstrap.Alert.getOrCreateInstance(el);
+                        bsAlert.close();
+                    } catch (e) {
+                        el.style.display = 'none';
+                    }
+                }, 5000);
+            });
+
             var hour = new Date().getHours();
             var greetingEl = document.getElementById('greeting');
-            
+
             if (greetingEl) {
                 var name = @json($user->name);
                 var greet = 'Selamat ';
