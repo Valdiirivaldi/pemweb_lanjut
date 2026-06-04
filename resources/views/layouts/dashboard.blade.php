@@ -585,10 +585,6 @@
                    class="nav-link {{ request()->routeIs('tentor.students.*') ? 'active' : '' }}">
                     <i class="fas fa-users"></i>Participants
                 </a>
-                <a href="{{ route('profile') }}"
-                   class="nav-link {{ request()->routeIs('profile') ? 'active' : '' }}">
-                    <i class="fas fa-user-cog"></i>Profile
-                </a>
                 @break
 
             @case('admin')
