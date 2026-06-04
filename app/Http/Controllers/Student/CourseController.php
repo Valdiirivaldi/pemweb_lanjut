@@ -63,7 +63,7 @@ class CourseController extends Controller
             abort(403, 'You are not enrolled in this course.');
         }
 
-        $course->load(['modules', 'tentor', 'quizzes.questions', 'quizzes.attempts' => function ($q) use ($user) {
+        $course->load(['modules.submissions', 'modules.files', 'tentor', 'quizzes.questions', 'quizzes.attempts' => function ($q) use ($user) {
             $q->where('siswa_id', $user->id);
         }]);
 

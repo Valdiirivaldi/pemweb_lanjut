@@ -49,6 +49,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('modules.destroy');
         Route::delete('/modules/{module}/files/{file}', [ModuleController::class, 'destroyFile'])
             ->name('modules.files.destroy');
+        Route::get('/modules/{module}/submissions', [\App\Http\Controllers\Tentor\SubmissionController::class, 'index'])
+            ->name('modules.submissions.index');
+        Route::get('/modules/{module}/submissions/{submission}', [\App\Http\Controllers\Tentor\SubmissionController::class, 'show'])
+            ->name('modules.submissions.show');
         Route::get('/modules', [ModuleController::class, 'index'])
             ->name('modules.index');
         Route::get('/quizzes', [QuizController::class, 'index'])
@@ -95,6 +99,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('courses.enroll');
         Route::get('/courses/{course}/learn', [StudentCourseController::class, 'learn'])
             ->name('courses.learn');
+
+        Route::post('/modules/{module}/submissions', [\App\Http\Controllers\Student\SubmissionController::class, 'store'])
+            ->name('modules.submissions.store');
 
         Route::get('/my-courses', [StudentCourseController::class, 'index'])
             ->name('my-courses.index');

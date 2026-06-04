@@ -277,6 +277,11 @@
                                     <i class="fas fa-file me-1"></i>{{ $fileCount }} File(s)
                                 </span>
                             @endif
+                            @if ($module->submissions_count > 0)
+                                <span class="badge-tag" style="background: rgba(22,160,133,0.08); color: #16a085;">
+                                    <i class="fas fa-upload me-1"></i>{{ $module->submissions_count }} Submission(s)
+                                </span>
+                            @endif
                         </div>
                         @if ($fileCount > 0)
                             <div class="mt-2" style="font-size:0.8rem;">
@@ -309,6 +314,11 @@
                         @endif
                     </div>
                     <div class="module-actions">
+                        <a href="{{ route('tentor.modules.submissions.index', $module->id) }}"
+                           class="btn btn-sm btn-outline-info rounded-pill px-3 me-1"
+                           style="font-size:0.78rem; font-weight:500; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+                            <i class="fas fa-upload"></i>{{ $module->submissions_count }}
+                        </a>
                         <a href="{{ route('tentor.modules.edit', $module->id) }}" class="btn-sm-icon btn-edit" title="Edit Module">
                             <i class="fas fa-pen"></i>
                         </a>

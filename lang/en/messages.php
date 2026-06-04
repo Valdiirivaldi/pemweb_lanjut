@@ -17,4 +17,5 @@ return [
     'module.updated'  => 'Module updated successfully!',
     'module.deleted'     => 'Module deleted successfully!',
     'module.file_deleted' => 'File deleted successfully!',
+    'submission.saved'    => 'Submission saved successfully!',
 ];

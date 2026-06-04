@@ -82,6 +82,11 @@ class User extends Authenticatable
         return $this->hasMany(QuizAttempt::class, 'siswa_id');
     }
 
+    public function submissions(): HasMany
+    {
+        return $this->hasMany(ModuleSubmission::class, 'siswa_id');
+    }
+
     /**
      * Profil Siswa (1:1 ke tabel siswas).
      */

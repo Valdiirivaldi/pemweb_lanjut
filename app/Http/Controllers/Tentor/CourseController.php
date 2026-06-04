@@ -50,7 +50,7 @@ class CourseController extends Controller
         }
 
         $course->load(['modules' => function ($q) {
-            $q->latest();
+            $q->withCount('submissions')->latest();
         }]);
 
         return view('tentor.courses.show', compact('user', 'course'));

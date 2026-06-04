@@ -390,6 +390,92 @@
                                 @endforeach
                             </div>
                         @endif
+
+                        {{-- Submission Section --}}
+                        @php $mySubmission = $module->submissions->where('siswa_id', $user->id)->first(); @endphp
+                        <div class="mt-3 pt-3 border-top">
+                            <h6 class="fw-bold mb-2" style="color:#1e3c72;">
+                                <i class="fas fa-upload me-1"></i>My Submission
+                            </h6>
+
+                            @if ($mySubmission)
+                                <div style="font-size:0.88rem;">
+                                    @if ($mySubmission->file_path)
+                                        <div class="mb-1">
+                                            <i class="fas fa-file me-1 text-muted"></i>
+                                            <a href="{{ asset('storage/' . $mySubmission->file_path) }}" target="_blank">
+                                                {{ $mySubmission->file_name }}
+                                            </a>
+                                        </div>
+                                    @endif
+                                    @if ($mySubmission->link_url)
+                                        <div class="mb-1">
+                                            <i class="fas fa-link me-1 text-muted"></i>
+                                            <a href="{{ $mySubmission->link_url }}" target="_blank">{{ $mySubmission->link_url }}</a>
+                                        </div>
+                                    @endif
+                                    @if ($mySubmission->notes)
+                                        <div class="text-muted mt-1" style="font-size:0.82rem;">
+                                            <i class="fas fa-comment me-1"></i>{{ $mySubmission->notes }}
+                                        </div>
+                                    @endif
+                                    <div class="text-muted mt-1" style="font-size:0.78rem;">
+                                        <i class="fas fa-clock me-1"></i>Submitted {{ $mySubmission->submitted_at->diffForHumans() }}
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary rounded-pill px-3 mt-2"
+                                        onclick="toggleEditSubmission({{ $module->id }})">
+                                    <i class="fas fa-edit me-1"></i>Edit
+                                </button>
+                                <div id="edit-submission-{{ $module->id }}" style="display:none;" class="mt-2">
+                                    <form method="POST" action="{{ route('siswa.modules.submissions.store', $module->id) }}"
+                                          enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="mb-2">
+                                            <label style="font-size:0.82rem; font-weight:600;">Replace File (optional)</label>
+                                            <input type="file" class="form-control form-control-sm" name="file"
+                                                   accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.zip,.rar,.jpg,.jpeg,.png">
+                                        </div>
+                                        <div class="mb-2">
+                                            <label style="font-size:0.82rem; font-weight:600;">Link URL (optional)</label>
+                                            <input type="url" class="form-control form-control-sm" name="link_url"
+                                                   value="{{ $mySubmission->link_url }}" placeholder="https://...">
+                                        </div>
+                                        <div class="mb-2">
+                                            <label style="font-size:0.82rem; font-weight:600;">Notes (optional)</label>
+                                            <textarea class="form-control form-control-sm" name="notes" rows="2"
+                                                      placeholder="Add notes...">{{ $mySubmission->notes }}</textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-sm btn-primary rounded-pill px-3">
+                                            <i class="fas fa-save me-1"></i>Update Submission
+                                        </button>
+                                    </form>
+                                </div>
+                            @else
+                                <form method="POST" action="{{ route('siswa.modules.submissions.store', $module->id) }}"
+                                      enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="mb-2">
+                                        <label style="font-size:0.82rem; font-weight:600;">Upload File (optional)</label>
+                                        <input type="file" class="form-control form-control-sm" name="file"
+                                               accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.zip,.rar,.jpg,.jpeg,.png">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label style="font-size:0.82rem; font-weight:600;">Link URL (optional)</label>
+                                        <input type="url" class="form-control form-control-sm" name="link_url"
+                                               placeholder="https://...">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label style="font-size:0.82rem; font-weight:600;">Notes (optional)</label>
+                                        <textarea class="form-control form-control-sm" name="notes" rows="2"
+                                                  placeholder="Add notes about your submission..."></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-sm btn-primary rounded-pill px-3">
+                                        <i class="fas fa-upload me-1"></i>Submit
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -489,6 +575,11 @@
     if (firstBody) {
         firstBody.classList.add('open');
         if (firstIcon) firstIcon.classList.add('open');
+    }
+
+    function toggleEditSubmission(moduleId) {
+        var el = document.getElementById('edit-submission-' + moduleId);
+        if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
     }
 </script>
 @endpush

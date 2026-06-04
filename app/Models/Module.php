@@ -26,4 +26,9 @@ class Module extends Model
     {
         return $this->hasMany(ModuleFile::class);
     }
+
+    public function submissions(): HasMany
+    {
+        return $this->hasMany(ModuleSubmission::class);
+    }
 }
