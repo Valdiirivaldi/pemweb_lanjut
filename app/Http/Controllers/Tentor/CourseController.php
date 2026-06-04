@@ -38,6 +38,21 @@ class CourseController extends Controller
         ]);
 
         return redirect()->route('tentor.courses.index')
-            ->with('success', 'Course berhasil dibuat!');
+            ->with('success', __('messages.course.created'));
+    }
+
+    public function show(Course $course): View
+    {
+        $user = Auth::user();
+
+        if ($course->tentor_id !== $user->id) {
+            abort(403);
+        }
+
+        $course->load(['modules' => function ($q) {
+            $q->latest();
+        }]);
+
+        return view('tentor.courses.show', compact('user', 'course'));
     }
 }

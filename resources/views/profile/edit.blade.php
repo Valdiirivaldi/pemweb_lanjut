@@ -1,29 +1,50 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot>
+@extends('layouts.dashboard')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
+@section('title', 'Edit Profile - Eduria')
+@section('page-title', 'Edit Profile')
+
+@section('content')
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            {{-- Profile Information --}}
+            <div class="content-card shadow-sm mb-4">
+                <div class="card-header">
+                    <span><i class="fas fa-user me-2"></i>Profile Information</span>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted" style="font-size:0.88rem;margin-bottom:20px;">
+                        Update your account's profile information and email address.
+                    </p>
                     @include('profile.partials.update-profile-information-form')
                 </div>
             </div>
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
+            {{-- Update Password --}}
+            <div class="content-card shadow-sm mb-4">
+                <div class="card-header">
+                    <span><i class="fas fa-lock me-2"></i>Update Password</span>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted" style="font-size:0.88rem;margin-bottom:20px;">
+                        Ensure your account is using a long, random password to stay secure.
+                    </p>
                     @include('profile.partials.update-password-form')
                 </div>
             </div>
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
+            {{-- Delete Account --}}
+            <div class="content-card shadow-sm mb-4" style="border-left: 4px solid #dc3545;">
+                <div class="card-header" style="background:#fff5f5;">
+                    <span><i class="fas fa-trash-alt me-2 text-danger"></i>Delete Account</span>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted" style="font-size:0.88rem;margin-bottom:20px;">
+                        Once your account is deleted, all of its resources and data will be permanently deleted.
+                        Before deleting your account, please download any data or information that you wish to retain.
+                    </p>
                     @include('profile.partials.delete-user-form')
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
+@endsection

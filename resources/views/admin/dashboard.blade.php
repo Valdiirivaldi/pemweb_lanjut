@@ -1,25 +1,9 @@
-@php
-    $sidebarMenus = [
-        ['route' => 'admin.dashboard', 'label' => 'Dashboard', 'icon' => 'fa-chart-pie', 'active' => true],
-        ['route' => 'admin.users.index', 'label' => 'Kelola Pengguna', 'icon' => 'fa-users'],
-        ['route' => 'admin.enrollments.index', 'label' => 'Enrollment Kelas', 'icon' => 'fa-user-graduate'],
-        ['route' => 'profile.edit', 'label' => 'Profile', 'icon' => 'fa-user-cog'],
-    ];
-@endphp
-
 @extends('layouts.dashboard')
+
+
 
 @section('title', 'Admin Dashboard - Eduria')
 @section('page-title', 'Admin Dashboard')
-
-@section('sidebar-menu')
-    @foreach ($sidebarMenus as $menu)
-        <a href="{{ route($menu['route']) }}"
-           class="nav-link {{ ($menu['active'] ?? false) || request()->routeIs($menu['route']) ? 'active' : '' }}">
-            <i class="fas {{ $menu['icon'] }}"></i>{{ $menu['label'] }}
-        </a>
-    @endforeach
-@endsection
 
 @section('content')
     {{-- Welcome Card --}}
@@ -30,9 +14,9 @@
                     <i class="fas fa-user-shield" style="font-size: 2.5rem; opacity: 0.3;"></i>
                 </div>
                 <div>
-                    <h4 class="fw-bold mb-1" style="color: #fff;" id="adminGreeting">Selamat Datang, {{ Auth::user()->name }}!</h4>
+                    <h4 class="fw-bold mb-1" style="color: #fff;" id="adminGreeting">Welcome, {{ Auth::user()->name }}!</h4>
                     <p class="mb-0" style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">
-                        Pantau dan kelola seluruh aktivitas pembelajaran dengan bijak.
+                        Monitor and manage all learning activities wisely.
                     </p>
                 </div>
             </div>
@@ -50,7 +34,7 @@
                 <div class="stat-number">
                     <span class="counter-animate" data-target="{{ $totalUsers }}">0</span>
                 </div>
-                <div class="stat-label">Total Seluruh User Aktif</div>
+                <div class="stat-label">Total Active Users</div>
             </div>
         </div>
         <div class="col-md-4">
@@ -63,7 +47,7 @@
                 <div class="stat-number">
                     <span class="counter-animate" data-target="{{ $totalCourses }}">0</span>
                 </div>
-                <div class="stat-label">Total Kelas yang Tersedia</div>
+                <div class="stat-label">Total Available Courses</div>
             </div>
         </div>
         <div class="col-md-4">
@@ -76,7 +60,7 @@
                 <div class="stat-number">
                     <span class="counter-animate" data-target="{{ $totalEnrolled }}">0</span>
                 </div>
-                <div class="stat-label">Total Siswa Ter-Enroll</div>
+                <div class="stat-label">Total Enrolled Students</div>
             </div>
         </div>
     </div>
@@ -85,7 +69,7 @@
         <div class="col-lg-6">
             <div class="content-card shadow-sm animate-on-scroll delay-3">
                 <div class="card-header">
-                    <span>Pengguna Terbaru</span>
+                    <span>Latest Users</span>
                     <span class="badge bg-primary rounded-pill">{{ count($recentUsers) }}</span>
                 </div>
                 <div class="card-body p-0">
@@ -94,10 +78,10 @@
                             <table class="table table-hover mb-0" style="font-size: 0.85rem;">
                                 <thead class="table-light">
                                     <tr>
-                                        <th>Nama</th>
+                                        <th>Name</th>
                                         <th>Email</th>
                                         <th>Role</th>
-                                        <th>Bergabung</th>
+                                        <th>Joined</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -117,8 +101,8 @@
                     @else
                         <div class="empty-state">
                             <i class="fas fa-users"></i>
-                            <h6>Belum ada pengguna</h6>
-                            <p>Belum ada pengguna yang terdaftar di sistem.</p>
+                            <h6>No users yet</h6>
+                            <p>No users are registered in the system.</p>
                         </div>
                     @endif
                 </div>
@@ -128,7 +112,7 @@
         <div class="col-lg-6">
             <div class="content-card shadow-sm animate-on-scroll delay-4">
                 <div class="card-header">
-                    <span>Course Terbaru</span>
+                    <span>Latest Courses</span>
                     <span class="badge bg-primary rounded-pill">{{ count($recentCourses) }}</span>
                 </div>
                 <div class="card-body p-0">
@@ -137,7 +121,7 @@
                             <table class="table table-hover mb-0" style="font-size: 0.85rem;">
                                 <thead class="table-light">
                                     <tr>
-                                        <th>Judul</th>
+                                        <th>Title</th>
                                         <th>Tentor</th>
                                         <th>Dibuat</th>
                                     </tr>
@@ -156,8 +140,8 @@
                     @else
                         <div class="empty-state">
                             <i class="fas fa-book"></i>
-                            <h6>Belum ada course</h6>
-                            <p>Belum ada course yang dibuat di sistem.</p>
+                            <h6>No courses yet</h6>
+                            <p>No courses have been created in the system.</p>
                         </div>
                     @endif
                 </div>
@@ -173,11 +157,11 @@
         var el = document.getElementById('adminGreeting');
         if (el) {
             var name = el.textContent.split(', ').pop() || '';
-            var greet = 'Selamat ';
-            if (hour >= 3 && hour < 11) greet += 'Pagi';
-            else if (hour >= 11 && hour < 15) greet += 'Siang';
-            else if (hour >= 15 && hour < 18) greet += 'Sore';
-            else greet += 'Malam';
+            var greet = 'Good ';
+            if (hour >= 3 && hour < 11) greet += 'Morning';
+            else if (hour >= 11 && hour < 15) greet += 'Afternoon';
+            else if (hour >= 15 && hour < 18) greet += 'Evening';
+            else greet += 'Night';
             el.textContent = greet + ', ' + name + '!';
         }
     });

@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
@@ -79,5 +80,29 @@ class User extends Authenticatable
     public function quizAttempts(): HasMany
     {
         return $this->hasMany(QuizAttempt::class, 'siswa_id');
+    }
+
+    /**
+     * Profil Siswa (1:1 ke tabel siswas).
+     */
+    public function siswa(): HasOne
+    {
+        return $this->hasOne(Siswa::class, 'user_id');
+    }
+
+    /**
+     * Profil Tentor (1:1 ke tabel tentors).
+     */
+    public function tentor(): HasOne
+    {
+        return $this->hasOne(Tentor::class, 'user_id');
+    }
+
+    /**
+     * Mendapatkan unique_id berdasarkan role.
+     */
+    public function getUniqueIdAttribute(): ?string
+    {
+        return $this->siswa?->unique_id ?? $this->tentor?->unique_id;
     }
 }

@@ -1,26 +1,7 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Profil Saya - Eduria')
-@section('page-title', 'Profil Saya')
-
-@section('sidebar-menu')
-    @if(Auth::user()->role == 'admin')
-        <a href="{{ route('admin.dashboard') }}" class="nav-link">
-            <i class="fas fa-chart-pie"></i>Dashboard
-        </a>
-    @elseif(Auth::user()->role == 'tentor')
-        <a href="{{ route('tentor.dashboard') }}" class="nav-link">
-            <i class="fas fa-chart-pie"></i>Dashboard
-        </a>
-    @else
-        <a href="{{ route('dashboard') }}" class="nav-link">
-            <i class="fas fa-chart-pie"></i>Dashboard
-        </a>
-    @endif
-    <a href="{{ route('profile') }}" class="nav-link active">
-        <i class="fas fa-user-cog"></i>Profile
-    </a>
-@endsection
+@section('title', 'My Profile - Eduria')
+@section('page-title', 'My Profile')
 
 @push('styles')
 <style>
@@ -234,11 +215,11 @@
 
                 <p class="profile-meta mb-3">
                     <i class="far fa-calendar-alt"></i>
-                    Bergabung sejak {{ $user->created_at->format('d M Y') }}
+                    Member since {{ $user->created_at->format('d M Y') }}
                 </p>
 
                 <button class="btn btn-primary btn-edit-toggle" id="editToggle" type="button">
-                    <i class="fas fa-pen me-1"></i> Edit Profil
+                    <i class="fas fa-pen me-1"></i> Edit Profile
                 </button>
 
                 {{-- Slide-down Edit Form --}}
@@ -251,7 +232,7 @@
                             <div class="form-floating-custom">
                                 <input type="text" class="form-control" id="name" name="name"
                                        value="{{ old('name', $user->name) }}" placeholder=" " required>
-                                <label for="name">Nama Lengkap</label>
+                                <label for="name">Full Name</label>
                                 @error('name')
                                     <small class="text-danger mt-1 d-block">{{ $message }}</small>
                                 @enderror
@@ -268,16 +249,16 @@
 
                             <div class="d-flex gap-2 mt-3">
                                 <button type="submit" class="btn btn-primary flex-grow-1 rounded-pill">
-                                    <i class="fas fa-check me-1"></i> Simpan
+                                    <i class="fas fa-check me-1"></i> Save
                                 </button>
                                 <button type="button" class="btn btn-outline-secondary rounded-pill px-4" id="editCancel">
-                                    Batal
+                                    Cancel
                                 </button>
                             </div>
 
                             @if (session('status') === 'profile-updated')
                                 <div class="alert alert-success mt-3 mb-0 py-2 text-center rounded-pill" style="font-size: 0.85rem;">
-                                    <i class="fas fa-check-circle me-1"></i> Profil berhasil diperbarui!
+                                    <i class="fas fa-check-circle me-1"></i> Profile updated successfully!
                                 </div>
                             @endif
                         </form>
@@ -299,7 +280,7 @@
                             <div class="profile-stat-number">
                                 <span class="counter" data-target="{{ $totalClasses }}">0</span>
                             </div>
-                            <div class="profile-stat-label">Kelas Diikuti</div>
+                            <div class="profile-stat-label">Enrolled Courses</div>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -310,7 +291,7 @@
                             <div class="profile-stat-number">
                                 <span class="counter" data-target="{{ $totalCertificates }}">0</span>
                             </div>
-                            <div class="profile-stat-label">Sertifikat</div>
+                            <div class="profile-stat-label">Certificates</div>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -321,7 +302,7 @@
                             <div class="profile-stat-number">
                                 <span class="counter" data-target="{{ $totalQuizzes }}">0</span>
                             </div>
-                            <div class="profile-stat-label">Kuis Dikerjakan</div>
+                            <div class="profile-stat-label">Quizzes Taken</div>
                         </div>
                     </div>
                 </div>
@@ -329,43 +310,94 @@
                 {{-- Account Info Card for Siswa --}}
                 <div class="content-card shadow-sm">
                     <div class="card-header">
-                        <span><i class="fas fa-info-circle me-2"></i>Informasi Akun</span>
+                        <span><i class="fas fa-info-circle me-2"></i>Account Information</span>
                     </div>
                     <div class="card-body">
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-id-card me-2"></i>ID Pengguna</span>
+                            <span class="info-label"><i class="fas fa-id-card me-2"></i>User ID</span>
                             <span class="info-value">#{{ $user->id }}</span>
                         </div>
+                        <div class="info-item">
+                            <span class="info-label"><i class="fas fa-qrcode me-2"></i>Unique ID</span>
+                            <span class="info-value">
+                                @if ($user->unique_id)
+                                    <span class="badge-role" style="background:#e8ecf4;color:#1e3c72;font-family:monospace;">
+                                        {{ $user->unique_id }}
+                                    </span>
+                                    @if(Auth::user()->isAdmin())
+                                    <button class="btn btn-sm btn-link p-0 ms-1" type="button"
+                                            onclick="toggleUniqueIdEdit()"
+                                            style="color:#4e73df;text-decoration:none;font-size:0.75rem;">
+                                        <i class="fas fa-pen"></i>
+                                    </button>
+                                    @endif
+                                @else
+                                    <span class="text-muted" style="font-size:0.85rem;">—</span>
+                                @endif
+                            </span>
+                        </div>
+                        @if(Auth::user()->isAdmin())
+                        {{-- Inline edit form for Unique ID --}}
+                        <div id="uniqueIdEditForm" style="display:none; padding: 8px 0 4px;">
+                            <form method="post" action="{{ route('profile.unique-id') }}">
+                                @csrf
+                                @method('patch')
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" name="unique_id"
+                                           value="{{ $user->unique_id }}" maxlength="20"
+                                           style="border-radius:8px 0 0 8px;font-family:monospace;"
+                                           placeholder="S-2026-XXXX" required>
+                                    <button class="btn btn-success btn-sm" type="submit"
+                                            style="border-radius:0 8px 8px 0;">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="btn btn-outline-secondary btn-sm" type="button"
+                                            onclick="toggleUniqueIdEdit()"
+                                            style="border-radius:8px;margin-left:4px;">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                @error('unique_id')
+                                    <small class="text-danger mt-1 d-block">{{ $message }}</small>
+                                @enderror
+                                @if (session('status') === 'unique-id-updated')
+                                    <small class="text-success mt-1 d-block">
+                                        <i class="fas fa-check-circle me-1"></i>Unique ID updated!
+                                    </small>
+                                @endif
+                            </form>
+                        </div>
+                        @endif
                         <div class="info-item">
                             <span class="info-label"><i class="fas fa-envelope me-2"></i>Email</span>
                             <span class="info-value">{{ $user->email }}</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-check-circle me-2"></i>Verifikasi Email</span>
+                            <span class="info-label"><i class="fas fa-check-circle me-2"></i>Email Verification</span>
                             <span class="info-value">
                                 @if ($user->email_verified_at)
                                     <span class="badge-role" style="background:#c6f6d5;color:#276749;">
-                                        <i class="fas fa-check-circle me-1"></i>Terverifikasi
+                                        <i class="fas fa-check-circle me-1"></i>Verified
                                     </span>
                                 @else
                                     <span class="badge-role" style="background:#fed7d7;color:#9b2c2c;">
-                                        <i class="fas fa-times-circle me-1"></i>Belum Verifikasi
+                                        <i class="fas fa-times-circle me-1"></i>Not Verified
                                     </span>
                                 @endif
                             </span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-user-tag me-2"></i>Peran</span>
+                            <span class="info-label"><i class="fas fa-user-tag me-2"></i>Role</span>
                             <span class="info-value">
                                 <span class="badge-role {{ $user->role }}">{{ ucfirst($user->role) }}</span>
                             </span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-calendar-plus me-2"></i>Bergabung Sejak</span>
+                            <span class="info-label"><i class="fas fa-calendar-plus me-2"></i>Member Since</span>
                             <span class="info-value">{{ $user->created_at->format('d F Y') }}</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-clock me-2"></i>Terakhir Diperbarui</span>
+                            <span class="info-label"><i class="fas fa-clock me-2"></i>Last Updated</span>
                             <span class="info-value">{{ $user->updated_at->format('d F Y, H:i') }}</span>
                         </div>
                     </div>
@@ -379,47 +411,100 @@
                                 <i class="fas {{ Auth::user()->role == 'admin' ? 'fa-user-shield' : 'fa-chalkboard-teacher' }}"></i>
                             </div>
                             <div>
-                                <h5 class="fw-bold mb-1" style="color: #1e3c72;">Akun {{ ucfirst(Auth::user()->role) }}</h5>
+                                <h5 class="fw-bold mb-1" style="color: #1e3c72;">{{ ucfirst(Auth::user()->role) }} Account</h5>
                                 <p class="mb-0 text-muted" style="font-size: 0.85rem;">
-                                    {{ Auth::user()->role == 'admin' ? 'Anda adalah pemilik dan pengelola sistem pembelajaran.' : 'Anda adalah pengajar yang bertanggung jawab atas kursus dan peserta didik.' }}
+                                    {{ Auth::user()->role == 'admin' ? 'You are the owner and manager of the learning system.' : 'You are an instructor responsible for courses and students.' }}
                                 </p>
                             </div>
                         </div>
 
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-id-card me-2"></i>ID Pengguna</span>
+                            <span class="info-label"><i class="fas fa-id-card me-2"></i>User ID</span>
                             <span class="info-value">#{{ $user->id }}</span>
                         </div>
+                        @if ($user->role !== 'admin')
+                        <div class="info-item">
+                            <span class="info-label"><i class="fas fa-qrcode me-2"></i>Unique ID</span>
+                            <span class="info-value">
+                                @if ($user->unique_id)
+                                    <span class="badge-role" style="background:#e8ecf4;color:#1e3c72;font-family:monospace;">
+                                        {{ $user->unique_id }}
+                                    </span>
+                                    @if(Auth::user()->isAdmin())
+                                    <button class="btn btn-sm btn-link p-0 ms-1" type="button"
+                                            onclick="toggleUniqueIdEdit()"
+                                            style="color:#4e73df;text-decoration:none;font-size:0.75rem;">
+                                        <i class="fas fa-pen"></i>
+                                    </button>
+                                    @endif
+                                @else
+                                    <span class="text-muted" style="font-size:0.85rem;">—</span>
+                                @endif
+                            </span>
+                        </div>
+                        @if(Auth::user()->isAdmin())
+                        {{-- Inline edit form for Unique ID --}}
+                        <div id="uniqueIdEditForm" style="display:none; padding: 8px 0 4px;">
+                            <form method="post" action="{{ route('profile.unique-id') }}">
+                                @csrf
+                                @method('patch')
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" name="unique_id"
+                                           value="{{ $user->unique_id }}" maxlength="20"
+                                           style="border-radius:8px 0 0 8px;font-family:monospace;"
+                                           placeholder="S-2026-XXXX" required>
+                                    <button class="btn btn-success btn-sm" type="submit"
+                                            style="border-radius:0 8px 8px 0;">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="btn btn-outline-secondary btn-sm" type="button"
+                                            onclick="toggleUniqueIdEdit()"
+                                            style="border-radius:8px;margin-left:4px;">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                @error('unique_id')
+                                    <small class="text-danger mt-1 d-block">{{ $message }}</small>
+                                @enderror
+                                @if (session('status') === 'unique-id-updated')
+                                    <small class="text-success mt-1 d-block">
+                                        <i class="fas fa-check-circle me-1"></i>Unique ID updated!
+                                    </small>
+                                @endif
+                            </form>
+                        </div>
+                        @endif
+                        @endif
                         <div class="info-item">
                             <span class="info-label"><i class="fas fa-envelope me-2"></i>Email</span>
                             <span class="info-value">{{ $user->email }}</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-check-circle me-2"></i>Verifikasi Email</span>
+                            <span class="info-label"><i class="fas fa-check-circle me-2"></i>Email Verification</span>
                             <span class="info-value">
                                 @if ($user->email_verified_at)
                                     <span class="badge-role" style="background:#c6f6d5;color:#276749;">
-                                        <i class="fas fa-check-circle me-1"></i>Terverifikasi
+                                        <i class="fas fa-check-circle me-1"></i>Verified
                                     </span>
                                 @else
                                     <span class="badge-role" style="background:#fed7d7;color:#9b2c2c;">
-                                        <i class="fas fa-times-circle me-1"></i>Belum Verifikasi
+                                        <i class="fas fa-times-circle me-1"></i>Not Verified
                                     </span>
                                 @endif
                             </span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-user-tag me-2"></i>Peran</span>
+                            <span class="info-label"><i class="fas fa-user-tag me-2"></i>Role</span>
                             <span class="info-value">
                                 <span class="badge-role {{ $user->role }}">{{ ucfirst($user->role) }}</span>
                             </span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-calendar-plus me-2"></i>Bergabung Sejak</span>
+                            <span class="info-label"><i class="fas fa-calendar-plus me-2"></i>Member Since</span>
                             <span class="info-value">{{ $user->created_at->format('d F Y') }}</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-clock me-2"></i>Terakhir Diperbarui</span>
+                            <span class="info-label"><i class="fas fa-clock me-2"></i>Last Updated</span>
                             <span class="info-value">{{ $user->updated_at->format('d F Y, H:i') }}</span>
                         </div>
                     </div>
@@ -486,5 +571,11 @@
             editForm.classList.add('show');
         @endif
     });
+
+    /* ── Toggle Unique ID Edit ── */
+    function toggleUniqueIdEdit() {
+        var el = document.getElementById('uniqueIdEditForm');
+        if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
 </script>
 @endpush

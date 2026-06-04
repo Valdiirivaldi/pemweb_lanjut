@@ -542,7 +542,18 @@
             <h3>Selamat Datang</h3>
             <p class="subtitle">Masuk ke akun Eduria Anda</p>
 
-            <div id="errorContainer" class="alert-error" role="alert">
+            @error('email')
+                <div class="alert-error show" role="alert">
+                    <i class="fas fa-circle-exclamation"></i>
+                    <span>{{ $message }}</span>
+                </div>
+            @enderror
+
+            @if ($errors->has('email'))
+                <div id="errorContainer" class="alert-error" role="alert" style="display:none;">
+            @else
+                <div id="errorContainer" class="alert-error" role="alert">
+            @endif
                 <i class="fas fa-circle-exclamation"></i>
                 <span id="errorMessage"></span>
             </div>
@@ -552,8 +563,8 @@
 
 
                 <div class="floating-group">
-                    <input type="email" class="form-control" id="email" name="email"
-                        placeholder="nama@email.com" autocomplete="email" autofocus required>
+                    <input type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" id="email" name="email"
+                        placeholder="nama@email.com" value="{{ old('email') }}" autocomplete="email" autofocus required>
                     <label for="email">
                         <i class="far fa-envelope me-1"></i>Alamat Email
                     </label>

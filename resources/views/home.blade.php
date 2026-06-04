@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Eduria - Bimbingan Belajar Online Terbaik</title>
+    <title>Eduria - Best Online Learning Platform</title>
 
     <!-- Google Font: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -312,12 +312,12 @@
             <div class="collapse navbar-collapse" id="navMenu">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item"><a class="nav-link" href="#hero">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#keunggulan">Keunggulan</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#about">Tentang</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#kontak">Kontak</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#keunggulan">Why Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#kontak">Contact</a></li>
                 </ul>
-                <a href="{{ route('login') }}" class="btn btn-glow">
-                    <i class="fas fa-arrow-right-to-bracket me-2"></i>Login / Daftar
+                    <a href="{{ route('login') }}" class="btn btn-glow">
+                    <i class="fas fa-arrow-right-to-bracket me-2"></i>Login / Register
                 </a>
             </div>
         </div>
@@ -329,25 +329,25 @@
             <div class="row align-items-center gy-5">
                 <div class="col-lg-6" data-aos="fade-right" data-aos-duration="1000">
                     <p class="text-warning fw-semibold mb-2" style="letter-spacing: 2px; font-size: 0.9rem;">
-                        <i class="fas fa-star me-1"></i> BIMBINGAN BELAJAR ONLINE #1
+                        <i class="fas fa-star me-1"></i>                         ONLINE LEARNING #1 PLATFORM
                     </p>
                     <h1 class="hero-title">
                         Ayo <span class="typed-text"></span>
                     </h1>
                     <p class="hero-sub mt-3">
-                        Eduria adalah web pendukung belajar bahasa inggris dengan tentor berpengalaman, materi lengkap, dan belajar santai.
+                        Eduria adalah platform belajar bahasa Inggris with experienced tutors, complete materials, dan fun learning experience.
                     </p>
                     <div class="d-flex flex-wrap gap-3 mt-4">
                         <a href="#keunggulan" class="btn btn-cta">
-                            <i class="fas fa-rocket me-2"></i>Mulai Belajar Sekarang
+                            <i class="fas fa-rocket me-2"></i>Start Learning Now
                         </a>
                         <a href="#about" class="btn btn-outline-light rounded-pill px-4 fw-semibold">
-                            Pelajari Dulu <i class="fas fa-arrow-right ms-2"></i>
+                            Learn More <i class="fas fa-arrow-right ms-2"></i>
                         </a>
                     </div>
                     <div class="d-flex gap-4 mt-4 pt-2">
-                        <div><small class="text-white-50">Tentor Berpengalaman</small><p class="text-white fw-bold mb-0">-</p></div>
-                        <div><small class="text-white-50">Total Peserta</small><p class="text-white fw-bold mb-0">-</p></div>
+                        <div><small class="text-white-50">Experienced Tutors</small><p class="text-white fw-bold mb-0">-</p></div>
+                        <div><small class="text-white-50">Total Students</small><p class="text-white fw-bold mb-0">-</p></div>
                         <div><small class="text-white-50">Rating</small><p class="text-white fw-bold mb-0">⭐ 4.9</p></div>
                     </div>
                 </div>
@@ -364,11 +364,11 @@
     <section id="keunggulan" class="py-5">
         <div class="container py-5">
             <div class="text-center mb-5" data-aos="fade-up">
-                <p class="text-primary fw-semibold mb-1">KEUNGGULAN</p>
-                <h2 class="section-title section-title-center">Kenapa Harus Eduria?</h2>
-                <p class="text-muted mx-auto" style="max-width: 540px;">
-                    Kami hadir dengan solusi belajar terlengkap untuk membantumu sukses.
-                </p>
+                    <p class="text-primary fw-semibold mb-1">WHY CHOOSE US</p>
+                    <h2 class="section-title section-title-center">Kenapa Harus Eduria?</h2>
+                    <p class="text-muted mx-auto" style="max-width: 540px;">
+                        We provide complete learning solutions untuk membantu kamu sukses.
+                    </p>
             </div>
             <div class="row g-4">
                 <div class="col-md-4" data-aos="fade-up" data-aos-delay="0">
@@ -376,9 +376,9 @@
                         <div class="feature-icon-box bouncing-icon mx-auto" style="background: linear-gradient(135deg, #4e73df, #224abe);">
                             <i class="fas fa-book-open"></i>
                         </div>
-                        <h5 class="fw-bold mb-2">Tentor Berpengalaman</h5>
+                        <h5 class="fw-bold mb-2">Expert Tutors</h5>
                         <p class="text-muted mb-0">
-                            Belajar langsung dengan tentor berpengalaman dan profesional di bidangnya.
+                            Learn directly with experienced and professional tutors in their fields.
                         </p>
                     </div>
                 </div>
@@ -387,9 +387,9 @@
                         <div class="feature-icon-box bouncing-icon mx-auto" style="background: linear-gradient(135deg, #1cc88a, #13855c);">
                             <i class="fas fa-book"></i>
                         </div>
-                        <h5 class="fw-bold mb-2">Materi Lengkap</h5>
+                        <h5 class="fw-bold mb-2">Complete Materials</h5>
                         <p class="text-muted mb-0">
-                            Akses modul, video pembelajaran, dan latihan soal yang selalu diperbarui.
+                            Access modules, learning videos, dan practice questions that are always updated.
                         </p>
                     </div>
                 </div>
@@ -398,9 +398,9 @@
                         <div class="feature-icon-box bouncing-icon mx-auto" style="background: linear-gradient(135deg, #f6c23e, #d4a217);">
                             <i class="fas fa-book-reader"></i>
                         </div>
-                        <h5 class="fw-bold mb-2">Kuis Interaktif</h5>
+                        <h5 class="fw-bold mb-2">Interactive Quizzes</h5>
                         <p class="text-muted mb-0">
-                            Uji pemahamanmu dengan kuis seru yang bikin belajar terasa seperti bermain.
+                            Test your understanding with fun quizzes that make learning feel like playing.
                         </p>
                     </div>
                 </div>
@@ -419,41 +419,41 @@
                          style="max-width: 420px; filter: drop-shadow(0 10px 40px rgba(78, 115, 223, 0.15));">
                 </div>
                 <div class="col-lg-6" data-aos="fade-left" data-aos-duration="1000">
-                    <p class="text-primary fw-semibold mb-1">TENTANG KAMI</p>
-                    <h2 class="section-title">Solusi Belajar<br>Terpercaya Sejak 2024</h2>
+                    <p class="text-primary fw-semibold mb-1">ABOUT US</p>
+                    <h2 class="section-title">Trusted Learning<br>Solution Since 2024</h2>
                     <p class="text-muted">
-                        Eduria merupakan website pendukung resmi dari lembaga les offline kami.
-                        Seluruh peserta yang mendaftar dan mengikuti les offline secara otomatis
-                        akan mendapatkan akun dan hak penuh untuk mengakses materi digital
-                        serta kuis interaktif di website ini.
+                        Eduria merupakan official supporting website from our offline tutoring center.
+                        All students who register and join our offline classes will automatically
+                        receive an account with full access to digital materials
+                        and interactive quizzes on this platform.
                     </p>
                     <div class="row mt-4">
                         <div class="col-sm-6">
                             <div class="facility-item">
-                                <i class="fas fa-circle-check"></i> Video Pembelajaran
+                                <i class="fas fa-circle-check"></i> Learning Videos
                             </div>
                             <div class="facility-item">
-                                <i class="fas fa-circle-check"></i> Modul PDF & E-Book
+                                <i class="fas fa-circle-check"></i> PDF Modules & E-Books
                             </div>
                             <div class="facility-item">
-                                <i class="fas fa-circle-check"></i> Kuis & Try Out
+                                <i class="fas fa-circle-check"></i> Quizzes & Try Outs
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="facility-item">
-                                <i class="fas fa-circle-check"></i> Materi Eksklusif
+                                <i class="fas fa-circle-check"></i> Exclusive Materials
                             </div>
                             <div class="facility-item">
-                                <i class="fas fa-circle-check"></i> Sertifikat Kelulusan
+                                <i class="fas fa-circle-check"></i> Graduation Certificates
                             </div>
                             <div class="facility-item">
-                                <i class="fas fa-circle-check"></i> Grup Diskusi Eksklusif
+                                <i class="fas fa-circle-check"></i> Exclusive Discussion Groups
                             </div>
                         </div>
                     </div>
                     <a href="#kontak" class="btn btn-primary rounded-pill px-5 py-3 fw-bold mt-3"
                        style="background: linear-gradient(135deg, #4e73df, #224abe); border: none;">
-                        <i class="fas fa-phone me-2"></i>Hubungi Kami Sekarang
+                        <i class="fas fa-phone me-2"></i>Contact Us Now
                     </a>
                 </div>
             </div>
@@ -464,14 +464,14 @@
     <section id="kontak" class="cta-section py-5">
         <div class="container py-5 text-center position-relative" style="z-index: 2;">
             <div data-aos="flip-up" data-aos-duration="1000">
-                <p class="text-warning fw-semibold mb-1" style="letter-spacing: 2px;">SIAP SUKSES?</p>
-                <h2 class="text-white fw-bold" style="font-size: 2.4rem;">Gabung Bersama Eduria Sekarang!</h2>
+                <p class="text-warning fw-semibold mb-1" style="letter-spacing: 2px;">READY TO SUCCEED?</p>
+                <h2 class="text-white fw-bold" style="font-size: 2.4rem;">Join Eduria Sekarang!</h2>
                 <p class="text-white-50 mx-auto mb-4" style="max-width: 540px;">
-                    Hubungi kami via WhatsApp untuk informasi dan pendaftaran.
-                    Tim kami siap membantu kamu!
+                    Contact us via WhatsApp untuk info dan pendaftaran.
+                    Tim kami siap membantu you!
                 </p>
                 <a href="https://wa.me/628972551888" class="btn btn-wa" target="_blank">
-                    <i class="fab fa-whatsapp fa-lg me-2"></i>Hubungi WhatsApp
+                    <i class="fab fa-whatsapp fa-lg me-2"></i>Contact WhatsApp
                 </a>
                 <div class="d-flex justify-content-center gap-5 mt-5 text-white">
                     <div><i class="fas fa-envelope text-warning me-2"></i>eduriainfo@gmail.com</div>
@@ -527,9 +527,9 @@
         // ── Typed.js ──
         new Typed('.typed-text', {
             strings: [
-                'Belajar Lebih Seru.',
-                'Raih Prestasi Teratas.',
-                'Bersama Eduria.',
+                'Learning Made Fun.',
+                'Reach Your Goals.',
+                'Together with Eduria.',
             ],
             typeSpeed: 70,
             backSpeed: 40,

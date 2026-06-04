@@ -10,21 +10,36 @@ class Question extends Model
     protected $fillable = [
         'quiz_id',
         'question_text',
-        'option_a',
-        'option_b',
-        'option_c',
-        'option_d',
-        'correct_option',
+        'type',
+        'options',
+        'correct_options',
     ];
 
-    // -------------------------------------------------------
-    // Relationships
-    // -------------------------------------------------------
+    protected $casts = [
+        'options' => 'array',
+        'correct_options' => 'array',
+    ];
 
-    /**
-     * Kuis yang memiliki soal ini.
-     * Question → belongsTo Quiz
-     */
+    public function isSingleChoice(): bool
+    {
+        return $this->type === 'single';
+    }
+
+    public function isMultipleChoice(): bool
+    {
+        return $this->type === 'multiple';
+    }
+
+    public function isTrueFalse(): bool
+    {
+        return $this->type === 'true_false';
+    }
+
+    public function getOptionKeys(): array
+    {
+        return array_keys($this->options ?? []);
+    }
+
     public function quiz(): BelongsTo
     {
         return $this->belongsTo(Quiz::class);

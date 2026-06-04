@@ -10,7 +10,9 @@ class Module extends Model
     protected $fillable = [
         'course_id',
         'title',
+        'content',
         'video_url',
+        'link_url',
         'pdf_path',
     ];
 
