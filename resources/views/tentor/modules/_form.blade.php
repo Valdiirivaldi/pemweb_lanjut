@@ -76,38 +76,48 @@
 
 <div class="mb-4">
     <label class="form-label-custom">
-        <i class="fas fa-file label-icon"></i>File Attachment
+        <i class="fas fa-file label-icon"></i>File Attachments
     </label>
 
-    @if ($isEdit && $module->pdf_path)
-        <div class="current-file">
-            <i class="fas fa-paperclip"></i>
-            Current file:
-            <a href="{{ asset('storage/' . $module->pdf_path) }}" target="_blank">
-                {{ basename($module->pdf_path) }}
-            </a>
+    @if ($isEdit && $module->files->isNotEmpty())
+        <div class="mb-2">
+            <div style="font-size:0.82rem; font-weight:600; color:#4a5568; margin-bottom:6px;">Current files:</div>
+            @foreach ($module->files as $file)
+                <div class="current-file d-inline-flex align-items-center gap-2 me-2 mb-1">
+                    <i class="fas fa-paperclip"></i>
+                    <a href="{{ asset('storage/' . $file->file_path) }}" target="_blank">
+                        {{ $file->file_name }}
+                    </a>
+                    <form action="{{ route('tentor.modules.files.destroy', [$module->id, $file->id]) }}"
+                          method="POST" class="d-inline" onsubmit="return confirm('Delete this file?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm text-danger border-0 bg-transparent p-0 ms-1"
+                                title="Delete file" style="line-height:1;">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </form>
+                </div>
+            @endforeach
         </div>
     @endif
 
     <div class="file-upload-area" id="fileUploadArea">
         <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
-        <div class="upload-text">
-            @if ($isEdit && $module->pdf_path)
-                Click to replace file
-            @else
-                Click to upload or drag a file here
-            @endif
+        <div class="upload-text" id="uploadText">
+            Click to choose files
         </div>
-        <div class="upload-hint">Supported: PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX, TXT, ZIP, RAR (max 100MB)</div>
+        <div class="upload-hint">Supported: PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX, TXT, ZIP, RAR, JPG, PNG, GIF, MP4 (max 100MB)</div>
     </div>
-    <input type="file" class="d-none" id="file" name="file"
-           accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.zip,.rar">
-    @error('file')
+    <input type="file" class="d-none" id="files" name="files[]" multiple
+           accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.zip,.rar,.jpg,.jpeg,.png,.gif,.mp4,.webm">
+    @error('files')
         <small class="text-danger mt-1 d-block">{{ $message }}</small>
     @enderror
-    @if ($isEdit)
-        <div class="form-hint">Leave empty to keep the current file.</div>
-    @endif
+    @error('files.*')
+        <small class="text-danger mt-1 d-block">{{ $message }}</small>
+    @enderror
+    <div class="form-hint">You can select multiple files at once. Existing files are kept unless deleted individually.</div>
 </div>
 
 <div class="d-flex gap-3 mt-4 pt-3 border-top">

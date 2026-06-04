@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Tentor;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Module;
+use App\Models\ModuleFile;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +20,7 @@ class ModuleController extends Controller
         $courseIds = $user->courses()->pluck('id');
         $modules = Module::whereIn('course_id', $courseIds)
             ->with('course')
+            ->withCount('files')
             ->latest()
             ->get();
 
@@ -48,7 +50,8 @@ class ModuleController extends Controller
             'content'   => ['nullable', 'string', 'max:50000'],
             'video_url' => ['nullable', 'string', 'max:500'],
             'link_url'  => ['nullable', 'url', 'max:500'],
-            'file'      => ['nullable', 'file', 'mimes:pdf,doc,docx,ppt,pptx,xls,xlsx,txt,zip,rar', 'max:102400'],
+            'files'     => ['nullable', 'array'],
+            'files.*'   => ['file', 'mimes:pdf,doc,docx,ppt,pptx,xls,xlsx,txt,zip,rar,jpg,jpeg,png,gif,mp4,webm', 'max:102400'],
         ]);
 
         $course = Course::findOrFail($request->course_id);
@@ -57,14 +60,20 @@ class ModuleController extends Controller
             abort(403);
         }
 
-        $data = $request->only(['course_id', 'title', 'content', 'video_url', 'link_url']);
+        $data = array_filter($request->only(['course_id', 'title', 'content', 'video_url', 'link_url']));
 
-        if ($request->hasFile('file')) {
-            $path = $request->file('file')->store('modules', 'public');
-            $data['pdf_path'] = $path;
+        $module = Module::create($data);
+
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                $path = $file->store('modules', 'public');
+                $module->files()->create([
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_path' => $path,
+                    'file_size' => $file->getSize(),
+                ]);
+            }
         }
-
-        Module::create($data);
 
         return redirect()->route('tentor.courses.show', $course->id)
             ->with('success', __('messages.module.created'));
@@ -97,23 +106,42 @@ class ModuleController extends Controller
             'content'   => ['nullable', 'string', 'max:50000'],
             'video_url' => ['nullable', 'string', 'max:500'],
             'link_url'  => ['nullable', 'url', 'max:500'],
-            'file'      => ['nullable', 'file', 'mimes:pdf,doc,docx,ppt,pptx,xls,xlsx,txt,zip,rar', 'max:102400'],
+            'files'     => ['nullable', 'array'],
+            'files.*'   => ['file', 'mimes:pdf,doc,docx,ppt,pptx,xls,xlsx,txt,zip,rar,jpg,jpeg,png,gif,mp4,webm', 'max:102400'],
         ]);
 
-        $data = $request->only(['course_id', 'title', 'content', 'video_url', 'link_url']);
-
-        if ($request->hasFile('file')) {
-            if ($module->pdf_path) {
-                Storage::disk('public')->delete($module->pdf_path);
-            }
-            $path = $request->file('file')->store('modules', 'public');
-            $data['pdf_path'] = $path;
-        }
+        $data = array_filter($request->only(['course_id', 'title', 'content', 'video_url', 'link_url']));
 
         $module->update($data);
 
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                $path = $file->store('modules', 'public');
+                $module->files()->create([
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_path' => $path,
+                    'file_size' => $file->getSize(),
+                ]);
+            }
+        }
+
         return redirect()->route('tentor.courses.show', $module->course_id)
             ->with('success', __('messages.module.updated'));
+    }
+
+    public function destroyFile(Module $module, ModuleFile $file): RedirectResponse
+    {
+        $user = Auth::user();
+
+        if ($module->course->tentor_id !== $user->id) {
+            abort(403);
+        }
+
+        Storage::disk('public')->delete($file->file_path);
+        $file->delete();
+
+        return redirect()->route('tentor.courses.show', $module->course_id)
+            ->with('success', __('messages.module.file_deleted'));
     }
 
     public function destroy(Module $module): RedirectResponse
@@ -125,6 +153,10 @@ class ModuleController extends Controller
         }
 
         $courseId = $module->course_id;
+
+        foreach ($module->files as $file) {
+            Storage::disk('public')->delete($file->file_path);
+        }
 
         if ($module->pdf_path) {
             Storage::disk('public')->delete($module->pdf_path);

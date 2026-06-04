@@ -15,5 +15,6 @@ return [
     'profile.updated' => 'Profile updated successfully!',
     'module.created'  => 'Module created successfully!',
     'module.updated'  => 'Module updated successfully!',
-    'module.deleted'  => 'Module deleted successfully!',
+    'module.deleted'     => 'Module deleted successfully!',
+    'module.file_deleted' => 'File deleted successfully!',
 ];

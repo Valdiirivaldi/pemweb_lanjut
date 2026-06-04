@@ -47,6 +47,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('modules.update');
         Route::delete('/modules/{module}', [ModuleController::class, 'destroy'])
             ->name('modules.destroy');
+        Route::delete('/modules/{module}/files/{file}', [ModuleController::class, 'destroyFile'])
+            ->name('modules.files.destroy');
         Route::get('/modules', [ModuleController::class, 'index'])
             ->name('modules.index');
         Route::get('/quizzes', [QuizController::class, 'index'])

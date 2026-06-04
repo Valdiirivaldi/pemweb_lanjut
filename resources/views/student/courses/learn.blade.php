@@ -350,13 +350,45 @@
                             </div>
                         @endif
 
-                        @if ($module->pdf_path)
-                            <a href="{{ asset('storage/' . $module->pdf_path) }}"
-                               class="btn-pdf"
-                               target="_blank"
-                               download>
-                                <i class="fas fa-file-pdf"></i> Download PDF
-                            </a>
+                        @if ($module->content)
+                            <div class="module-content mb-3" style="font-size:0.9rem; line-height:1.7; color:#2d3748;">
+                                {!! nl2br(e($module->content)) !!}
+                            </div>
+                        @endif
+
+                        @if ($module->link_url)
+                            <div class="mb-3">
+                                <a href="{{ $module->link_url }}" target="_blank"
+                                   class="btn-pdf" style="display:inline-flex; align-items:center; gap:8px; padding:10px 20px; border-radius:12px; font-weight:600; font-size:0.85rem; background:rgba(22,160,133,0.08); color:#16a085; border:1.5px solid rgba(22,160,133,0.15); text-decoration:none; transition:all 0.25s ease;">
+                                    <i class="fas fa-external-link-alt"></i> Open Reference Link
+                                </a>
+                            </div>
+                        @endif
+
+                        @php
+                            $allFiles = collect();
+                            if ($module->pdf_path) {
+                                $allFiles->push((object)[
+                                    'file_name' => basename($module->pdf_path),
+                                    'file_path' => $module->pdf_path,
+                                ]);
+                            }
+                            foreach ($module->files as $f) {
+                                $allFiles->push($f);
+                            }
+                        @endphp
+
+                        @if ($allFiles->isNotEmpty())
+                            <div class="d-flex flex-wrap gap-2 mt-2">
+                                @foreach ($allFiles as $file)
+                                    <a href="{{ asset('storage/' . $file->file_path) }}"
+                                       class="btn-pdf"
+                                       target="_blank"
+                                       download>
+                                        <i class="fas fa-download"></i> {{ $file->file_name }}
+                                    </a>
+                                @endforeach
+                            </div>
                         @endif
                     </div>
                 </div>

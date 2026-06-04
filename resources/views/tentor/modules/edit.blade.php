@@ -190,19 +190,18 @@
 @push('scripts')
 <script>
     document.getElementById('fileUploadArea').addEventListener('click', function() {
-        document.getElementById('file').click();
+        document.getElementById('files').click();
     });
 
-    document.getElementById('file').addEventListener('change', function() {
+    document.getElementById('files').addEventListener('change', function() {
         var area = document.getElementById('fileUploadArea');
+        var text = document.getElementById('uploadText');
         if (this.files && this.files.length > 0) {
             area.classList.add('has-file');
-            area.querySelector('.upload-text').textContent = this.files[0].name;
-            area.querySelector('.upload-hint').textContent = (this.files[0].size / 1024 / 1024).toFixed(2) + ' MB';
+            text.textContent = this.files.length + ' file(s) selected';
         } else {
             area.classList.remove('has-file');
-            area.querySelector('.upload-text').textContent = 'Click to upload or drag a file here';
-            area.querySelector('.upload-hint').textContent = 'Supported: PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX, TXT, ZIP, RAR (max 100MB)';
+            text.textContent = 'Click to choose files';
         }
     });
 </script>

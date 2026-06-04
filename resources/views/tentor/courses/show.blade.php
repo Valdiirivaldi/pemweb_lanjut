@@ -271,12 +271,42 @@
                                     <i class="fas fa-link me-1"></i>Link
                                 </span>
                             @endif
-                            @if ($module->pdf_path)
+                            @php $fileCount = $module->files->count() + ($module->pdf_path ? 1 : 0); @endphp
+                            @if ($fileCount > 0)
                                 <span class="badge-tag" style="background: rgba(243,156,18,0.08); color: #e67e22;">
-                                    <i class="fas fa-file me-1"></i>File
+                                    <i class="fas fa-file me-1"></i>{{ $fileCount }} File(s)
                                 </span>
                             @endif
                         </div>
+                        @if ($fileCount > 0)
+                            <div class="mt-2" style="font-size:0.8rem;">
+                                @if ($module->pdf_path)
+                                    <div class="d-inline-flex align-items-center gap-1 me-3">
+                                        <i class="fas fa-paperclip text-muted"></i>
+                                        <a href="{{ asset('storage/' . $module->pdf_path) }}" target="_blank" class="text-decoration-none">
+                                            {{ basename($module->pdf_path) }}
+                                        </a>
+                                    </div>
+                                @endif
+                                @foreach ($module->files as $file)
+                                    <div class="d-inline-flex align-items-center gap-1 me-3">
+                                        <i class="fas fa-paperclip text-muted"></i>
+                                        <a href="{{ asset('storage/' . $file->file_path) }}" target="_blank" class="text-decoration-none">
+                                            {{ $file->file_name }}
+                                        </a>
+                                        <form action="{{ route('tentor.modules.files.destroy', [$module->id, $file->id]) }}"
+                                              method="POST" class="d-inline" onsubmit="return confirm('Delete this file?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm text-danger border-0 bg-transparent p-0"
+                                                    title="Delete file" style="line-height:1;">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
                     </div>
                     <div class="module-actions">
                         <a href="{{ route('tentor.modules.edit', $module->id) }}" class="btn-sm-icon btn-edit" title="Edit Module">

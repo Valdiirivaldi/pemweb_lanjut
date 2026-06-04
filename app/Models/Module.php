@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Module extends Model
 {
@@ -16,16 +17,13 @@ class Module extends Model
         'pdf_path',
     ];
 
-    // -------------------------------------------------------
-    // Relationships
-    // -------------------------------------------------------
-
-    /**
-     * Kelas yang memiliki modul ini.
-     * Module → belongsTo Course
-     */
     public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class);
+    }
+
+    public function files(): HasMany
+    {
+        return $this->hasMany(ModuleFile::class);
     }
 }
