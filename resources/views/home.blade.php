@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Eduria - Best Online Learning Platform</title>
+    <script>if(localStorage.getItem('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 
     <!-- Google Font: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -280,6 +281,70 @@
         .footer a { color: #a0aec0; text-decoration: none; transition: color 0.3s; }
         .footer a:hover { color: #4e73df; }
 
+        /* ── Dark Mode ── */
+        [data-theme="dark"] body {
+            background: #0f172a;
+        }
+        [data-theme="dark"] .navbar-eduria.scrolled {
+            background: rgba(15, 23, 42, 0.95);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+        [data-theme="dark"] .navbar-eduria.scrolled .nav-link {
+            color: #cbd5e1 !important;
+        }
+        [data-theme="dark"] .navbar-eduria.scrolled .navbar-brand {
+            color: #60a5fa !important;
+        }
+        [data-theme="dark"] .hero {
+            background: linear-gradient(135deg, #0a1628 0%, #132347 30%, #1a3a7a 70%, #0f1a3a 100%);
+        }
+        [data-theme="dark"] .section-title {
+            color: #f1f5f9;
+        }
+        [data-theme="dark"] .text-muted {
+            color: #94a3b8 !important;
+        }
+        [data-theme="dark"] .text-white-50 {
+            color: #94a3b8 !important;
+        }
+        [data-theme="dark"] .feature-card {
+            background: #1e293b;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        [data-theme="dark"] .feature-card:hover {
+            box-shadow: 0 20px 50px rgba(78, 115, 223, 0.25);
+        }
+        [data-theme="dark"] .about-section {
+            background: #0f172a;
+        }
+        [data-theme="dark"] .facility-item {
+            color: #cbd5e1;
+        }
+        [data-theme="dark"] .btn-outline-light {
+            border-color: #64748b;
+            color: #cbd5e1;
+        }
+        [data-theme="dark"] .btn-outline-light:hover {
+            background: #334155;
+            border-color: #64748b;
+            color: #f1f5f9;
+        }
+        [data-theme="dark"] .cta-section {
+            background: linear-gradient(135deg, #0a1628, #132347);
+        }
+        [data-theme="dark"] .hero-title {
+            color: #fff;
+        }
+        [data-theme="dark"] .hero-sub {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        [data-theme="dark"] .navbar-eduria .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+        [data-theme="dark"] .navbar-eduria .navbar-brand {
+            color: #fff !important;
+        }
+
         /* ── Responsive ── */
         @media (max-width: 991px) {
             .hero-title { font-size: 2.4rem; }
@@ -316,6 +381,10 @@
                     <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                     <li class="nav-item"><a class="nav-link" href="#kontak">Contact</a></li>
                 </ul>
+                    <button class="btn btn-glow theme-toggle me-2" id="themeToggle" type="button"
+                        style="padding:8px 16px;min-width:42px;display:inline-flex;align-items:center;justify-content:center;">
+                        <i class="fas fa-moon"></i>
+                    </button>
                     <a href="{{ route('login') }}" class="btn btn-glow">
                     <i class="fas fa-arrow-right-to-bracket me-2"></i>Login / Register
                 </a>
@@ -538,6 +607,29 @@
             showCursor: true,
             cursorChar: '|',
         });
+
+        var themeToggle = document.getElementById('themeToggle');
+        var htmlEl = document.documentElement;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                htmlEl.setAttribute('data-theme', 'dark');
+                if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                htmlEl.removeAttribute('data-theme');
+                if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        if (themeToggle) {
+            var current = localStorage.getItem('theme') || 'light';
+            applyTheme(current);
+            themeToggle.addEventListener('click', function() {
+                var next = htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                applyTheme(next);
+            });
+        }
     </script>
 </body>
 </html>

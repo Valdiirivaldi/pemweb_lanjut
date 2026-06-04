@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard') - Eduria</title>
+    <script>if(localStorage.getItem('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -142,12 +143,43 @@
             to { transform: scaleX(0); }
         }
 
+        :root {
+            --bg-body: #f4f7fc;
+            --bg-surface: #ffffff;
+            --bg-topbar: #ffffff;
+            --bg-hover: #f7fafc;
+            --text-primary: #1e3c72;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            --text-subtle: #a0aec0;
+            --border-default: #e2e8f0;
+            --border-light: #f0f4f8;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+            --shadow-hover: 0 12px 30px rgba(0,0,0,0.06);
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0f172a;
+            --bg-surface: #1e293b;
+            --bg-topbar: #1e293b;
+            --bg-hover: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --text-subtle: #64748b;
+            --border-default: #334155;
+            --border-light: #1e293b;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
+            --shadow-hover: 0 12px 30px rgba(0,0,0,0.3);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: #f4f7fc;
+            background: var(--bg-body);
             min-height: 100vh;
+            transition: background 0.3s ease;
         }
 
         /* ── Sidebar ── */
@@ -254,35 +286,38 @@
         }
 
         .topbar {
-            background: #fff;
+            background: var(--bg-topbar);
             padding: 14px 28px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            box-shadow: var(--shadow-sm);
             position: sticky;
             top: 0;
             z-index: 999;
+            transition: background 0.3s ease;
         }
 
         .topbar .page-title {
             font-weight: 700;
-            color: #1e3c72;
+            color: var(--text-primary);
             font-size: 1.2rem;
+            transition: color 0.3s ease;
         }
 
         .topbar .page-title span {
-            color: #a0aec0;
+            color: var(--text-subtle);
             font-weight: 400;
         }
 
         .topbar .live-clock {
             font-size: 0.8rem;
-            color: #a0aec0;
+            color: var(--text-subtle);
             font-weight: 500;
             letter-spacing: 0.3px;
-            border-left: 1px solid #e2e8f0;
+            border-left: 1px solid var(--border-default);
             padding-left: 12px;
+            transition: color 0.3s ease, border-color 0.3s ease;
         }
 
         /* ── Entrance Animations ── */
@@ -331,18 +366,18 @@
             width: 38px;
             height: 38px;
             border-radius: 10px;
-            border: 1px solid #e2e8f0;
-            background: #fff;
+            border: 1px solid var(--border-default);
+            background: var(--bg-surface);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #718096;
+            color: var(--text-muted);
             transition: all 0.3s;
             text-decoration: none;
         }
 
         .topbar .btn-icon:hover {
-            background: #f7fafc;
+            background: var(--bg-hover);
             color: #4e73df;
         }
 
@@ -356,13 +391,13 @@
             border-radius: 10px;
             cursor: pointer;
             transition: background 0.3s;
-            color: #4a5568;
+            color: var(--text-secondary);
             font-weight: 500;
             font-size: 0.9rem;
         }
 
         .topbar .user-dropdown .dropdown-toggle:hover {
-            background: #f7fafc;
+            background: var(--bg-hover);
         }
 
         .topbar .user-dropdown .dropdown-toggle::after { display: none; }
@@ -388,10 +423,11 @@
             display: none;
             background: none;
             border: none;
-            color: #1e3c72;
+            color: var(--text-primary);
             font-size: 1.3rem;
             cursor: pointer;
             padding: 4px;
+            transition: color 0.3s ease;
         }
 
         /* ── Card ── */
@@ -400,12 +436,12 @@
             border-radius: 16px;
             padding: 22px 24px;
             transition: all 0.3s ease;
-            background: #fff;
+            background: var(--bg-surface);
         }
 
         .stat-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+            box-shadow: var(--shadow-hover);
         }
 
         .stat-card .stat-icon {
@@ -422,32 +458,36 @@
         .stat-card .stat-number {
             font-weight: 800;
             font-size: 1.8rem;
-            color: #1e3c72;
+            color: var(--text-primary);
             line-height: 1.2;
+            transition: color 0.3s ease;
         }
 
         .stat-card .stat-label {
-            color: #a0aec0;
+            color: var(--text-muted);
             font-size: 0.85rem;
             font-weight: 500;
+            transition: color 0.3s ease;
         }
 
         .content-card {
             border: none;
             border-radius: 16px;
-            background: #fff;
+            background: var(--bg-surface);
             overflow: hidden;
+            transition: background 0.3s ease;
         }
 
         .content-card .card-header {
             background: transparent;
-            border-bottom: 1px solid #f0f4f8;
+            border-bottom: 1px solid var(--border-light);
             padding: 18px 24px;
             font-weight: 700;
-            color: #1e3c72;
+            color: var(--text-primary);
             display: flex;
             align-items: center;
             justify-content: space-between;
+            transition: color 0.3s ease, border-color 0.3s ease;
         }
 
         .content-card .card-body { padding: 24px; }
@@ -464,6 +504,139 @@
         .badge-role.tentor { background: #fefcbf; color: #975a16; }
         .badge-role.siswa { background: #c6f6d5; color: #276749; }
 
+        /* ── Dark Mode Overrides ── */
+        [data-theme="dark"] .hover-lift:hover {
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+        }
+        [data-theme="dark"] .dropdown-menu {
+            background: var(--bg-surface);
+            border-color: var(--border-default);
+        }
+        [data-theme="dark"] .dropdown-item {
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+        [data-theme="dark"] .dropdown-item:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+        [data-theme="dark"] .dropdown-divider {
+            border-color: var(--border-default);
+        }
+        [data-theme="dark"] .form-control,
+        [data-theme="dark"] .form-select {
+            background: var(--bg-surface);
+            border-color: var(--border-default);
+            color: var(--text-primary);
+        }
+        [data-theme="dark"] .form-control:focus,
+        [data-theme="dark"] .form-select:focus {
+            background: var(--bg-surface);
+            border-color: #4e73df;
+            color: var(--text-primary);
+        }
+        [data-theme="dark"] .table {
+            color: var(--text-secondary);
+        }
+        [data-theme="dark"] .table thead th {
+            border-color: var(--border-default);
+        }
+        [data-theme="dark"] .table td,
+        [data-theme="dark"] .table th {
+            border-color: var(--border-default);
+        }
+        [data-theme="dark"] .table-striped tbody tr:nth-of-type(odd) {
+            background: rgba(255,255,255,0.02);
+        }
+        [data-theme="dark"] .table-hover tbody tr:hover {
+            background: var(--bg-hover);
+        }
+        [data-theme="dark"] .btn-light {
+            background: var(--bg-hover);
+            border-color: var(--border-default);
+            color: var(--text-secondary);
+        }
+        [data-theme="dark"] .btn-light:hover {
+            background: var(--border-default);
+            color: var(--text-primary);
+        }
+        [data-theme="dark"] .btn-outline-secondary {
+            border-color: var(--border-default);
+            color: var(--text-muted);
+        }
+        [data-theme="dark"] .btn-outline-secondary:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+        [data-theme="dark"] .text-muted {
+            color: var(--text-muted) !important;
+        }
+        [data-theme="dark"] .modal-content {
+            background: var(--bg-surface);
+            border-color: var(--border-default);
+        }
+        [data-theme="dark"] .modal-header {
+            border-color: var(--border-default);
+        }
+        [data-theme="dark"] .modal-footer {
+            border-color: var(--border-default);
+        }
+        [data-theme="dark"] .page-link {
+            background: var(--bg-surface);
+            border-color: var(--border-default);
+            color: var(--text-secondary);
+        }
+        [data-theme="dark"] .page-link:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+        [data-theme="dark"] .page-item.disabled .page-link {
+            background: var(--bg-body);
+            border-color: var(--border-default);
+            color: var(--text-subtle);
+        }
+        [data-theme="dark"] .page-item.active .page-link {
+            background: #4e73df;
+            border-color: #4e73df;
+        }
+        [data-theme="dark"] .alert-success {
+            background: #064e3b !important;
+            color: #a7f3d0 !important;
+        }
+        [data-theme="dark"] .alert-danger {
+            background: #7f1d1d !important;
+            color: #fecaca !important;
+        }
+        [data-theme="dark"] .alert-warning {
+            background: #78350f !important;
+            color: #fde68a !important;
+        }
+        [data-theme="dark"] .alert-info {
+            background: #1e3a5f !important;
+            color: #bfdbfe !important;
+        }
+        [data-theme="dark"] .list-group-item {
+            background: var(--bg-surface);
+            border-color: var(--border-default);
+            color: var(--text-secondary);
+        }
+        [data-theme="dark"] .card {
+            background: var(--bg-surface);
+            border-color: var(--border-default);
+        }
+        [data-theme="dark"] .progress {
+            background: var(--border-default);
+        }
+        [data-theme="dark"] .toast {
+            background: var(--bg-surface);
+            border-color: var(--border-default);
+        }
+        [data-theme="dark"] .toast-header {
+            background: var(--bg-hover);
+            border-color: var(--border-default);
+            color: var(--text-secondary);
+        }
+
         /* ── Empty State ── */
         .empty-state {
             text-align: center;
@@ -472,20 +645,23 @@
 
         .empty-state i {
             font-size: 3rem;
-            color: #cbd5e0;
+            color: var(--text-subtle);
             margin-bottom: 16px;
+            transition: color 0.3s ease;
         }
 
         .empty-state h6 {
             font-weight: 700;
-            color: #4a5568;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
         }
 
         .empty-state p {
-            color: #a0aec0;
+            color: var(--text-muted);
             font-size: 0.9rem;
             max-width: 360px;
             margin: 0 auto;
+            transition: color 0.3s ease;
         }
 
         /* ── Responsive ── */
@@ -659,6 +835,9 @@
             </div>
 
             <div class="topbar-right">
+                <button class="btn-icon theme-toggle" id="themeToggle" type="button" title="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
                 <div class="dropdown user-dropdown">
                     <button class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="avatar-sm" style="background: linear-gradient(135deg, #4e73df, #224abe);">
@@ -772,6 +951,30 @@
                 setTimeout(dismissLoginToast, 5200);
             }
         });
+
+        /* ── Dark Mode Toggle ── */
+        var themeToggle = document.getElementById('themeToggle');
+        var htmlEl = document.documentElement;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                htmlEl.setAttribute('data-theme', 'dark');
+                if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                htmlEl.removeAttribute('data-theme');
+                if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        if (themeToggle) {
+            var current = localStorage.getItem('theme') || 'light';
+            applyTheme(current);
+            themeToggle.addEventListener('click', function() {
+                var next = htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                applyTheme(next);
+            });
+        }
 
         /* ── Counter Animation ── */
         document.addEventListener('DOMContentLoaded', function() {

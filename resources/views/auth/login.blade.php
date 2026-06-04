@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Masuk - Eduria</title>
+    <script>if(localStorage.getItem('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -350,6 +351,80 @@
             margin-right: 6px;
         }
 
+        /* ── Dark Mode ── */
+        [data-theme="dark"] body {
+            background: linear-gradient(135deg, #0a1628 0%, #132347 50%, #1a3a7a 100%);
+        }
+        [data-theme="dark"] .card-login {
+            background: rgba(30, 41, 59, 0.95);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+        [data-theme="dark"] .card-login h3 {
+            color: #f1f5f9;
+        }
+        [data-theme="dark"] .card-login .subtitle {
+            color: #94a3b8;
+        }
+        [data-theme="dark"] .floating-group .form-control {
+            background: #1e293b;
+            border-color: #334155;
+            color: #f1f5f9;
+        }
+        [data-theme="dark"] .floating-group .form-control:focus {
+            border-color: #4e73df;
+            box-shadow: 0 0 0 4px rgba(78, 115, 223, 0.2);
+        }
+        [data-theme="dark"] .floating-group label {
+            color: #64748b;
+        }
+        [data-theme="dark"] .floating-group .form-control:focus ~ label,
+        [data-theme="dark"] .floating-group .form-control:not(:placeholder-shown) ~ label {
+            color: #60a5fa;
+        }
+        [data-theme="dark"] .floating-group .form-control::placeholder {
+            color: transparent;
+        }
+        [data-theme="dark"] .floating-group .form-control:focus::placeholder {
+            color: #475569;
+        }
+        [data-theme="dark"] .password-toggle {
+            color: #64748b;
+        }
+        [data-theme="dark"] .password-toggle:hover {
+            color: #60a5fa;
+        }
+        [data-theme="dark"] .password-strength .criteria-list .criteria-item {
+            background: #1e293b;
+            border-color: #334155;
+            color: #64748b;
+        }
+        [data-theme="dark"] .password-strength .criteria-list .criteria-item.met {
+            background: #064e3b;
+            border-color: #38a169;
+            color: #6ee7b7;
+        }
+        [data-theme="dark"] .form-check-label {
+            color: #cbd5e1 !important;
+        }
+        [data-theme="dark"] .divider {
+            color: #64748b;
+        }
+        [data-theme="dark"] .divider::before,
+        [data-theme="dark"] .divider::after {
+            background: #334155;
+        }
+        [data-theme="dark"] .text-center {
+            color: #94a3b8 !important;
+        }
+        [data-theme="dark"] .alert-error {
+            background: #7f1d1d;
+            border-color: #991b1b;
+            color: #fecaca;
+        }
+        [data-theme="dark"] .password-strength .strength-bar .seg {
+            background: #334155;
+        }
+
         @media (max-width: 480px) {
             .card-login {
                 padding: 28px 20px 24px;
@@ -363,6 +438,11 @@
 </head>
 
 <body>
+
+    <button class="theme-toggle" id="themeToggle" type="button" title="Toggle theme"
+        style="position:fixed;top:20px;right:20px;z-index:9999;width:42px;height:42px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);color:#fff;font-size:1.1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s ease;">
+        <i class="fas fa-moon"></i>
+    </button>
 
     <div class="login-wrapper">
         <div class="brand">
@@ -549,6 +629,29 @@
             });
 
         })();
+
+        var themeToggle = document.getElementById('themeToggle');
+        var htmlEl = document.documentElement;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                htmlEl.setAttribute('data-theme', 'dark');
+                if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                htmlEl.removeAttribute('data-theme');
+                if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        if (themeToggle) {
+            var current = localStorage.getItem('theme') || 'light';
+            applyTheme(current);
+            themeToggle.addEventListener('click', function() {
+                var next = htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                applyTheme(next);
+            });
+        }
     </script>
 
 </body>
