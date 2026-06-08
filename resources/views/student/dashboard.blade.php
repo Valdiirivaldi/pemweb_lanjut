@@ -443,7 +443,6 @@
 @endsection
 
 @push('scripts')
-<script>if(typeof lucide!=='undefined')lucide.createIcons();</script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var hour = new Date().getHours();

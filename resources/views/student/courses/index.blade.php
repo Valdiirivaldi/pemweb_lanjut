@@ -732,7 +732,4 @@ Join New Class
         });
     })();
 </script>
-<script>
-    if (typeof lucide !== 'undefined') lucide.createIcons();
-</script>
 @endpush

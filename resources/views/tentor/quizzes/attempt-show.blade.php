@@ -292,9 +292,5 @@
             </div>
         @endif
     </div>
-@push('scripts')
-<script>
-    if (typeof lucide !== 'undefined') lucide.createIcons();
-</script>
-@endpush
+
 @endsection

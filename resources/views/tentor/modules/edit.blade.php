@@ -47,13 +47,6 @@
         padding-top: 12px;
     }
 
-    select.form-input {
-        appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a0aec0' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 16px center;
-        padding-right: 40px;
-    }
 
     .form-label-custom {
         font-weight: 600;
@@ -88,65 +81,6 @@
         font-weight: 600;
     }
 
-    .file-upload-area {
-        border: 2px dashed #d0d9e8;
-        border-radius: 12px;
-        padding: 24px;
-        text-align: center;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        background: #fafbff;
-    }
-
-    .file-upload-area:hover {
-        border-color: #4e73df;
-        background: #f0f4ff;
-    }
-
-    .file-upload-area .upload-icon {
-        font-size: 2rem;
-        color: #4e73df;
-        margin-bottom: 8px;
-    }
-
-    .file-upload-area .upload-text {
-        color: #4a5568;
-        font-size: 0.9rem;
-        font-weight: 500;
-    }
-
-    .file-upload-area .upload-hint {
-        color: #a0aec0;
-        font-size: 0.8rem;
-        margin-top: 4px;
-    }
-
-    .file-upload-area.has-file {
-        border-color: #10b981;
-        background: #f0fdf4;
-    }
-
-    .current-file {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 16px;
-        border-radius: 10px;
-        background: #f0f4ff;
-        color: #4e73df;
-        font-size: 0.85rem;
-        font-weight: 500;
-        margin-bottom: 12px;
-    }
-
-    .current-file a {
-        color: #4e73df;
-        text-decoration: none;
-    }
-
-    .current-file a:hover {
-        text-decoration: underline;
-    }
 </style>
 @endpush
 
@@ -189,8 +123,6 @@
 
 @push('scripts')
 <script>
-    if (typeof lucide !== 'undefined') lucide.createIcons();
-
     document.getElementById('fileUploadArea').addEventListener('click', function() {
         document.getElementById('files').click();
     });

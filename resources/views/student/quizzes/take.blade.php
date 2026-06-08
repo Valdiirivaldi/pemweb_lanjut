@@ -62,6 +62,10 @@
         line-height: 1.3;
     }
 
+    .quiz-timer.caution {
+        background: linear-gradient(135deg, #d97706, #b45309);
+    }
+
     .quiz-timer.warning {
         background: linear-gradient(135deg, #dc2626, #b91c1c);
         animation: timerPulse 1s ease-in-out infinite;
@@ -277,7 +281,7 @@
 
             @if ($total > 0)
                 <div class="quiz-footer">
-                    <div class="total-questions"><i data-lucide="list" style="width:14px;height:14px;margin-right:4px;"></i>Total soal: {{ $total }}</div>
+                    <div class="total-questions"><i data-lucide="list" style="width:14px;height:14px;margin-right:4px;"></i><span id="answeredCount">0</span> / {{ $total }} answered</div>
                     <button type="submit" class="btn-submit-quiz">
                         <i data-lucide="send" style="width:16px;height:16px;margin-right:8px;"></i>Submit Jawaban
                     </button>
@@ -310,8 +314,19 @@
             timerEl.textContent = pad(m) + ':' + pad(s);
 
             if (seconds <= 60) {
+                timerContainer.classList.remove('caution');
                 timerContainer.classList.add('warning');
+            } else if (seconds <= 180) {
+                timerContainer.classList.add('caution');
+                timerContainer.classList.remove('warning');
+            } else {
+                timerContainer.classList.remove('caution', 'warning');
             }
+        }
+
+        function getAnsweredCount() {
+            var checked = form.querySelectorAll('input[type="radio"]:checked, input[type="checkbox"]:checked');
+            return checked.length;
         }
 
         function lockForm() {
@@ -320,6 +335,16 @@
 
         function submitIfNeeded() {
             if (submitted) return;
+
+            var answered = getAnsweredCount();
+            var total = {{ $total }};
+
+            if (answered < total) {
+                if (!confirm('Waktu habis! ' + (total - answered) + ' soal belum dijawab. Tetap kirim jawaban?')) {
+                    return;
+                }
+            }
+
             submitted = true;
 
             clearInterval(t);
@@ -329,14 +354,24 @@
             lockForm();
 
             if (submitBtn) {
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...';
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Submitting...';
                 submitBtn.disabled = true;
             }
 
             form.submit();
         }
 
+        // Live progress counter
+        function updateProgress() {
+            var answered = form.querySelectorAll('input[type="radio"]:checked, input[type="checkbox"]:checked').length;
+            var el = document.getElementById('answeredCount');
+            if (el) el.textContent = answered;
+        }
+
+        form.addEventListener('change', updateProgress);
+
         render();
+        updateProgress();
 
         var t = setInterval(function() {
             seconds--;
@@ -348,8 +383,5 @@
             render();
         }, 1000);
     })();
-</script>
-<script>
-    if (typeof lucide !== 'undefined') lucide.createIcons();
 </script>
 @endpush

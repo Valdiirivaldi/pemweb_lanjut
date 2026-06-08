@@ -21,9 +21,8 @@
             <i data-lucide="search" style="width:18px;height:18px;"></i>
         </button>
 
-        <button class="topbar-btn" type="button" title="Notifications">
-            <i data-lucide="bell" style="width:18px;height:18px;"></i>
-            <span class="notif-badge" id="notifBadge" style="display:none;">0</span>
+        <button class="topbar-btn" type="button" title="Notifications (coming soon)" style="opacity:0.4;cursor:default;">
+            <i data-lucide="bell-off" style="width:18px;height:18px;"></i>
         </button>
 
         <button class="topbar-btn theme-toggle" id="themeToggle" type="button" title="Toggle theme">

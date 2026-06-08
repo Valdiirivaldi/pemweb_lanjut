@@ -15,24 +15,6 @@
 @endsection
 
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2"
-            style="border-radius: 14px; border: none; font-size: 0.9rem; font-weight: 500;" role="alert">
-            <i data-lucide="check-circle" style="width:18px;height:18px;"></i>
-            {{ session('success') }}
-            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center gap-2"
-            style="border-radius: 14px; border: none; font-size: 0.9rem; font-weight: 500;" role="alert">
-            <i data-lucide="alert-circle" style="width:18px;height:18px;"></i>
-            {{ session('error') }}
-            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
     {{-- Tab Navigation --}}
     <div class="enrollment-tabs">
         <a href="{{ route('admin.enrollments.index', ['tab' => 'siswa']) }}"

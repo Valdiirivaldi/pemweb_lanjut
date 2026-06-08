@@ -293,7 +293,7 @@
                                             {{ $file->file_name }}
                                         </a>
                                         <form action="{{ route('tentor.modules.files.destroy', [$module->id, $file->id]) }}"
-                                              method="POST" class="d-inline" onsubmit="return confirm('Delete this file?');">
+                                               method="POST" class="d-inline" onsubmit="return confirmDelete(this, 'Delete this file?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm text-danger border-0 bg-transparent p-0"
@@ -318,7 +318,7 @@
                         <form action="{{ route('tentor.modules.destroy', $module->id) }}" method="POST" class="d-inline delete-module-form">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn-sm-icon btn-delete" title="Delete Module" onclick="return confirm('Delete this module? This action cannot be undone.');">
+                            <button type="submit" class="btn-sm-icon btn-delete" title="Delete Module" onclick="return confirmDelete(this, 'Delete this module? This action cannot be undone.');">
                                 <i data-lucide="trash-2" style="width:16px;height:16px;"></i>
                             </button>
                         </form>
@@ -338,8 +338,4 @@
     </div>
 @endsection
 
-@push('scripts')
-<script>
-    if(typeof lucide!=='undefined')lucide.createIcons();
-</script>
-@endpush
+

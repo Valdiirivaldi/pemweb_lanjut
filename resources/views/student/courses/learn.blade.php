@@ -582,7 +582,4 @@
         if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
     }
 </script>
-<script>
-    if (typeof lucide !== 'undefined') lucide.createIcons();
-</script>
 @endpush

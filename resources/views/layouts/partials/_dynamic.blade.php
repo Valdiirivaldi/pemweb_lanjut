@@ -227,6 +227,23 @@
         }
     }
 
+    /* ── Confirm Delete via SweetAlert2 ── */
+    window.confirmDelete = function(el, message) {
+        if (typeof Swal === 'undefined') return confirm(message);
+        var form = el.closest('form');
+        Swal.fire({
+            title: message,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#e74c3c',
+        }).then(function(result) {
+            if (result.isConfirmed && form) form.submit();
+        });
+        return false;
+    };
+
     /* ── Init on page load ── */
     document.addEventListener('DOMContentLoaded', function() {
         initSortable();

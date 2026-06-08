@@ -351,9 +351,6 @@
 
 @push('scripts')
 <script>
-    if (typeof lucide !== 'undefined') lucide.createIcons();
-</script>
-<script>
 (function() {
     const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 

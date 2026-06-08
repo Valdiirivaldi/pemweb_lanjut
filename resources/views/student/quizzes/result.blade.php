@@ -633,8 +633,38 @@
             card.style.animationDelay = (delay + index * 150) + 'ms';
         });
     });
+
+    /* ── Confetti on pass ── */
+    var passed = {{ $passed ? 'true' : 'false' }};
+    if (passed && typeof confetti !== 'undefined') {
+        setTimeout(function() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#4e73df', '#1cc88a', '#f6c23e', '#e74a3b', '#36b9cc']
+            });
+        }, 400);
+        setTimeout(function() {
+            confetti({
+                particleCount: 50,
+                spread: 100,
+                origin: { y: 0.4, x: 0.3 },
+                colors: ['#4e73df', '#1cc88a']
+            });
+        }, 700);
+        setTimeout(function() {
+            confetti({
+                particleCount: 50,
+                spread: 100,
+                origin: { y: 0.4, x: 0.7 },
+                colors: ['#f6c23e', '#e74a3b']
+            });
+        }, 1000);
+    }
 </script>
-<script>
-    if (typeof lucide !== 'undefined') lucide.createIcons();
-</script>
+
+@if ($passed)
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+@endif
 @endpush
