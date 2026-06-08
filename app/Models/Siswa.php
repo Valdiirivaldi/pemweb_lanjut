@@ -9,6 +9,10 @@ class Siswa extends Model
 {
     protected $fillable = ['user_id', 'unique_id'];
 
+    /**
+     * Akun user yang terkait dengan profil Siswa ini.
+     * Siswa → belongsTo User
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -14,6 +14,10 @@ use Illuminate\View\View;
 
 class AdminUserController extends Controller
 {
+    /**
+     * Menampilkan daftar seluruh pengguna (siswa dan tentor) dengan profil mereka.
+     * Data ditampilkan secara terbatas (10 per halaman) dan diurutkan dari yang terbaru.
+     */
     public function index(): View
     {
         $users = User::with(['siswa', 'tentor'])
@@ -24,11 +28,19 @@ class AdminUserController extends Controller
         return view('admin.users.index', compact('users'));
     }
 
+    /**
+     * Menampilkan formulir untuk membuat pengguna baru (siswa atau tentor).
+     */
     public function create(): View
     {
         return view('admin.users.create');
     }
 
+    /**
+     * Menyimpan pengguna baru ke database dalam satu transaksi.
+     * Membuat akun User, lalu membuat profil Siswa atau Tentor sesuai role.
+     * Unique ID (S-YYYY-NNNN atau T-YYYY-NNNN) dibuatkan secara otomatis.
+     */
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -46,12 +58,12 @@ class AdminUserController extends Controller
                 'role'     => $request->role,
             ]);
 
-            if ($user->role === 'siswa') {
+            if ($user->isSiswa()) {
                 Siswa::create([
                     'user_id'   => $user->id,
                     'unique_id' => $this->generateSiswaId(),
                 ]);
-            } elseif ($user->role === 'tentor') {
+            } elseif ($user->isTentor()) {
                 Tentor::create([
                     'user_id'   => $user->id,
                     'unique_id' => $this->generateTentorId(),
@@ -65,6 +77,10 @@ class AdminUserController extends Controller
             ->with('success', __('messages.account.created'));
     }
 
+    /**
+     * Menampilkan formulir untuk mengedit data pengguna siswa atau tentor.
+     * Membatalkan aksi jika pengguna bukan siswa atau tentor (403 Forbidden).
+     */
     public function edit(int $id): View
     {
         $user = User::with(['siswa', 'tentor'])->findOrFail($id);
@@ -73,6 +89,11 @@ class AdminUserController extends Controller
         return view('admin.users.edit', compact('user'));
     }
 
+    /**
+     * Memperbarui data pengguna yang sudah ada.
+     * Jika password diisi, password akan di-hash dan diperbarui.
+     * Unique ID juga bisa diubah melalui form ini.
+     */
     public function update(Request $request, int $id): RedirectResponse
     {
         $user = User::with(['siswa', 'tentor'])->findOrFail($id);
@@ -93,27 +114,56 @@ class AdminUserController extends Controller
             'unique_id' => $uniqueIdRules,
         ]);
 
-        $data = [
-            'name'  => $request->name,
-            'email' => $request->email,
-            'role'  => $request->role,
-        ];
+        DB::transaction(function () use ($request, $user) {
+            $data = [
+                'name'  => $request->name,
+                'email' => $request->email,
+                'role'  => $request->role,
+            ];
 
-        if ($request->filled('password')) {
-            $request->validate(['password' => ['string', 'min:8']]);
-            $data['password'] = Hash::make($request->password);
-        }
+            if ($request->filled('password')) {
+                $request->validate(['password' => ['string', 'min:8']]);
+                $data['password'] = Hash::make($request->password);
+            }
 
-        $user->update($data);
+            $oldRole = $user->getOriginal('role');
+            $user->update($data);
 
-        if ($record && $request->filled('unique_id')) {
-            $record->update(['unique_id' => $request->unique_id]);
-        }
+            // Sync profile when role changes
+            if ($oldRole !== $request->role) {
+                if ($oldRole === 'siswa') {
+                    $user->siswa?->delete();
+                } elseif ($oldRole === 'tentor') {
+                    $user->tentor?->delete();
+                }
+
+                if ($request->role === 'siswa') {
+                    Siswa::create([
+                        'user_id'   => $user->id,
+                        'unique_id' => $request->unique_id ?? $this->generateSiswaId(),
+                    ]);
+                } elseif ($request->role === 'tentor') {
+                    Tentor::create([
+                        'user_id'   => $user->id,
+                        'unique_id' => $request->unique_id ?? $this->generateTentorId(),
+                    ]);
+                }
+            } else {
+                $record = $user->siswa ?? $user->tentor;
+                if ($record && $request->filled('unique_id')) {
+                    $record->update(['unique_id' => $request->unique_id]);
+                }
+            }
+        });
 
         return redirect()->route('admin.users.index')
             ->with('success', __('messages.account.updated'));
     }
 
+    /**
+     * Menghapus pengguna (siswa atau tentor) dari database.
+     * Hanya bisa menghapus pengguna dengan role siswa atau tentor.
+     */
     public function destroy(int $id): RedirectResponse
     {
         $user = User::findOrFail($id);
@@ -125,6 +175,13 @@ class AdminUserController extends Controller
             ->with('success', __('messages.account.deleted'));
     }
 
+    /**
+     * Menghasilkan ID unik siswa dengan format S-YYYY-NNNN.
+     * Nomer urut diambil dari siswa terakhir pada tahun berjalan, lalu ditambah 1.
+     * Menggunakan lockForUpdate untuk mencegah duplikasi data secara bersamaan.
+     *
+     * @return string  ID unik siswa, contoh: S-2026-0001
+     */
     private function generateSiswaId(): string
     {
         $year = date('Y');
@@ -142,6 +199,13 @@ class AdminUserController extends Controller
         return 'S-' . $year . '-' . str_pad($num, 4, '0', STR_PAD_LEFT);
     }
 
+    /**
+     * Menghasilkan ID unik tentor dengan format T-YYYY-NNNN.
+     * Nomer urut diambil dari tentor terakhir pada tahun berjalan, lalu ditambah 1.
+     * Menggunakan lockForUpdate untuk mencegah duplikasi data secara bersamaan.
+     *
+     * @return string  ID unik tentor, contoh: T-2026-0001
+     */
     private function generateTentorId(): string
     {
         $year = date('Y');

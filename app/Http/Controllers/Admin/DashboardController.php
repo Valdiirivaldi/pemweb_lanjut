@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
+    /**
+     * Menampilkan dashboard admin dengan ringkasan data sistem:
+     * - Total pengguna terdaftar
+     * - Total kelas/kursus
+     * - Total siswa yang terdaftar minimal di satu kelas
+     * - 5 pengguna terbaru
+     * - 5 kursus terbaru
+     */
     public function index()
     {
         $user = Auth::user();

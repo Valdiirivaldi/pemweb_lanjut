@@ -8,6 +8,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CheckRole
 {
+    /**
+     * Memeriksa apakah pengguna yang sedang login memiliki role yang diizinkan.
+     * Digunakan dalam route untuk membatasi akses berdasarkan peran (role).
+     * Contoh penggunaan: middleware('role:admin,tentor')
+     *
+     * @param  Request   $request  Request HTTP yang masuk
+     * @param  Closure   $next     Fungsi middleware selanjutnya
+     * @param  string    ...$roles Daftar role yang diizinkan (admin, tentor, siswa)
+     * @return Response            Response HTTP
+     */
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {
         $user = $request->user();

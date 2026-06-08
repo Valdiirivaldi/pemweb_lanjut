@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('course_user', function (Blueprint $table) {
-            //
+            $table->boolean('is_unlocked')->default(false)->after('course_id');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('course_user', function (Blueprint $table) {
-            //
+            $table->dropColumn('is_unlocked');
         });
     }
 };

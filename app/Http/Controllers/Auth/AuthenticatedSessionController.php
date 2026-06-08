@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Auth;
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Destroy an authenticated session.
+     * Menghapus sesi pengguna yang sedang login (logout).
+     * Invalidate session dan regenerate CSRF token untuk keamanan.
      */
     public function destroy(Request $request): RedirectResponse
     {
@@ -20,6 +21,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('home');
     }
 }

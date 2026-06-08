@@ -1,4 +1,4 @@
-@props(['course', 'index' => 0])
+@props(['course', 'index' => 0, 'routeName' => 'tentor.courses.show'])
 
 <div class="col-12 col-md-6 col-lg-4 card-entry" data-title="{{ strtolower($course->title) }}">
     <div class="course-card shadow-sm">
@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="card-footer">
-            <a href="{{ route('tentor.courses.show', $course->id) }}" class="btn-action btn-primary">
+            <a href="{{ route($routeName, $course->id) }}" class="btn-action btn-primary">
                 <i class="fas fa-eye"></i> Details
             </a>
         </div>

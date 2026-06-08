@@ -11,6 +11,10 @@ use Illuminate\View\View;
 
 class CourseController extends Controller
 {
+    /**
+     * Menampilkan daftar semua kelas/kursus yang diampu oleh tentor ini.
+     * Setiap kelas dilengkapi dengan jumlah modul, kuis, dan siswa.
+     */
     public function index(): View
     {
         $user = Auth::user();
@@ -19,11 +23,18 @@ class CourseController extends Controller
         return view('tentor.courses.index', compact('user', 'courses'));
     }
 
+    /**
+     * Menampilkan formulir untuk membuat kelas/kursus baru.
+     */
     public function create(): View
     {
         return view('tentor.courses.create');
     }
 
+    /**
+     * Menyimpan kelas/kursus baru ke database.
+     * Tentor_id diisi otomatis dengan ID pengguna yang sedang login.
+     */
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -41,6 +52,10 @@ class CourseController extends Controller
             ->with('success', __('messages.course.created'));
     }
 
+    /**
+     * Menampilkan detail satu kelas/kursus beserta daftar modulnya.
+     * Hanya bisa diakses oleh tentor yang memiliki kelas tersebut (403 jika bukan pemilik).
+     */
     public function show(Course $course): View
     {
         $user = Auth::user();
@@ -50,7 +65,7 @@ class CourseController extends Controller
         }
 
         $course->load(['modules' => function ($q) {
-            $q->latest();
+            $q->withCount('submissions')->latest();
         }]);
 
         return view('tentor.courses.show', compact('user', 'course'));

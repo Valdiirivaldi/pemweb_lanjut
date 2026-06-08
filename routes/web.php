@@ -47,6 +47,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('modules.update');
         Route::delete('/modules/{module}', [ModuleController::class, 'destroy'])
             ->name('modules.destroy');
+        Route::delete('/modules/{module}/files/{file}', [ModuleController::class, 'destroyFile'])
+            ->name('modules.files.destroy');
+        Route::get('/modules/{module}/submissions', [\App\Http\Controllers\Tentor\SubmissionController::class, 'index'])
+            ->name('modules.submissions.index');
+        Route::get('/modules/{module}/submissions/{submission}', [\App\Http\Controllers\Tentor\SubmissionController::class, 'show'])
+            ->name('modules.submissions.show');
         Route::get('/modules', [ModuleController::class, 'index'])
             ->name('modules.index');
         Route::get('/quizzes', [QuizController::class, 'index'])
@@ -96,15 +102,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->middleware('course.access');
 
 
+        Route::post('/modules/{module}/submissions', [\App\Http\Controllers\Student\SubmissionController::class, 'store'])
+            ->name('modules.submissions.store');
+
         Route::get('/my-courses', [StudentCourseController::class, 'index'])
             ->name('my-courses.index');
 
         Route::get('/quizzes', [StudentQuizController::class, 'index'])
             ->name('quizzes.index');
         Route::get('/quizzes/{quiz}', [StudentQuizController::class, 'show'])
-            ->name('quizzes.show');
+            ->name('quizzes.show')
+            ->middleware('course.access');
         Route::post('/quizzes/{quiz}/submit', [StudentQuizController::class, 'submit'])
-            ->name('quizzes.submit');
+            ->name('quizzes.submit')
+            ->middleware('course.access');
 
         Route::get('/quizzes/{quiz}/submit', function (\App\Models\Quiz $quiz) {
             return redirect()->route('siswa.quizzes.show', $quiz)
@@ -112,7 +123,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         })->name('quizzes.submit.get');
 
         Route::get('/quiz-attempts/{attempt}', [StudentQuizController::class, 'result'])
-            ->name('quiz-attempts.show');
+            ->name('quiz-attempts.show')
+            ->middleware('course.access');
 
         Route::get('/certificates', [StudentCertificateController::class, 'index'])
             ->name('certificates.index');

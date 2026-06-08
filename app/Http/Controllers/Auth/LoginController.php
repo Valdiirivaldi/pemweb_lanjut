@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
     /**
-     * Display the login form.
+     * Menampilkan formulir login.
      */
     public function showLoginForm()
     {
@@ -17,7 +17,10 @@ class LoginController extends Controller
     }
 
     /**
-     * Handle an incoming login request.
+     * Memproses permintaan login.
+     * Memanggil authenticate() pada LoginRequest untuk validasi dan attempt login.
+     * Me-regenerate session ID untuk keamanan (mencegah session fixation).
+     * Menyimpan data nama dan role pengguna ke flash session untuk ditampilkan di dashboard.
      */
     public function login(LoginRequest $request)
     {
@@ -30,6 +33,6 @@ class LoginController extends Controller
             'role' => Auth::user()->role,
         ]);
 
-        return redirect()->intended('/dashboard');
+        return redirect()->route('dashboard');
     }
 }

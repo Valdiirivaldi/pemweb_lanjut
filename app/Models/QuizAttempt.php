@@ -43,6 +43,10 @@ class QuizAttempt extends Model
         return $this->belongsTo(Quiz::class);
     }
 
+    /**
+     * Semua jawaban yang diberikan siswa pada attempt ini.
+     * QuizAttempt → hasMany QuizAttemptAnswer
+     */
     public function answers(): HasMany
     {
         return $this->hasMany(QuizAttemptAnswer::class);

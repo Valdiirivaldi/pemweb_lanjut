@@ -14,6 +14,11 @@ class QuizAttemptAnswer extends Model
         'is_correct',
     ];
 
+    /**
+     * Mengubah tipe data kolom menjadi tipe PHP yang sesuai.
+     * given_answer dikonversi menjadi array (mendukung single/multiple jawaban).
+     * is_correct dikonversi menjadi boolean.
+     */
     protected function casts(): array
     {
         return [
@@ -22,11 +27,19 @@ class QuizAttemptAnswer extends Model
         ];
     }
 
+    /**
+     * Percobaan kuis yang memiliki jawaban ini.
+     * QuizAttemptAnswer → belongsTo QuizAttempt
+     */
     public function quizAttempt(): BelongsTo
     {
         return $this->belongsTo(QuizAttempt::class);
     }
 
+    /**
+     * Soal yang dijawab pada jawaban ini.
+     * QuizAttemptAnswer → belongsTo Question
+     */
     public function question(): BelongsTo
     {
         return $this->belongsTo(Question::class);

@@ -12,13 +12,14 @@ use Illuminate\View\View;
 class ProfileController extends Controller
 {
     /**
-     * Display the user's profile page.
+     * Menampilkan halaman profil pengguna beserta statistik pribadi.
+     * Untuk siswa, menampilkan jumlah kelas yang diikuti, sertifikat, dan kuis.
      */
     public function show()
     {
         $user = Auth::user()->load(['siswa', 'tentor']);
 
-        if ($user->role === 'siswa') {
+        if ($user->isSiswa()) {
             $totalClasses = $user->enrolledCourses()->count();
             $totalCertificates = $user->quizAttempts()->whereNotNull('certificate_path')->count();
             $totalQuizzes = $user->quizAttempts()->count();
@@ -32,7 +33,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Display the user's profile form.
+     * Menampilkan form untuk mengubah informasi profil (nama dan email).
      */
     public function edit(Request $request): View
     {
@@ -42,7 +43,8 @@ class ProfileController extends Controller
     }
 
     /**
-     * Update the user's profile information.
+     * Memperbarui informasi profil pengguna.
+     * Jika email berubah, status verifikasi email direset (email_verified_at = null).
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
@@ -58,7 +60,8 @@ class ProfileController extends Controller
     }
 
     /**
-     * Delete the user's account.
+     * Menghapus akun pengguna secara permanen.
+     * Memvalidasi password sebelum menghapus, lalu logout dan invalidate session.
      */
     public function destroy(Request $request): RedirectResponse
     {
@@ -79,22 +82,27 @@ class ProfileController extends Controller
     }
 
     /**
-     * Update unique_id for siswa or tentor (admin only, or self).
+     * Memperbarui unique_id (ID unik) untuk profil siswa atau tentor.
+     * Hanya bisa diakses oleh admin atau pengguna itu sendiri.
      */
     public function updateUniqueId(Request $request): RedirectResponse
     {
-        $request->validate([
-            'unique_id' => ['required', 'string', 'max:20', 'unique:siswas,unique_id', 'unique:tentors,unique_id'],
-        ]);
-
         $user = $request->user()->load(['siswa', 'tentor']);
+
+        $request->validate([
+            'unique_id' => [
+                'required', 'string', 'max:20',
+                'unique:siswas,unique_id' . ($user->siswa ? ',' . $user->siswa->id : ''),
+                'unique:tentors,unique_id' . ($user->tentor ? ',' . $user->tentor->id : ''),
+            ],
+        ]);
 
         if ($user->siswa) {
             $user->siswa->update(['unique_id' => $request->unique_id]);
         } elseif ($user->tentor) {
             $user->tentor->update(['unique_id' => $request->unique_id]);
         } else {
-            return back()->with('error', 'Only siswa and tentor can have a unique ID.');
+            return back()->with('error', __('messages.error.only_siswa_tentor'));
         }
 
         return Redirect::route('profile')->with('status', 'unique-id-updated');

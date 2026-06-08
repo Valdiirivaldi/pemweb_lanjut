@@ -89,6 +89,7 @@ class User extends Authenticatable
     public function enrolledCourses(): BelongsToMany
     {
         return $this->belongsToMany(Course::class, 'course_user')
+            ->withPivot(['is_unlocked', 'status', 'unlocked_at', 'unlocked_by'])
             ->withTimestamps();
     }
 
@@ -99,6 +100,15 @@ class User extends Authenticatable
     public function quizAttempts(): HasMany
     {
         return $this->hasMany(QuizAttempt::class, 'siswa_id');
+    }
+
+    /**
+     * Semua pengumpulan tugas modul yang dilakukan oleh Siswa ini.
+     * (User sebagai Siswa) → hasMany ModuleSubmission
+     */
+    public function submissions(): HasMany
+    {
+        return $this->hasMany(ModuleSubmission::class, 'siswa_id');
     }
 
     /**

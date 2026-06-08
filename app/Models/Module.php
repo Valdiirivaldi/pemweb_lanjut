@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Module extends Model
 {
@@ -16,10 +17,6 @@ class Module extends Model
         'pdf_path',
     ];
 
-    // -------------------------------------------------------
-    // Relationships
-    // -------------------------------------------------------
-
     /**
      * Kelas yang memiliki modul ini.
      * Module → belongsTo Course
@@ -27,5 +24,23 @@ class Module extends Model
     public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class);
+    }
+
+    /**
+     * Semua file lampiran yang diunggah pada modul ini.
+     * Module → hasMany ModuleFile
+     */
+    public function files(): HasMany
+    {
+        return $this->hasMany(ModuleFile::class);
+    }
+
+    /**
+     * Semua pengumpulan tugas dari siswa untuk modul ini.
+     * Module → hasMany ModuleSubmission
+     */
+    public function submissions(): HasMany
+    {
+        return $this->hasMany(ModuleSubmission::class);
     }
 }

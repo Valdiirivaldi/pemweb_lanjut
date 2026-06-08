@@ -12,7 +12,8 @@ use Illuminate\Validation\ValidationException;
 class LoginRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Menentukan apakah pengguna diizinkan melakukan request ini.
+     * Selalu mengembalikan true karena login adalah aksi publik.
      */
     public function authorize(): bool
     {
@@ -20,9 +21,8 @@ class LoginRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
+     * Aturan validasi untuk form login.
+     * Email harus valid, password wajib diisi.
      */
     public function rules(): array
     {
@@ -33,7 +33,10 @@ class LoginRequest extends FormRequest
     }
 
     /**
-     * Attempt to authenticate the request's credentials.
+     * Mencoba melakukan autentikasi dengan kredensial yang diberikan.
+     * Memanggil ensureIsNotRateLimited() terlebih dahulu untuk memeriksa batas percobaan.
+     * Jika autentikasi gagal, menambah hit counter pada rate limiter dan melempar exception.
+     * Jika berhasil, membersihkan hit counter rate limiter.
      *
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -53,7 +56,9 @@ class LoginRequest extends FormRequest
     }
 
     /**
-     * Ensure the login request is not rate limited.
+     * Memastikan permintaan login tidak melebihi batas percobaan (rate limiting).
+     * Maksimal 5 percobaan login gagal. Jika terlalu banyak percobaan,
+     * pengguna harus menunggu beberapa detik sebelum bisa mencoba lagi.
      *
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -76,7 +81,10 @@ class LoginRequest extends FormRequest
     }
 
     /**
-     * Get the rate limiting throttle key for the request.
+     * Mendapatkan kunci unik untuk rate limiter berdasarkan email dan alamat IP.
+     * Digunakan untuk melacak percobaan login per kombinasi email + IP.
+     *
+     * @return string  Kunci throttle dalam format "email|ip"
      */
     public function throttleKey(): string
     {

@@ -15,6 +15,10 @@ use Illuminate\View\View;
 
 class QuizController extends Controller
 {
+    /**
+     * Menampilkan daftar semua percobaan kuis yang sudah dikerjakan oleh siswa.
+     * Data dikelompokkan berdasarkan kuis dan diberi nomor urut percobaan (attempt_number).
+     */
     public function index()
     {
         $user = Auth::user();
@@ -36,6 +40,11 @@ class QuizController extends Controller
         return view('student.quizzes.index', compact('user', 'quizAttempts'));
     }
 
+    /**
+     * Menampilkan halaman pengerjaan kuis.
+     * Memvalidasi bahwa siswa terdaftar di kelas kuis tersebut.
+     * Membuat sesi percobaan baru jika belum ada sesi yang aktif (finished_at = null).
+     */
     public function show(Quiz $quiz): View
     {
         $user = Auth::user();
@@ -64,6 +73,18 @@ class QuizController extends Controller
         return view('student.quizzes.take', compact('user', 'quiz', 'attempt'));
     }
 
+    /**
+     * Memproses pengiriman jawaban kuis dari siswa.
+     * Alur kerja:
+     * 1. Validasi sesi kuis yang aktif
+     * 2. Cek apakah waktu pengerjaan sudah habis (time_limit + 5 menit grace period)
+     * 3. Hapus jawaban sebelumnya, lalu grade semua jawaban baru
+     * 4. Hitung skor persentase (benar/total * 100)
+     * 5. Jika lulus (skor >= passing_score), buat sertifikat PDF menggunakan DomPDF
+     * 6. Simpan percobaan dengan skor, path sertifikat, dan waktu selesai
+     *
+     * Mendukung 3 tipe soal: single, multiple, true_false.
+     */
     public function submit(Request $request, Quiz $quiz): RedirectResponse
     {
         $user = Auth::user();
@@ -87,7 +108,7 @@ class QuizController extends Controller
 
         if (!$attempt) {
             return redirect()->route('siswa.quizzes.show', $quiz)
-                ->with('error', 'Tidak ada sesi kuis yang aktif.');
+                ->with('error', __('messages.error.no_active_quiz'));
         }
 
         $timeExpired = false;
@@ -162,25 +183,29 @@ class QuizController extends Controller
 
         $certificatePath = null;
         if ($passed) {
-            $fileName = 'certificate_' . $user->id . '_' . $quiz->id . '_' . Str::random(8) . '.pdf';
-            $relativeDir = 'certificates';
-            $storagePath = storage_path('app/public/' . $relativeDir);
+            try {
+                $fileName = 'certificate_' . $user->id . '_' . $quiz->id . '_' . Str::random(8) . '.pdf';
+                $relativeDir = 'certificates';
+                $storagePath = storage_path('app/public/' . $relativeDir);
 
-            if (!is_dir($storagePath)) {
-                mkdir($storagePath, 0775, true);
+                if (!is_dir($storagePath)) {
+                    mkdir($storagePath, 0775, true);
+                }
+
+                $pdf = Pdf::loadView('certificates.template', [
+                    'studentName' => $user->name,
+                    'quizTitle' => $quiz->title,
+                    'courseTitle' => $quiz->course->title,
+                    'score' => $scorePercent,
+                    'date' => now()->format('j F Y'),
+                ]);
+
+                $pdf->save($storagePath . '/' . $fileName);
+
+                $certificatePath = $relativeDir . '/' . $fileName;
+            } catch (\Exception $e) {
+                $certificatePath = null;
             }
-
-            $pdf = Pdf::loadView('certificates.template', [
-                'studentName' => $user->name,
-                'quizTitle' => $quiz->title,
-                'courseTitle' => $quiz->course->title,
-                'score' => $scorePercent,
-                'date' => now()->format('j F Y'),
-            ]);
-
-            $pdf->save($storagePath . '/' . $fileName);
-
-            $certificatePath = $relativeDir . '/' . $fileName;
         }
 
         $attempt->update([
@@ -190,9 +215,17 @@ class QuizController extends Controller
         ]);
 
         return redirect()->route('siswa.quiz-attempts.show', ['attempt' => $attempt->id])
-            ->with('error', $timeExpired ? 'Waktu pengerjaan kuis telah habis.' : null);
+            ->with(
+                $timeExpired ? 'warning' : 'success',
+                $timeExpired ? __('messages.quiz.time_expired_submitted') : __('messages.quiz.submitted')
+            );
     }
 
+    /**
+     * Menampilkan hasil pengerjaan kuis secara detail.
+     * Memuat semua jawaban beserta detail soal untuk review siswa.
+     * Juga memuat seluruh percobaan sebelumnya pada kuis yang sama.
+     */
     public function result(QuizAttempt $attempt): View
     {
         $user = Auth::user();

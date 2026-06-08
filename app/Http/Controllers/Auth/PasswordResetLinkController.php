@@ -11,7 +11,7 @@ use Illuminate\View\View;
 class PasswordResetLinkController extends Controller
 {
     /**
-     * Display the password reset link request view.
+     * Menampilkan formulir untuk meminta link reset password.
      */
     public function create(): View
     {
@@ -19,7 +19,9 @@ class PasswordResetLinkController extends Controller
     }
 
     /**
-     * Handle an incoming password reset link request.
+     * Memproses permintaan reset password.
+     * Mengirim link reset password ke email yang dimasukkan.
+     * Jika berhasil, menampilkan pesan sukses. Jika gagal, menampilkan pesan error.
      *
      * @throws \Illuminate\Validation\ValidationException
      */

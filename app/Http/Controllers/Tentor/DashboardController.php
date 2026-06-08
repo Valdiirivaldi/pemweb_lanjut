@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
+    /**
+     * Menampilkan dashboard tentor dengan data:
+     * - Daftar kelas yang diampu beserta jumlah siswa, modul, dan kuis
+     * - Total seluruh siswa di semua kelas
+     * - Total seluruh kuis di semua kelas
+     */
     public function index()
     {
         $user = Auth::user();

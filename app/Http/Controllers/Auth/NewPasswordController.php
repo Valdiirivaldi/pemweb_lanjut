@@ -15,7 +15,7 @@ use Illuminate\View\View;
 class NewPasswordController extends Controller
 {
     /**
-     * Display the password reset view.
+     * Menampilkan formulir untuk mengatur password baru (via link dari email).
      */
     public function create(Request $request): View
     {
@@ -23,7 +23,9 @@ class NewPasswordController extends Controller
     }
 
     /**
-     * Handle an incoming new password request.
+     * Memproses pengaturan password baru.
+     * Memvalidasi token, email, dan password baru. Memperbarui password di database.
+     * Menghasilkan remember_token baru dan memunculkan event PasswordReset.
      *
      * @throws \Illuminate\Validation\ValidationException
      */

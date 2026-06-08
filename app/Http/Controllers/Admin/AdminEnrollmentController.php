@@ -12,11 +12,16 @@ use Illuminate\Support\Facades\DB;
 
 class AdminEnrollmentController extends Controller
 {
+    /**
+     * Menampilkan halaman manajemen pendaftaran (enrollment) siswa ke kelas.
+     * Menyediakan data siswa, tentor, dan kelas untuk form.
+     * Mendukung filter berdasarkan status (pending/active) via query parameter ?status=.
+     */
     public function index(): View
     {
 
-        $siswa  = User::where('role', 'siswa')->orderBy('name')->get();
-        $tentors = User::where('role', 'tentor')->orderBy('name')->get();
+        $siswa  = User::where('role', 'siswa')->whereHas('siswa')->orderBy('name')->get();
+        $tentors = User::where('role', 'tentor')->whereHas('tentor')->orderBy('name')->get();
         $courses = Course::with('tentor')->orderBy('title')->get();
 
         $status = request('status'); // pending|active|null
@@ -48,6 +53,11 @@ class AdminEnrollmentController extends Controller
     }
 
 
+    /**
+     * Mendaftarkan (enroll) seorang siswa ke sebuah kelas/kursus.
+     * Status awal adalah 'pending' dan kelas belum terbuka (is_unlocked = 0).
+     * Mencegah pendaftaran ganda (sama siswa di kelas yang sama).
+     */
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -56,7 +66,7 @@ class AdminEnrollmentController extends Controller
         ]);
 
         $siswa = User::findOrFail($request->user_id);
-        abort_if($siswa->role !== 'siswa', 400, 'User yang dipilih bukan siswa.');
+        abort_if(!$siswa->isSiswa(), 400, 'User yang dipilih bukan siswa.');
 
         $exists = DB::table('course_user')
             ->where('user_id', $request->user_id)
@@ -87,6 +97,10 @@ class AdminEnrollmentController extends Controller
     }
 
 
+    /**
+     * Menugaskan (assign) seorang tentor ke sebuah kelas/kursus.
+     * Memperbarui kolom tentor_id pada tabel courses.
+     */
     public function assignTentor(Request $request): RedirectResponse
     {
         $request->validate([
@@ -95,7 +109,7 @@ class AdminEnrollmentController extends Controller
         ]);
 
         $tentor = User::findOrFail($request->tentor_id);
-        abort_if($tentor->role !== 'tentor', 400, 'User yang dipilih bukan tentor.');
+        abort_if(!$tentor->isTentor(), 400, 'User yang dipilih bukan tentor.');
 
         $course = Course::findOrFail($request->course_id);
         $course->tentor_id = $request->tentor_id;
@@ -105,6 +119,10 @@ class AdminEnrollmentController extends Controller
             ->with('success', __('messages.enrollment.assigned', ['course' => $course->title]));
     }
 
+    /**
+     * Menghapus pendaftaran (enrollment) siswa dari kelas.
+     * Baris pada tabel pivot course_user akan dihapus secara permanen.
+     */
     public function destroy(int $id): RedirectResponse
     {
         DB::table('course_user')->where('id', $id)->delete();

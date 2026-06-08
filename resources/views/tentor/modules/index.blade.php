@@ -17,7 +17,7 @@
                                 <th>Module Title</th>
                                 <th>Course</th>
                                 <th>Video</th>
-                                <th>PDF</th>
+                                <th>Files</th>
                                 <th>Created</th>
                                 <th class="text-end">Actions</th>
                             </tr>
@@ -39,13 +39,13 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if ($module->pdf_path)
+                                        @if ($module->files_count > 0 || $module->pdf_path)
                                             <span class="badge bg-success bg-opacity-10 text-success">
-                                                <i class="fas fa-check me-1"></i>Yes
+                                                <i class="fas fa-check me-1"></i>{{ $module->files_count + ($module->pdf_path ? 1 : 0) }}
                                             </span>
                                         @else
                                             <span class="badge bg-secondary bg-opacity-10 text-secondary">
-                                                <i class="fas fa-times me-1"></i>No
+                                                <i class="fas fa-times me-1"></i>0
                                             </span>
                                         @endif
                                     </td>

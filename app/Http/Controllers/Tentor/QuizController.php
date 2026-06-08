@@ -13,6 +13,10 @@ use Illuminate\View\View;
 
 class QuizController extends Controller
 {
+    /**
+     * Menampilkan daftar semua kuis di seluruh kelas milik tentor ini.
+     * Setiap kuis dilengkapi dengan jumlah soal dan jumlah percobaan pengerjaan siswa.
+     */
     public function index(): View
     {
         $user = Auth::user();
@@ -26,6 +30,9 @@ class QuizController extends Controller
         return view('tentor.quizzes.index', compact('user', 'quizzes'));
     }
 
+    /**
+     * Menampilkan formulir untuk membuat kuis baru.
+     */
     public function create(): View
     {
         $user = Auth::user();
@@ -34,6 +41,10 @@ class QuizController extends Controller
         return view('tentor.quizzes.create', compact('user', 'courses'));
     }
 
+    /**
+     * Menyimpan kuis baru ke database.
+     * Memvalidasi bahwa kelas yang dipilih adalah milik tentor ini.
+     */
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -57,6 +68,10 @@ class QuizController extends Controller
             ->with('success', __('messages.quiz.created'));
     }
 
+    /**
+     * Menampilkan formulir untuk mengedit kuis yang sudah ada.
+     * Membatalkan aksi jika kuis bukan milik tentor ini (403).
+     */
     public function edit(Quiz $quiz): View
     {
         $user = Auth::user();
@@ -67,6 +82,10 @@ class QuizController extends Controller
         return view('tentor.quizzes.edit', compact('user', 'quiz', 'courses'));
     }
 
+    /**
+     * Memperbarui data kuis yang sudah ada.
+     * Memvalidasi bahwa kelas tujuan juga adalah milik tentor ini.
+     */
     public function update(Request $request, Quiz $quiz): RedirectResponse
     {
         abort_if($quiz->course->tentor_id !== Auth::id(), 403);
@@ -89,9 +108,12 @@ class QuizController extends Controller
         ]);
 
         return redirect()->route('tentor.quizzes.index')
-            ->with('success', 'Quiz berhasil diperbarui.');
+            ->with('success', __('messages.quiz.updated'));
     }
 
+    /**
+     * Menghapus kuis secara permanen dari database.
+     */
     public function destroy(Quiz $quiz): RedirectResponse
     {
         abort_if($quiz->course->tentor_id !== Auth::id(), 403);
@@ -99,9 +121,13 @@ class QuizController extends Controller
         $quiz->delete();
 
         return redirect()->route('tentor.quizzes.index')
-            ->with('success', 'Quiz berhasil dihapus.');
+            ->with('success', __('messages.quiz.deleted'));
     }
 
+    /**
+     * Menampilkan daftar semua percobaan pengerjaan kuis oleh siswa.
+     * Berguna untuk tentor melihat siapa saja yang sudah mengerjakan kuis ini.
+     */
     public function attemptsIndex(Quiz $quiz): View
     {
         abort_if($quiz->course->tentor_id !== Auth::id(), 403);
@@ -114,6 +140,10 @@ class QuizController extends Controller
         return view('tentor.quizzes.attempts-index', compact('quiz', 'attempts'));
     }
 
+    /**
+     * Menampilkan detail satu percobaan pengerjaan kuis.
+     * Memuat data siswa, semua jawaban, dan detail soal untuk review tentor.
+     */
     public function attemptShow(Quiz $quiz, QuizAttempt $attempt): View
     {
         abort_if($quiz->course->tentor_id !== Auth::id(), 403);

@@ -9,6 +9,15 @@ use Illuminate\Support\Facades\DB;
 
 class EnrollmentController extends Controller
 {
+    /**
+     * Mengubah status akses kelas untuk seorang siswa (toggle).
+     * Jika status aktif → menjadi pending (kelas dikunci).
+     * Jika status pending → menjadi active (kelas dibuka).
+     * Saat membuka kelas, mencatat waktu (unlocked_at) dan admin yang membuka (unlocked_by).
+     * Berguna sebagai audit trail untuk melihat siapa yang membuka akses kelas.
+     *
+     * @param  int  $id  ID baris pada tabel pivot course_user
+     */
     public function toggleAccess(int $id): RedirectResponse
     {
         $row = DB::table('course_user')->where('id', $id)->first();
@@ -38,6 +47,6 @@ class EnrollmentController extends Controller
         ]);
 
         return redirect()->route('admin.enrollments.index')
-            ->with('success', $newStatus === 'active' ? 'Akses dibuka.' : 'Status di-set pending.');
+            ->with('success', $newStatus === 'active' ? __('messages.enrollment.opened') : __('messages.enrollment.set_pending'));
     }
 }

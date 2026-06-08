@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Auth;
 
 class StudentController extends Controller
 {
+    /**
+     * Menampilkan daftar semua siswa yang terdaftar di kelas-kelas milik tentor ini.
+     * Setiap siswa dilengkapi informasi kelas mana yang diikutinya.
+     * Siswa yang mengikuti beberapa kelas hanya ditampilkan sekali (unique by ID).
+     */
     public function index()
     {
         $user = Auth::user();

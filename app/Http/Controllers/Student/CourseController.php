@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
+    /**
+     * Menampilkan daftar kelas untuk siswa:
+     * - myCourses: kelas yang sudah diikuti (enrolled)
+     * - allCourses: semua kelas yang tersedia
+     * Mendukung pencarian berdasarkan judul kelas via parameter ?search=.
+     * Menandai kelas mana yang sudah diikuti siswa.
+     */
     public function index(Request $request)
     {
         $user = Auth::user();
@@ -35,6 +42,12 @@ class CourseController extends Controller
         return view('student.courses.index', compact('myCourses', 'allCourses', 'enrolledIds', 'search'));
     }
 
+    /**
+     * Mendaftarkan siswa ke sebuah kelas/kursus (self-enrollment).
+     * Status awal: pending, kelas belum terbuka (is_unlocked = 0).
+     * Admin harus membuka akses kelas sebelum siswa bisa mengakses konten.
+     * Mencegah pendaftaran ganda (sama siswa di kelas yang sama).
+     */
     public function enroll(Request $request)
     {
         $request->validate([
@@ -57,13 +70,18 @@ class CourseController extends Controller
             'updated_at' => now(),
         ]);
 
-        $courseTitle = Course::find($courseId)->title;
+        $courseTitle = Course::findOrFail($courseId)->title;
 
 
         return redirect()->route('siswa.courses.index')
             ->with('success', __('messages.enroll.success', ['course' => $courseTitle]));
     }
 
+    /**
+     * Menampilkan halaman pembelajaran untuk satu kelas/kursus.
+     * Memuat semua modul (dengan submission dan file), tentor, kuis (dengan soal dan percobaan siswa).
+     * Hanya bisa diakses oleh siswa yang terdaftar di kelas tersebut.
+     */
     public function learn(Course $course)
     {
         $user = Auth::user();
@@ -72,7 +90,7 @@ class CourseController extends Controller
             abort(403, 'You are not enrolled in this course.');
         }
 
-        $course->load(['modules', 'tentor', 'quizzes.questions', 'quizzes.attempts' => function ($q) use ($user) {
+        $course->load(['modules.submissions', 'modules.files', 'tentor', 'quizzes.questions', 'quizzes.attempts' => function ($q) use ($user) {
             $q->where('siswa_id', $user->id);
         }]);
 

@@ -12,6 +12,12 @@ use Illuminate\View\View;
 
 class QuestionController extends Controller
 {
+    /**
+     * Memastikan bahwa kuis adalah milik tentor yang sedang login.
+     * Jika bukan, membatalkan aksi dengan status 403 Forbidden.
+     *
+     * @param  Quiz  $quiz  Kuis yang akan divalidasi pemilikannya
+     */
     private function ensureQuizOwnership(Quiz $quiz): void
     {
         if ($quiz->course->tentor_id !== Auth::id()) {
@@ -19,6 +25,10 @@ class QuestionController extends Controller
         }
     }
 
+    /**
+     * Menampilkan daftar semua soal dalam sebuah kuis.
+     * Soal diurutkan berdasarkan ID terbaru.
+     */
     public function index(int|string $quizId): View
     {
         $quiz = Quiz::query()->findOrFail($quizId);
@@ -32,6 +42,9 @@ class QuestionController extends Controller
         return view('tentor.quizzes.questions.index', compact('quiz', 'questions'));
     }
 
+    /**
+     * Menampilkan formulir untuk membuat soal baru dalam kuis.
+     */
     public function create(int|string $quizId): View
     {
         $quiz = Quiz::query()->findOrFail($quizId);
@@ -40,6 +53,12 @@ class QuestionController extends Controller
         return view('tentor.quizzes.questions.create', compact('quiz'));
     }
 
+    /**
+     * Menyimpan soal baru ke database.
+     * Mendukung 3 tipe soal: single (pilihan ganda), multiple (ganda ganda), true_false (benar/salah).
+     * Memvalidasi bahwa kunci jawaban benar sesuai dengan kunci opsi yang tersedia.
+     * Untuk tipe single dan true_false, hanya boleh satu jawaban benar.
+     */
     public function store(Request $request, int|string $quizId): RedirectResponse
     {
         $quiz = Quiz::query()->findOrFail($quizId);
@@ -80,9 +99,12 @@ class QuestionController extends Controller
 
         return redirect()
             ->route('tentor.quizzes.questions.index', ['quiz' => $quiz->id])
-            ->with('success', 'Soal berhasil ditambahkan.');
+            ->with('success', __('messages.question.created'));
     }
 
+    /**
+     * Menampilkan formulir untuk mengedit soal yang sudah ada.
+     */
     public function edit(int|string $quizId, int|string $questionId): View
     {
         $quiz = Quiz::query()->findOrFail($quizId);
@@ -96,6 +118,10 @@ class QuestionController extends Controller
         return view('tentor.quizzes.questions.edit', compact('quiz', 'question'));
     }
 
+    /**
+     * Memperbarui soal yang sudah ada di database.
+     * Menggunakan validasi yang sama dengan store().
+     */
     public function update(Request $request, int|string $quizId, int|string $questionId): RedirectResponse
     {
         $quiz = Quiz::query()->findOrFail($quizId);
@@ -138,9 +164,12 @@ class QuestionController extends Controller
 
         return redirect()
             ->route('tentor.quizzes.questions.index', ['quiz' => $quiz->id])
-            ->with('success', 'Soal berhasil diperbarui.');
+            ->with('success', __('messages.question.updated'));
     }
 
+    /**
+     * Menghapus soal secara permanen dari database.
+     */
     public function destroy(int|string $quizId, int|string $questionId): RedirectResponse
     {
         $quiz = Quiz::query()->findOrFail($quizId);
@@ -155,6 +184,6 @@ class QuestionController extends Controller
 
         return redirect()
             ->route('tentor.quizzes.questions.index', ['quiz' => $quiz->id])
-            ->with('success', 'Soal berhasil dihapus.');
+            ->with('success', __('messages.question.deleted'));
     }
 }

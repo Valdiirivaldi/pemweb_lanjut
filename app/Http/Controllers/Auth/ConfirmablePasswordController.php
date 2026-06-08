@@ -13,7 +13,8 @@ use Illuminate\View\View;
 class ConfirmablePasswordController extends Controller
 {
     /**
-     * Show the confirm password view.
+     * Menampilkan formulir konfirmasi password.
+     * Digunakan sebelum pengguna melakukan aksi sensitif (seperti mengubah password).
      */
     public function show(): View
     {
@@ -21,7 +22,9 @@ class ConfirmablePasswordController extends Controller
     }
 
     /**
-     * Confirm the user's password.
+     * Memvalidasi konfirmasi password pengguna.
+     * Jika valid, menyimpan timestamp konfirmasi ke session.
+     * Jika tidak valid, melempar exception validasi dengan pesan error.
      */
     public function store(Request $request): RedirectResponse
     {
