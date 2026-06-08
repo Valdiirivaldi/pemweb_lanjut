@@ -148,9 +148,44 @@
             </div>
         </div>
     </div>
+
+    {{-- Charts Row --}}
+    <div class="row g-4 mt-2">
+        <div class="col-lg-4">
+            <div class="content-card shadow-sm animate-on-scroll">
+                <div class="card-header">
+                    <span><i class="fas fa-chart-pie me-2"></i>User Role Distribution</span>
+                </div>
+                <div class="card-body">
+                    <canvas id="roleChart" height="220"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="content-card shadow-sm animate-on-scroll delay-1">
+                <div class="card-header">
+                    <span><i class="fas fa-chart-line me-2"></i>User Growth</span>
+                </div>
+                <div class="card-body">
+                    <canvas id="growthChart" height="220"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="content-card shadow-sm animate-on-scroll delay-2">
+                <div class="card-header">
+                    <span><i class="fas fa-door-open me-2"></i>Enrollment Status</span>
+                </div>
+                <div class="card-body">
+                    <canvas id="enrollmentChart" height="220"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var hour = new Date().getHours();
@@ -163,6 +198,93 @@
             else if (hour >= 15 && hour < 18) greet += 'Evening';
             else greet += 'Night';
             el.textContent = greet + ', ' + name + '!';
+        }
+
+        var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        var textColor = isDark ? '#cbd5e0' : '#4a5568';
+        var gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+
+        Chart.defaults.color = textColor;
+
+        // Role Distribution (Doughnut)
+        var roleCtx = document.getElementById('roleChart');
+        if (roleCtx) {
+            var roleData = @json($roleDistribution);
+            new Chart(roleCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(roleData).map(function(r) { return r.charAt(0).toUpperCase() + r.slice(1); }),
+                    datasets: [{
+                        data: Object.values(roleData),
+                        backgroundColor: ['#4e73df', '#1cc88a', '#f6c23e'],
+                        borderWidth: 0,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { padding: 16, font: { size: 12 } } }
+                    }
+                }
+            });
+        }
+
+        // User Growth (Line)
+        var growthCtx = document.getElementById('growthChart');
+        if (growthCtx) {
+            var growthData = @json($userGrowth);
+            new Chart(growthCtx, {
+                type: 'line',
+                data: {
+                    labels: Object.keys(growthData),
+                    datasets: [{
+                        label: 'New Users',
+                        data: Object.values(growthData),
+                        borderColor: '#4e73df',
+                        backgroundColor: 'rgba(78,115,223,0.08)',
+                        fill: true,
+                        tension: 0.35,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#4e73df',
+                        borderWidth: 2,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { ticks: { font: { size: 10 } }, grid: { color: gridColor } },
+                        y: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 10 } }, grid: { color: gridColor } }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        // Enrollment Status (Doughnut)
+        var enrollCtx = document.getElementById('enrollmentChart');
+        if (enrollCtx) {
+            var enrollData = @json($enrollmentStatus);
+            var labels = Object.keys(enrollData).map(function(s) { return s.charAt(0).toUpperCase() + s.slice(1); });
+            new Chart(enrollCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: Object.values(enrollData),
+                        backgroundColor: ['#1cc88a', '#f6c23e', '#e74a3b'],
+                        borderWidth: 0,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { padding: 16, font: { size: 12 } } }
+                    }
+                }
+            });
         }
     });
 </script>

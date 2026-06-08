@@ -15,7 +15,7 @@ class AdminEnrollmentController extends Controller
     /**
      * Menampilkan halaman manajemen pendaftaran (enrollment) siswa ke kelas.
      * Menyediakan data siswa, tentor, dan kelas untuk form.
-     * Mendukung filter berdasarkan status (pending/active) via query parameter ?status=.
+     * Mendukung filter berdasarkan status (pending/active) dan pencarian via query parameter.
      */
     public function index(): View
     {
@@ -24,7 +24,8 @@ class AdminEnrollmentController extends Controller
         $tentors = User::where('role', 'tentor')->whereHas('tentor')->orderBy('name')->get();
         $courses = Course::with('tentor')->orderBy('title')->get();
 
-        $status = request('status'); // pending|active|null
+        $status = request('status');
+        $search = request('search');
 
         $query = DB::table('course_user')
             ->join('users', 'course_user.user_id', '=', 'users.id')
@@ -45,6 +46,14 @@ class AdminEnrollmentController extends Controller
 
         if (in_array($status, ['pending', 'active'], true)) {
             $query->where('course_user.status', $status);
+        }
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('users.name', 'like', "%{$search}%")
+                  ->orWhere('users.email', 'like', "%{$search}%")
+                  ->orWhere('courses.title', 'like', "%{$search}%");
+            });
         }
 
         $enrollments = $query->get();
@@ -82,7 +91,6 @@ class AdminEnrollmentController extends Controller
             'user_id' => $request->user_id,
             'course_id' => $request->course_id,
 
-            // sinkronkan workflow
             'is_unlocked' => 0,
             'status' => 'pending',
             'unlocked_at' => null,
@@ -127,8 +135,44 @@ class AdminEnrollmentController extends Controller
     {
         DB::table('course_user')->where('id', $id)->delete();
 
-
         return redirect()->route('admin.enrollments.index')
             ->with('success', __('messages.enrollment.deleted'));
+    }
+
+    /**
+     * Mengubah status akses secara massal (bulk toggle) untuk beberapa enrollment.
+     * Menerima array ID enrollment dan status target (active/pending).
+     */
+    public function bulkToggleAccess(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'ids'   => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'exists:course_user,id'],
+            'action' => ['required', 'in:lock,unlock'],
+        ]);
+
+        $isUnlock = $request->action === 'unlock';
+        $newStatus = $isUnlock ? 'active' : 'pending';
+        $adminId = auth()->id();
+
+        $now = now();
+
+        DB::table('course_user')
+            ->whereIn('id', $request->ids)
+            ->update([
+                'is_unlocked'  => $isUnlock ? 1 : 0,
+                'status'       => $newStatus,
+                'unlocked_at'  => $isUnlock ? $now : null,
+                'unlocked_by'  => $isUnlock ? $adminId : null,
+                'updated_at'   => $now,
+            ]);
+
+        $count = count($request->ids);
+        $msg = $isUnlock
+            ? "{$count} enrollment(s) telah dibuka."
+            : "{$count} enrollment(s) telah dikunci.";
+
+        return redirect()->route('admin.enrollments.index')
+            ->with('success', $msg);
     }
 }

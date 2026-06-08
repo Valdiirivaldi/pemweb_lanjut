@@ -16,14 +16,26 @@ class AdminUserController extends Controller
 {
     /**
      * Menampilkan daftar seluruh pengguna (siswa dan tentor) dengan profil mereka.
+     * Mendukung pencarian (search) berdasarkan nama/email dan filter berdasarkan role.
      * Data ditampilkan secara terbatas (10 per halaman) dan diurutkan dari yang terbaru.
      */
     public function index(): View
     {
-        $users = User::with(['siswa', 'tentor'])
-            ->whereIn('role', ['siswa', 'tentor'])
-            ->latest()
-            ->paginate(10);
+        $query = User::with(['siswa', 'tentor'])
+            ->whereIn('role', ['siswa', 'tentor']);
+
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        if ($role = request('role')) {
+            $query->where('role', $role);
+        }
+
+        $users = $query->latest()->paginate(10);
 
         return view('admin.users.index', compact('users'));
     }

@@ -80,19 +80,45 @@
 
     @if ($activeTab === 'siswa')
         {{-- ═══════════════════════════════════════════ TAB SISWA ═══════════════════════════════════════════ --}}
-        <div class="d-flex gap-2 mb-3">
-            <a href="{{ route('admin.enrollments.index', array_merge(request()->query(), ['tab' => 'siswa', 'status' => 'pending'])) }}"
-                class="btn btn-sm {{ request('status') === 'pending' ? 'btn-warning' : 'btn-outline-warning' }}">
-                Pending
-            </a>
-            <a href="{{ route('admin.enrollments.index', array_merge(request()->query(), ['tab' => 'siswa', 'status' => 'active'])) }}"
-                class="btn btn-sm {{ request('status') === 'active' ? 'btn-success' : 'btn-outline-success' }}">
-                Active
-            </a>
-            <a href="{{ route('admin.enrollments.index', array_merge(request()->query(), ['tab' => 'siswa', 'status' => null])) }}"
-                class="btn btn-sm btn-outline-secondary">
-                All
-            </a>
+        <div class="d-flex flex-wrap gap-2 mb-3 align-items-center">
+            {{-- Search --}}
+            <form method="GET" action="{{ route('admin.enrollments.index') }}" class="d-flex gap-2 flex-grow-1">
+                <input type="hidden" name="tab" value="siswa">
+                <input type="hidden" name="status" value="{{ request('status') }}">
+                <div class="input-group" style="max-width: 320px; border-radius: 10px; overflow: hidden;">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input type="text" name="search" class="form-control border-start-0"
+                           placeholder="Search student or course..."
+                           value="{{ request('search') }}" style="height: 36px; font-size: 0.85rem;">
+                </div>
+                <button type="submit" class="btn btn-sm btn-primary" style="border-radius: 10px;">
+                    <i class="fas fa-search"></i>
+                </button>
+                @if(request('search'))
+                    <a href="{{ route('admin.enrollments.index', ['tab' => 'siswa', 'status' => request('status')]) }}"
+                       class="btn btn-sm btn-outline-secondary" style="border-radius: 10px;">
+                        <i class="fas fa-times"></i>
+                    </a>
+                @endif
+            </form>
+
+            {{-- Status Filter --}}
+            <div class="d-flex gap-2">
+                <a href="{{ route('admin.enrollments.index', array_merge(request()->query(), ['tab' => 'siswa', 'status' => 'pending'])) }}"
+                    class="btn btn-sm {{ request('status') === 'pending' ? 'btn-warning' : 'btn-outline-warning' }}">
+                    Pending
+                </a>
+                <a href="{{ route('admin.enrollments.index', array_merge(request()->query(), ['tab' => 'siswa', 'status' => 'active'])) }}"
+                    class="btn btn-sm {{ request('status') === 'active' ? 'btn-success' : 'btn-outline-success' }}">
+                    Active
+                </a>
+                <a href="{{ route('admin.enrollments.index', array_merge(request()->query(), ['tab' => 'siswa', 'status' => null, 'search' => request('search')])) }}"
+                    class="btn btn-sm btn-outline-secondary">
+                    All
+                </a>
+            </div>
         </div>
 
         <div class="row g-4">
@@ -162,70 +188,127 @@
                     </div>
                     <div class="card-body p-0">
                         @if (count($enrollments) > 0)
-                            <div class="table-responsive">
-                                <table class="table table-hover mb-0" style="font-size: 0.88rem;">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Student</th>
-                                            <th>Course</th>
-                                            <th>Enrollment Date</th>
-                                            <th style="width: 60px;">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($enrollments as $index => $en)
-                                            <tr>
-                                                <td class="text-muted">{{ $index + 1 }}</td>
-                                                <td class="fw-semibold">{{ $en->user_name }}</td>
-                                                <td>{{ $en->course_title }}</td>
-                                                <td class="text-muted">
-                                                    {{ \Carbon\Carbon::parse($en->created_at)->format('d M Y') }}</td>
-                                                <td>
-                                                    <div class="d-flex gap-2 align-items-center">
-                                                        {{-- Toggle Access --}}
-                                                        <form
-                                                            action="{{ route('admin.enrollments.toggle-access', $en->id) }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            <button type="submit"
-                                                                class="btn btn-sm {{ (int) ($en->is_unlocked ?? 0) === 1 ? 'btn-success' : 'btn-danger' }}"
-                                                                style="border-radius: 8px; min-width: 44px;"
-                                                                title="Toggle Access">
-                                                                <i
-                                                                    class="fas {{ (int) ($en->is_unlocked ?? 0) === 1 ? 'fa-lock-open' : 'fa-lock' }}"></i>
-                                                            </button>
-                                                        </form>
+                            {{-- Bulk Actions --}}
+                            <form id="bulkForm" method="POST" action="{{ route('admin.enrollments.bulk-toggle') }}">
+                                @csrf
+                                <div class="d-flex align-items-center gap-2 px-3 py-2 border-bottom bg-light">
+                                    <input type="checkbox" id="selectAll" style="width: 16px; height: 16px;">
+                                    <span class="text-muted" style="font-size: 0.8rem;">Select All</span>
+                                    <div class="ms-auto d-flex gap-2">
+                                        <button type="submit" name="action" value="unlock"
+                                                class="btn btn-sm btn-success" style="border-radius: 8px;"
+                                                onclick="return confirm('Buka akses untuk enrollment terpilih?')">
+                                            <i class="fas fa-lock-open me-1"></i>Bulk Unlock
+                                        </button>
+                                        <button type="submit" name="action" value="lock"
+                                                class="btn btn-sm btn-danger" style="border-radius: 8px;"
+                                                onclick="return confirm('Kunci akses untuk enrollment terpilih?')">
+                                            <i class="fas fa-lock me-1"></i>Bulk Lock
+                                        </button>
+                                    </div>
+                                </div>
 
-                                                        {{-- Delete Enrollment --}}
-                                                        <form action="{{ route('admin.enrollments.destroy', $en->id) }}"
-                                                            method="POST"
-                                                            onsubmit="return confirm('Delete this enrollment?')">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-sm btn-danger"
-                                                                style="border-radius: 8px;" title="Hapus">
-                                                                <i class="fas fa-trash"></i>
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                </td>
+                                <div class="table-responsive">
+                                    <table class="table table-hover mb-0" style="font-size: 0.88rem;">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th style="width: 32px;"></th>
+                                                <th>#</th>
+                                                <th>Student</th>
+                                                <th>Course</th>
+                                                <th>Status</th>
+                                                <th>Enrollment Date</th>
+                                                <th>Unlocked By</th>
+                                                <th style="width: 60px;">Actions</th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($enrollments as $index => $en)
+                                                <tr>
+                                                    <td>
+                                                        <input type="checkbox" name="ids[]" value="{{ $en->id }}"
+                                                               class="enroll-checkbox"
+                                                               style="width: 16px; height: 16px;">
+                                                    </td>
+                                                    <td class="text-muted">{{ $index + 1 }}</td>
+                                                    <td class="fw-semibold">{{ $en->user_name }}</td>
+                                                    <td>{{ $en->course_title }}</td>
+                                                    <td>
+                                                        @php
+                                                            $isActive = (int) ($en->is_unlocked ?? 0) === 1;
+                                                        @endphp
+                                                        <span class="badge rounded-pill {{ $isActive ? 'bg-success' : 'bg-warning text-dark' }}"
+                                                              style="font-size: 0.75rem;">
+                                                            {{ $isActive ? 'Active' : 'Pending' }}
+                                                        </span>
+                                                    </td>
+                                                    <td class="text-muted" style="font-size: 0.8rem;">
+                                                        {{ \Carbon\Carbon::parse($en->created_at)->format('d M Y') }}</td>
+                                                    <td class="text-muted" style="font-size: 0.8rem;">
+                                                        @if ($en->unlocked_by)
+                                                            {{ \App\Models\User::find($en->unlocked_by)?->name ?? 'User #'.$en->unlocked_by }}
+                                                            <br><small>{{ $en->unlocked_at ? \Carbon\Carbon::parse($en->unlocked_at)->format('d M Y H:i') : '' }}</small>
+                                                        @else
+                                                            <span class="text-muted">—</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        <div class="d-flex gap-2 align-items-center">
+                                                            {{-- Toggle Access --}}
+                                                            <form
+                                                                action="{{ route('admin.enrollments.toggle-access', $en->id) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                <button type="submit"
+                                                                    class="btn btn-sm {{ $isActive ? 'btn-success' : 'btn-danger' }}"
+                                                                    style="border-radius: 8px; min-width: 36px;"
+                                                                    title="Toggle Access">
+                                                                    <i
+                                                                        class="fas {{ $isActive ? 'fa-lock-open' : 'fa-lock' }}"></i>
+                                                                </button>
+                                                            </form>
+
+                                                            {{-- Delete Enrollment --}}
+                                                            <form action="{{ route('admin.enrollments.destroy', $en->id) }}"
+                                                                method="POST"
+                                                                onsubmit="return confirm('Delete this enrollment?')">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-sm btn-danger"
+                                                                    style="border-radius: 8px;" title="Hapus">
+                                                                    <i class="fas fa-trash"></i>
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
                         @else
                             <div class="empty-state">
                                 <i class="fas fa-user-graduate"></i>
-                                <h6>No enrollments yet</h6>
-                                <p>No students are enrolled in any classes yet. Use the form to grant access.</p>
+                                <h6>No enrollments found</h6>
+                                <p>@if(request('search') || request('status')) No enrollments match your filter criteria. Try a different search. @else No students are enrolled in any classes yet. Use the form to grant access. @endif</p>
                             </div>
                         @endif
                     </div>
                 </div>
             </div>
         </div>
+
+        {{-- Select All Script --}}
+        @push('scripts')
+        <script>
+            document.getElementById('selectAll')?.addEventListener('change', function() {
+                document.querySelectorAll('.enroll-checkbox').forEach(function(cb) {
+                    cb.checked = this.checked;
+                }, this);
+            });
+        </script>
+        @endpush
     @else
         {{-- ═══════════════════════════════════════════ TAB TENTOR ═══════════════════════════════════════════ --}}
         <div class="row g-4">

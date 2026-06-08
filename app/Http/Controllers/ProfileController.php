@@ -80,31 +80,4 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
-
-    /**
-     * Memperbarui unique_id (ID unik) untuk profil siswa atau tentor.
-     * Hanya bisa diakses oleh admin atau pengguna itu sendiri.
-     */
-    public function updateUniqueId(Request $request): RedirectResponse
-    {
-        $user = $request->user()->load(['siswa', 'tentor']);
-
-        $request->validate([
-            'unique_id' => [
-                'required', 'string', 'max:20',
-                'unique:siswas,unique_id' . ($user->siswa ? ',' . $user->siswa->id : ''),
-                'unique:tentors,unique_id' . ($user->tentor ? ',' . $user->tentor->id : ''),
-            ],
-        ]);
-
-        if ($user->siswa) {
-            $user->siswa->update(['unique_id' => $request->unique_id]);
-        } elseif ($user->tentor) {
-            $user->tentor->update(['unique_id' => $request->unique_id]);
-        } else {
-            return back()->with('error', __('messages.error.only_siswa_tentor'));
-        }
-
-        return Redirect::route('profile')->with('status', 'unique-id-updated');
-    }
 }

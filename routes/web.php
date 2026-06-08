@@ -158,14 +158,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::post('/enrollments/{id}/toggle-access', [\App\Http\Controllers\Admin\EnrollmentController::class, 'toggleAccess'])
             ->name('enrollments.toggle-access');
+        Route::post('/enrollments/bulk-toggle', [AdminEnrollmentController::class, 'bulkToggleAccess'])
+            ->name('enrollments.bulk-toggle');
     });
 
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::patch('/profile/unique-id', [ProfileController::class, 'updateUniqueId'])
-        ->name('profile.unique-id')
-        ->middleware('role:admin');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 

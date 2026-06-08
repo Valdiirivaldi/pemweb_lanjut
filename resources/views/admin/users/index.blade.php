@@ -11,7 +11,36 @@
                 <i class="fas fa-plus me-1"></i>Add Account
             </a>
         </div>
-        <div class="card-body p-0">
+        <div class="card-body">
+            {{-- Search & Filter --}}
+            <form method="GET" action="{{ route('admin.users.index') }}" class="row g-2 mb-3">
+                <div class="col-md-5">
+                    <div class="input-group" style="border-radius: 10px; overflow: hidden;">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="fas fa-search text-muted"></i>
+                        </span>
+                        <input type="text" name="search" class="form-control border-start-0"
+                               placeholder="Search by name or email..."
+                               value="{{ request('search') }}" style="height: 40px;">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select name="role" class="form-select" style="height: 40px; border-radius: 10px;">
+                        <option value="">All Roles</option>
+                        <option value="siswa" {{ request('role') === 'siswa' ? 'selected' : '' }}>Student</option>
+                        <option value="tentor" {{ request('role') === 'tentor' ? 'selected' : '' }}>Tentor</option>
+                    </select>
+                </div>
+                <div class="col-md-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary" style="border-radius: 10px; height: 40px; font-weight: 600;">
+                        <i class="fas fa-filter me-1"></i>Filter
+                    </button>
+                    <a href="{{ route('admin.users.index') }}" class="btn btn-outline-secondary" style="border-radius: 10px; height: 40px; font-weight: 600;">
+                        <i class="fas fa-redo me-1"></i>Reset
+                    </a>
+                </div>
+            </form>
+
             @if ($users->count() > 0)
                 <div class="table-responsive">
                     <table class="table table-hover mb-0" style="font-size: 0.88rem;">
@@ -72,16 +101,22 @@
                     </table>
                 </div>
                 <div class="d-flex justify-content-center py-3">
-                    {{ $users->links() }}
+                    {{ $users->withQueryString()->links() }}
                 </div>
             @else
                 <div class="empty-state">
                     <i class="fas fa-users"></i>
-                    <h6>No users yet</h6>
-                    <p>No students or tentors registered yet. Click "Add Account" to add one.</p>
-                    <a href="{{ route('admin.users.create') }}" class="btn btn-primary btn-sm mt-2" style="border-radius: 10px;">
-                        <i class="fas fa-plus me-1"></i>Add Account
-                    </a>
+                    <h6>No users found</h6>
+                    <p>@if(request('search') || request('role')) No users match your filter criteria. Try a different search. @else No students or tentors registered yet. Click "Add Account" to add one. @endif</p>
+                    @if(!request('search') && !request('role'))
+                        <a href="{{ route('admin.users.create') }}" class="btn btn-primary btn-sm mt-2" style="border-radius: 10px;">
+                            <i class="fas fa-plus me-1"></i>Add Account
+                        </a>
+                    @else
+                        <a href="{{ route('admin.users.index') }}" class="btn btn-outline-secondary btn-sm mt-2" style="border-radius: 10px;">
+                            <i class="fas fa-redo me-1"></i>Reset Filters
+                        </a>
+                    @endif
                 </div>
             @endif
         </div>
