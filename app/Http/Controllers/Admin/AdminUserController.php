@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Siswa;
 use App\Models\Tentor;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -176,12 +177,19 @@ class AdminUserController extends Controller
      * Menghapus pengguna (siswa atau tentor) dari database.
      * Hanya bisa menghapus pengguna dengan role siswa atau tentor.
      */
-    public function destroy(int $id): RedirectResponse
+    public function destroy(int $id): RedirectResponse|JsonResponse
     {
         $user = User::findOrFail($id);
         abort_if(!in_array($user->role, ['siswa', 'tentor']), 403);
 
         $user->delete();
+
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => __('messages.account.deleted'),
+            ]);
+        }
 
         return redirect()->route('admin.users.index')
             ->with('success', __('messages.account.deleted'));

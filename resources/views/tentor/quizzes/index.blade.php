@@ -8,22 +8,22 @@
         <div class="card-header">
             <span>Quiz List</span>
             <a href="{{ route('tentor.quizzes.create') }}" class="btn btn-sm btn-primary rounded-pill px-3">
-                <i class="fas fa-plus me-1"></i>Create Quiz
+                <i data-lucide="plus" style="width:14px;height:14px;margin-right:4px;"></i>Create Quiz
             </a>
         </div>
         <div class="card-body p-0">
             @if ($quizzes->count() > 0)
                 <div class="table-responsive">
-                    <table class="table table-hover mb-0" style="font-size: 0.9rem;">
-                        <thead class="table-light">
+                    <table class="table-admin mb-0" data-sortable>
+                        <thead>
                             <tr>
-                                <th>Quiz Title</th>
-                                <th>Course</th>
-                                <th>Questions</th>
-                                <th>Participants</th>
-                                <th>Time Limit</th>
-                                <th>Created</th>
-                                <th class="text-end">Actions</th>
+                                <th data-sort="title">Quiz Title</th>
+                                <th data-sort="course">Course</th>
+                                <th data-sort="questions">Questions</th>
+                                <th data-sort="participants">Participants</th>
+                                <th data-sort="time">Time Limit</th>
+                                <th data-sort="created">Created</th>
+                                <th style="width: 60px;">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -43,24 +43,40 @@
                                     </td>
                                     <td class="text-muted">{{ $quiz->time_limit }} minutes</td>
                                     <td class="text-muted">{{ $quiz->created_at->format('d M Y') }}</td>
-                                    <td class="text-end">
-                                        <div class="d-flex gap-2 justify-content-end">
-                                            <a href="{{ route('tentor.quizzes.attempts.index', $quiz->id) }}" class="btn btn-sm btn-outline-success rounded-pill px-3">
-                                                <i class="fas fa-users me-1"></i>Attempts
-                                            </a>
-                                            <a href="{{ route('tentor.quizzes.questions.index', $quiz->id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                                                <i class="fas fa-eye me-1"></i>Questions
-                                            </a>
-                                            <a href="{{ route('tentor.quizzes.edit', $quiz->id) }}" class="btn btn-sm btn-outline-warning rounded-pill px-3">
-                                                <i class="fas fa-edit me-1"></i>Edit
-                                            </a>
-                                            <form action="{{ route('tentor.quizzes.destroy', $quiz->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus quiz ini? Semua data soal dan attempt akan ikut terhapus.');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3">
-                                                    <i class="fas fa-trash me-1"></i>Hapus
-                                                </button>
-                                            </form>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn-action-icon" data-bs-toggle="dropdown" aria-expanded="false" title="Actions">
+                                                <i data-lucide="more-vertical"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="border-radius: 12px; border: none; padding: 6px; min-width: 160px;">
+                                                <li>
+                                                    <a href="{{ route('tentor.quizzes.attempts.index', $quiz->id) }}" class="dropdown-item py-2 rounded-2">
+                                                        <i data-lucide="users" style="width:14px;height:14px;margin-right:8px;color:#27ae60;"></i>Attempts
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ route('tentor.quizzes.questions.index', $quiz->id) }}" class="dropdown-item py-2 rounded-2">
+                                                        <i data-lucide="help-circle" style="width:14px;height:14px;margin-right:8px;color:#4e73df;"></i>Questions
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ route('tentor.quizzes.edit', $quiz->id) }}" class="dropdown-item py-2 rounded-2">
+                                                        <i data-lucide="pencil" style="width:14px;height:14px;margin-right:8px;color:#f6c23e;"></i>Edit
+                                                    </a>
+                                                </li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li>
+                                                    <form action="{{ route('tentor.quizzes.destroy', $quiz->id) }}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="dropdown-item py-2 rounded-2 text-danger"
+                                                                data-ajax-action="delete"
+                                                                data-confirm="Yakin ingin menghapus quiz ini? Semua data soal dan attempt akan ikut terhapus.">
+                                                            <i data-lucide="trash-2" style="width:14px;height:14px;margin-right:8px;"></i>Hapus
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </td>
                                 </tr>
@@ -70,7 +86,7 @@
                 </div>
             @else
                 <div class="empty-state">
-                    <i class="fas fa-question-circle"></i>
+                    <div class="empty-state-icon-wrap"><i data-lucide="help-circle"></i></div>
                     <h6>No quizzes yet</h6>
                     <p>You haven't created any quizzes yet. Click "Create Quiz" to get started.</p>
                 </div>
@@ -78,3 +94,9 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+</script>
+@endpush

@@ -211,7 +211,7 @@
 
 @section('content')
     <a href="{{ route('siswa.courses.learn', $quiz->course) }}" class="back-link">
-        <i class="fas fa-arrow-left"></i> Kembali ke Kelas
+        <i data-lucide="arrow-left" style="width:16px;height:16px;"></i> Kembali ke Kelas
     </a>
 
     @php
@@ -222,7 +222,7 @@
 
     <div class="quiz-container">
         <div class="quiz-header">
-            <h1><i class="fas fa-pencil-alt me-2" style="color: #f59e0b;"></i>{{ $quiz->title }}</h1>
+            <h1><i data-lucide="pencil" style="width:16px;height:16px;margin-right:8px;color:#f59e0b;"></i>{{ $quiz->title }}</h1>
             <div class="quiz-timer" id="timerContainer">
                 <div class="timer-label">Timer</div>
                 <div class="timer-value" id="timerDisplay">00:00</div>
@@ -268,7 +268,7 @@
             @empty
                 <div class="content-card shadow-sm" style="border-radius: 14px;">
                     <div class="card-body text-center py-5">
-                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #cbd5e0; margin-bottom: 16px;"></i>
+                        <div class="empty-state-icon-wrap"><i data-lucide="alert-triangle" style="width:32px;height:32px;color:#cbd5e0;"></i></div>
                         <h6 style="color: #1e3c72; font-weight: 700;">Soal belum tersedia</h6>
                         <p style="color: #a0aec0; font-size: 0.9rem;">Tentor belum menambahkan soal untuk kuis ini.</p>
                     </div>
@@ -277,9 +277,9 @@
 
             @if ($total > 0)
                 <div class="quiz-footer">
-                    <div class="total-questions"><i class="fas fa-list me-1"></i>Total soal: {{ $total }}</div>
+                    <div class="total-questions"><i data-lucide="list" style="width:14px;height:14px;margin-right:4px;"></i>Total soal: {{ $total }}</div>
                     <button type="submit" class="btn-submit-quiz">
-                        <i class="fas fa-paper-plane me-2"></i>Submit Jawaban
+                        <i data-lucide="send" style="width:16px;height:16px;margin-right:8px;"></i>Submit Jawaban
                     </button>
                 </div>
             @endif
@@ -348,5 +348,8 @@
             render();
         }, 1000);
     })();
+</script>
+<script>
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 </script>
 @endpush

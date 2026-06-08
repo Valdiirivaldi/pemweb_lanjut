@@ -2,10 +2,14 @@
 
 @section('title', 'My Profile - Eduria')
 @section('page-title', 'My Profile')
+@section('breadcrumb')
+    <a href="{{ route('home') }}">Home</a>
+    <i data-lucide="chevron-right"></i>
+    <span class="current">My Profile</span>
+@endsection
 
 @push('styles')
 <style>
-    /* ── Profile Avatar ── */
     .profile-avatar {
         width: 100px;
         height: 100px;
@@ -23,89 +27,33 @@
 
     .profile-name {
         font-weight: 800;
-        color: #1e3c72;
+        color: var(--text-primary);
         font-size: 1.25rem;
     }
 
     .profile-email {
-        color: #718096;
+        color: var(--text-muted);
         font-size: 0.9rem;
     }
 
     .profile-meta {
-        color: #a0aec0;
+        color: var(--text-subtle);
         font-size: 0.8rem;
     }
 
-    .profile-meta i {
-        width: 16px;
-        text-align: center;
+    .profile-meta svg {
+        width: 14px;
+        height: 14px;
+        vertical-align: middle;
         margin-right: 4px;
     }
 
-    .profile-card {
-        border: none;
-        border-radius: 16px;
-        background: #fff;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-        transition: all 0.3s ease;
-        height: 100%;
-    }
-
-    .profile-card:hover {
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
-    }
-
-    /* ── Stat Cards ── */
-    .profile-stat-card {
-        border: none;
-        border-radius: 16px;
-        padding: 24px;
-        background: #fff;
-        transition: all 0.3s ease;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-        height: 100%;
-        text-align: center;
-    }
-
-    .profile-stat-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
-    }
-
-    .profile-stat-icon {
-        width: 52px;
-        height: 52px;
-        border-radius: 14px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.3rem;
-        color: #fff;
-        margin: 0 auto 12px;
-    }
-
-    .profile-stat-number {
-        font-weight: 800;
-        font-size: 2rem;
-        color: #1e3c72;
-        line-height: 1.2;
-    }
-
-    .profile-stat-label {
-        color: #a0aec0;
-        font-size: 0.8rem;
-        font-weight: 500;
-        margin-top: 4px;
-    }
-
-    /* ── Info Card ── */
     .info-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 12px 0;
-        border-bottom: 1px solid #f0f4f8;
+        border-bottom: 1px solid var(--border-light);
     }
 
     .info-item:last-child {
@@ -113,18 +61,27 @@
     }
 
     .info-label {
-        color: #718096;
+        color: var(--text-muted);
         font-size: 0.85rem;
         font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .info-label svg {
+        width: 16px;
+        height: 16px;
+        color: var(--text-subtle);
+        flex-shrink: 0;
     }
 
     .info-value {
-        color: #1e3c72;
+        color: var(--text-primary);
         font-size: 0.9rem;
         font-weight: 600;
     }
 
-    /* ── Edit Form Slide ── */
     .edit-form-wrap {
         max-height: 0;
         overflow: hidden;
@@ -137,48 +94,10 @@
 
     .edit-form-wrap .edit-form-inner {
         padding-top: 16px;
-        border-top: 1px solid #f0f4f8;
+        border-top: 1px solid var(--border-light);
         margin-top: 16px;
     }
 
-    .form-floating-custom {
-        position: relative;
-        margin-bottom: 16px;
-    }
-
-    .form-floating-custom .form-control {
-        border-radius: 12px;
-        border: 2px solid #e2e8f0;
-        padding: 16px 14px 8px;
-        height: auto;
-        font-size: 0.9rem;
-        transition: border-color 0.3s ease;
-    }
-
-    .form-floating-custom .form-control:focus {
-        border-color: #4e73df;
-        box-shadow: none;
-    }
-
-    .form-floating-custom label {
-        position: absolute;
-        top: 10px;
-        left: 14px;
-        font-size: 0.75rem;
-        color: #a0aec0;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        pointer-events: none;
-        transition: all 0.3s ease;
-    }
-
-    .form-floating-custom .form-control:focus ~ label,
-    .form-floating-custom .form-control:not(:placeholder-shown) ~ label {
-        color: #4e73df;
-    }
-
-    /* ── Button ── */
     .btn-edit-toggle {
         border-radius: 12px;
         padding: 10px 24px;
@@ -199,69 +118,71 @@
     <div class="row g-4">
         {{-- Left Column: Profile Card --}}
         <div class="col-lg-4">
-            <div class="profile-card p-4 text-center">
-                <div class="profile-avatar mb-3">
-                    {{ strtoupper(substr($user->name, 0, 1)) }}
-                </div>
+            <div class="content-card">
+                <div class="content-card-body text-center">
+                    <div class="profile-avatar mb-3">
+                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                    </div>
 
-                <h5 class="profile-name mb-1">{{ $user->name }}</h5>
-                <p class="profile-email mb-2">
-                    <i class="far fa-envelope me-1"></i>{{ $user->email }}
-                </p>
+                    <h5 class="profile-name mb-1">{{ $user->name }}</h5>
+                    <p class="profile-email mb-2">
+                        <i data-lucide="mail" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>{{ $user->email }}
+                    </p>
 
-                <div class="mb-3">
-                    <span class="badge-role {{ $user->role }}">{{ ucfirst($user->role) }}</span>
-                </div>
+                    <div class="mb-3">
+                        <span class="badge-role {{ $user->role }}">{{ ucfirst($user->role) }}</span>
+                    </div>
 
-                <p class="profile-meta mb-3">
-                    <i class="far fa-calendar-alt"></i>
-                    Member since {{ $user->created_at->format('d M Y') }}
-                </p>
+                    <p class="profile-meta mb-3">
+                        <i data-lucide="calendar"></i>
+                        Member since {{ $user->created_at->format('d M Y') }}
+                    </p>
 
-                <button class="btn btn-primary btn-edit-toggle" id="editToggle" type="button">
-                    <i class="fas fa-pen me-1"></i> Edit Profile
-                </button>
+                    <button class="btn btn-primary btn-edit-toggle" id="editToggle" type="button">
+                        <i data-lucide="pencil" style="width:14px;height:14px;margin-right:6px;"></i> Edit Profile
+                    </button>
 
-                {{-- Slide-down Edit Form --}}
-                <div class="edit-form-wrap" id="editForm">
-                    <div class="edit-form-inner">
-                        <form method="post" action="{{ route('profile.update') }}">
-                            @csrf
-                            @method('patch')
+                    {{-- Slide-down Edit Form --}}
+                    <div class="edit-form-wrap" id="editForm">
+                        <div class="edit-form-inner">
+                            <form method="post" action="{{ route('profile.update') }}">
+                                @csrf
+                                @method('patch')
 
-                            <div class="form-floating-custom">
-                                <input type="text" class="form-control" id="name" name="name"
-                                       value="{{ old('name', $user->name) }}" placeholder=" " required>
-                                <label for="name">Full Name</label>
-                                @error('name')
-                                    <small class="text-danger mt-1 d-block">{{ $message }}</small>
-                                @enderror
-                            </div>
-
-                            <div class="form-floating-custom">
-                                <input type="email" class="form-control" id="email" name="email"
-                                       value="{{ old('email', $user->email) }}" placeholder=" " required>
-                                <label for="email">Email</label>
-                                @error('email')
-                                    <small class="text-danger mt-1 d-block">{{ $message }}</small>
-                                @enderror
-                            </div>
-
-                            <div class="d-flex gap-2 mt-3">
-                                <button type="submit" class="btn btn-primary flex-grow-1 rounded-pill">
-                                    <i class="fas fa-check me-1"></i> Save
-                                </button>
-                                <button type="button" class="btn btn-outline-secondary rounded-pill px-4" id="editCancel">
-                                    Cancel
-                                </button>
-                            </div>
-
-                            @if (session('status') === 'profile-updated')
-                                <div class="alert alert-success mt-3 mb-0 py-2 text-center rounded-pill" style="font-size: 0.85rem;">
-                                    <i class="fas fa-check-circle me-1"></i> Profile updated successfully!
+                                <div class="form-floating-custom">
+                                    <input type="text" id="name" name="name"
+                                           value="{{ old('name', $user->name) }}" placeholder=" " required>
+                                    <label for="name">Full Name</label>
+                                    @error('name')
+                                        <small class="text-danger mt-1 d-block">{{ $message }}</small>
+                                    @enderror
                                 </div>
-                            @endif
-                        </form>
+
+                                <div class="form-floating-custom">
+                                    <input type="email" id="email" name="email"
+                                           value="{{ old('email', $user->email) }}" placeholder=" " required>
+                                    <label for="email">Email</label>
+                                    @error('email')
+                                        <small class="text-danger mt-1 d-block">{{ $message }}</small>
+                                    @enderror
+                                </div>
+
+                                <div class="d-flex gap-2 mt-3">
+                                    <button type="submit" class="btn btn-primary flex-grow-1 btn-pill">
+                                        <i data-lucide="check" style="width:14px;height:14px;margin-right:6px;"></i> Save
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary btn-pill px-4" id="editCancel">
+                                        Cancel
+                                    </button>
+                                </div>
+
+                                @if (session('status') === 'profile-updated')
+                                    <div class="alert alert-success mt-3 mb-0 py-2 text-center rounded-pill" style="font-size: 0.85rem;">
+                                        <i data-lucide="check-circle" style="width:14px;height:14px;margin-right:6px;"></i> Profile updated successfully!
+                                    </div>
+                                @endif
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -273,55 +194,55 @@
                 {{-- Stat Cards Row (Siswa only) --}}
                 <div class="row g-3 mb-4">
                     <div class="col-md-4">
-                        <div class="profile-stat-card">
-                            <div class="profile-stat-icon" style="background: linear-gradient(135deg, #4e73df, #224abe);">
-                                <i class="fas fa-book-open"></i>
+                        <div class="stat-card text-center">
+                            <div class="stat-card-icon mx-auto mb-3" style="background: linear-gradient(135deg, #4e73df, #224abe);">
+                                <i data-lucide="book-open"></i>
                             </div>
-                            <div class="profile-stat-number">
+                            <div class="stat-card-number">
                                 <span class="counter" data-target="{{ $totalClasses }}">0</span>
                             </div>
-                            <div class="profile-stat-label">Enrolled Courses</div>
+                            <div class="stat-card-label">Enrolled Courses</div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="profile-stat-card">
-                            <div class="profile-stat-icon" style="background: linear-gradient(135deg, #38a169, #276749);">
-                                <i class="fas fa-certificate"></i>
+                        <div class="stat-card text-center">
+                            <div class="stat-card-icon mx-auto mb-3" style="background: linear-gradient(135deg, #38a169, #276749);">
+                                <i data-lucide="award"></i>
                             </div>
-                            <div class="profile-stat-number">
+                            <div class="stat-card-number">
                                 <span class="counter" data-target="{{ $totalCertificates }}">0</span>
                             </div>
-                            <div class="profile-stat-label">Certificates</div>
+                            <div class="stat-card-label">Certificates</div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="profile-stat-card">
-                            <div class="profile-stat-icon" style="background: linear-gradient(135deg, #d69e2e, #b7791f);">
-                                <i class="fas fa-pencil-alt"></i>
+                        <div class="stat-card text-center">
+                            <div class="stat-card-icon mx-auto mb-3" style="background: linear-gradient(135deg, #d69e2e, #b7791f);">
+                                <i data-lucide="pencil"></i>
                             </div>
-                            <div class="profile-stat-number">
+                            <div class="stat-card-number">
                                 <span class="counter" data-target="{{ $totalQuizzes }}">0</span>
                             </div>
-                            <div class="profile-stat-label">Quizzes Taken</div>
+                            <div class="stat-card-label">Quizzes Taken</div>
                         </div>
                     </div>
                 </div>
 
                 {{-- Account Info Card for Siswa --}}
-                <div class="content-card shadow-sm">
-                    <div class="card-header">
-                        <span><i class="fas fa-info-circle me-2"></i>Account Information</span>
+                <div class="content-card">
+                    <div class="content-card-header">
+                        <span><i data-lucide="info" style="margin-right:8px;"></i>Account Information</span>
                     </div>
-                    <div class="card-body">
+                    <div class="content-card-body">
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-id-card me-2"></i>User ID</span>
+                            <span class="info-label"><i data-lucide="id-card"></i>User ID</span>
                             <span class="info-value">#{{ $user->id }}</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-qrcode me-2"></i>Unique ID</span>
+                            <span class="info-label"><i data-lucide="qrcode"></i>Unique ID</span>
                             <span class="info-value">
                                 @if ($user->unique_id)
-                                    <span class="badge-role" style="background:#e8ecf4;color:#1e3c72;font-family:monospace;">
+                                    <span class="badge-role" style="background:#e8ecf4;color:var(--text-primary);font-family:monospace;">
                                         {{ $user->unique_id }}
                                     </span>
                                 @else
@@ -330,49 +251,49 @@
                             </span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-envelope me-2"></i>Email</span>
+                            <span class="info-label"><i data-lucide="mail"></i>Email</span>
                             <span class="info-value">{{ $user->email }}</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-check-circle me-2"></i>Email Verification</span>
+                            <span class="info-label"><i data-lucide="check-circle"></i>Email Verification</span>
                             <span class="info-value">
                                 @if ($user->email_verified_at)
                                     <span class="badge-role" style="background:#c6f6d5;color:#276749;">
-                                        <i class="fas fa-check-circle me-1"></i>Verified
+                                        <i data-lucide="check-circle" style="width:12px;height:12px;"></i>Verified
                                     </span>
                                 @else
                                     <span class="badge-role" style="background:#fed7d7;color:#9b2c2c;">
-                                        <i class="fas fa-times-circle me-1"></i>Not Verified
+                                        <i data-lucide="x-circle" style="width:12px;height:12px;"></i>Not Verified
                                     </span>
                                 @endif
                             </span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-user-tag me-2"></i>Role</span>
+                            <span class="info-label"><i data-lucide="user-tag"></i>Role</span>
                             <span class="info-value">
                                 <span class="badge-role {{ $user->role }}">{{ ucfirst($user->role) }}</span>
                             </span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-calendar-plus me-2"></i>Member Since</span>
+                            <span class="info-label"><i data-lucide="calendar-plus"></i>Member Since</span>
                             <span class="info-value">{{ $user->created_at->format('d F Y') }}</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-clock me-2"></i>Last Updated</span>
+                            <span class="info-label"><i data-lucide="clock"></i>Last Updated</span>
                             <span class="info-value">{{ $user->updated_at->format('d F Y, H:i') }}</span>
                         </div>
                     </div>
                 </div>
             @else
                 {{-- Combined card: Info Summary + Account Details for Admin/Tentor --}}
-                <div class="content-card shadow-sm">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center gap-3 mb-4 pb-3" style="border-bottom: 1px solid #f0f4f8;">
+                <div class="content-card">
+                    <div class="content-card-body">
+                        <div class="d-flex align-items-center gap-3 mb-4 pb-3" style="border-bottom: 1px solid var(--border-light);">
                             <div style="width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(135deg, #4e73df, #224abe); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #fff; flex-shrink: 0;">
-                                <i class="fas {{ Auth::user()->role == 'admin' ? 'fa-user-shield' : 'fa-chalkboard-teacher' }}"></i>
+                                <i data-lucide="{{ Auth::user()->role == 'admin' ? 'shield' : 'chalkboard' }}" style="width:24px;height:24px;"></i>
                             </div>
                             <div>
-                                <h5 class="fw-bold mb-1" style="color: #1e3c72;">{{ ucfirst(Auth::user()->role) }} Account</h5>
+                                <h5 class="fw-bold mb-1" style="color: var(--text-primary);">{{ ucfirst(Auth::user()->role) }} Account</h5>
                                 <p class="mb-0 text-muted" style="font-size: 0.85rem;">
                                     {{ Auth::user()->role == 'admin' ? 'You are the owner and manager of the learning system.' : 'You are an instructor responsible for courses and students.' }}
                                 </p>
@@ -380,15 +301,15 @@
                         </div>
 
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-id-card me-2"></i>User ID</span>
+                            <span class="info-label"><i data-lucide="id-card"></i>User ID</span>
                             <span class="info-value">#{{ $user->id }}</span>
                         </div>
                         @if ($user->role !== 'admin')
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-qrcode me-2"></i>Unique ID</span>
+                            <span class="info-label"><i data-lucide="qrcode"></i>Unique ID</span>
                             <span class="info-value">
                                 @if ($user->unique_id)
-                                    <span class="badge-role" style="background:#e8ecf4;color:#1e3c72;font-family:monospace;">
+                                    <span class="badge-role" style="background:#e8ecf4;color:var(--text-primary);font-family:monospace;">
                                         {{ $user->unique_id }}
                                     </span>
                                 @else
@@ -398,35 +319,35 @@
                         </div>
                         @endif
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-envelope me-2"></i>Email</span>
+                            <span class="info-label"><i data-lucide="mail"></i>Email</span>
                             <span class="info-value">{{ $user->email }}</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-check-circle me-2"></i>Email Verification</span>
+                            <span class="info-label"><i data-lucide="check-circle"></i>Email Verification</span>
                             <span class="info-value">
                                 @if ($user->email_verified_at)
                                     <span class="badge-role" style="background:#c6f6d5;color:#276749;">
-                                        <i class="fas fa-check-circle me-1"></i>Verified
+                                        <i data-lucide="check-circle" style="width:12px;height:12px;"></i>Verified
                                     </span>
                                 @else
                                     <span class="badge-role" style="background:#fed7d7;color:#9b2c2c;">
-                                        <i class="fas fa-times-circle me-1"></i>Not Verified
+                                        <i data-lucide="x-circle" style="width:12px;height:12px;"></i>Not Verified
                                     </span>
                                 @endif
                             </span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-user-tag me-2"></i>Role</span>
+                            <span class="info-label"><i data-lucide="user-tag"></i>Role</span>
                             <span class="info-value">
                                 <span class="badge-role {{ $user->role }}">{{ ucfirst($user->role) }}</span>
                             </span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-calendar-plus me-2"></i>Member Since</span>
+                            <span class="info-label"><i data-lucide="calendar-plus"></i>Member Since</span>
                             <span class="info-value">{{ $user->created_at->format('d F Y') }}</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label"><i class="fas fa-clock me-2"></i>Last Updated</span>
+                            <span class="info-label"><i data-lucide="clock"></i>Last Updated</span>
                             <span class="info-value">{{ $user->updated_at->format('d F Y, H:i') }}</span>
                         </div>
                     </div>
@@ -440,7 +361,6 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
 
-        /* ── Counter Animation ── */
         var counters = document.querySelectorAll('.counter');
         if (counters.length) {
             var observer = new IntersectionObserver(function(entries) {
@@ -471,7 +391,6 @@
             counters.forEach(function(c) { observer.observe(c); });
         }
 
-        /* ── Edit Form Slide Toggle ── */
         var editToggle = document.getElementById('editToggle');
         var editForm = document.getElementById('editForm');
         var editCancel = document.getElementById('editCancel');
@@ -488,11 +407,9 @@
             });
         }
 
-        /* ── Auto-open edit form if validation errors exist ── */
         @if ($errors->any())
             editForm.classList.add('show');
         @endif
     });
-
 </script>
 @endpush

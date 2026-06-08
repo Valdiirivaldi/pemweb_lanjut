@@ -230,7 +230,7 @@
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
             <div>
                 <h4 style="color: #1e3c72; font-weight: 800; margin: 0; font-size: 1.3rem;">
-                    <i class="fas fa-book me-2" style="color: #4e73df;"></i>My Courses
+                    <i data-lucide="book" style="width:16px;height:16px;margin-right:8px;color:#4e73df;"></i>My Courses
                 </h4>
                 <p class="text-muted mb-0" style="font-size: 0.88rem; margin-top: 4px;">
                     Manage your courses, modules, and students
@@ -238,13 +238,13 @@
             </div>
             <div class="d-flex align-items-center gap-3">
                 <div class="result-badge">
-                    <i class="fas fa-book-open"></i>
+                    <i data-lucide="book-open" style="width:16px;height:16px;"></i>
                     <span>Showing</span>
                     <span class="count-num">{{ $courses->count() }}</span>
                     <span>courses</span>
                 </div>
                 <a href="{{ route('tentor.courses.create') }}" class="btn btn-primary rounded-pill px-3" style="height: 40px; font-weight: 600; font-size: 0.88rem;">
-                    <i class="fas fa-plus me-1"></i>Create Course
+                    <i data-lucide="plus" style="width:14px;height:14px;margin-right:4px;"></i>Create Course
                 </a>
             </div>
         </div>
@@ -252,7 +252,7 @@
         <div class="content-card shadow-sm" style="border-radius: var(--card-radius);">
             <div class="card-body p-4">
                 <div class="search-wrapper">
-                    <i class="fas fa-search search-icon"></i>
+                    <i data-lucide="search" class="search-icon" style="width:16px;height:16px;"></i>
                     <input type="text" class="search-input form-control" id="searchInput"
                            placeholder="Search course name..." autocomplete="off">
                 </div>
@@ -268,12 +268,12 @@
         <div class="col-12">
             <div class="empty-state" style="padding: 40px 20px;">
                 <div class="empty-state-icon">
-                    <i class="fas fa-book-open"></i>
+                    <div class="empty-state-icon-wrap"><i data-lucide="book-open" style="width:16px;height:16px;"></i></div>
                 </div>
                 <h6>No courses yet</h6>
                 <p>You haven't created any courses yet. Click "Create Course" to get started.</p>
                 <a href="{{ route('tentor.courses.create') }}" class="btn btn-primary rounded-pill px-4 mt-2">
-                    <i class="fas fa-plus me-1"></i>Create Course
+                    <i data-lucide="plus" style="width:14px;height:14px;margin-right:4px;"></i>Create Course
                 </a>
             </div>
         </div>
@@ -282,7 +282,7 @@
 
 <div class="empty-state" id="searchEmpty" style="display: none; padding: 40px 20px;">
     <div class="empty-state-icon">
-        <i class="fas fa-search"></i>
+        <div class="empty-state-icon-wrap"><i data-lucide="search" style="width:16px;height:16px;"></i></div>
     </div>
     <h6>No courses found</h6>
     <p>No courses match your search. Try a different keyword.</p>
@@ -290,6 +290,9 @@
 @endsection
 
 @push('scripts')
+<script>
+    if(typeof lucide!=='undefined')lucide.createIcons();
+</script>
 <script>
     document.getElementById('searchInput').addEventListener('input', function() {
         var q = this.value.toLowerCase().trim();

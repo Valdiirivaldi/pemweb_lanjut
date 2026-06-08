@@ -431,13 +431,13 @@
     @endphp
 
     <a href="{{ route('siswa.courses.learn', $attempt->quiz->course) }}" class="back-link">
-        <i class="fas fa-arrow-left"></i> Kembali ke Kelas
+        <i data-lucide="arrow-left" style="width:16px;height:16px;"></i> Kembali ke Kelas
     </a>
 
     <div class="hero-score-wrap" data-anim="hero">
         <div class="hero-score-card">
             <div class="hero-icon {{ $passed ? 'passed' : 'failed' }}">
-                <i class="fas {{ $passed ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
+                <i data-lucide="{{ $passed ? 'check-circle' : 'x-circle' }}" style="width:16px;height:16px;"></i>
             </div>
 
             <div class="hero-title">{{ $passed ? 'Selamat!' : 'Tetap Semangat!' }}</div>
@@ -446,7 +446,7 @@
             <div class="hero-score {{ $passed ? 'passed' : 'failed' }}">{{ $attempt->score }}%</div>
 
             <div class="hero-status {{ $passed ? 'passed' : 'failed' }}">
-                <i class="fas {{ $passed ? 'fa-check' : 'fa-times' }}"></i>
+                <i data-lucide="{{ $passed ? 'check' : 'x' }}" style="width:16px;height:16px;"></i>
                 {{ $passed ? 'Lulus' : 'Gagal' }}
             </div>
 
@@ -467,14 +467,14 @@
 
             <div class="hero-actions">
                 <a href="{{ route('siswa.quizzes.show', $attempt->quiz) }}" class="btn-hero btn-hero-retry">
-                    <i class="fas fa-redo"></i> Coba Lagi
+                    <i data-lucide="rotate-ccw" style="width:16px;height:16px;"></i> Coba Lagi
                 </a>
                 <a href="{{ route('siswa.courses.learn', $attempt->quiz->course) }}" class="btn-hero btn-hero-outline">
-                    <i class="fas fa-book"></i> Ke Kelas
+                    <i data-lucide="book" style="width:16px;height:16px;"></i> Ke Kelas
                 </a>
                 @if ($passed && !empty($attempt->certificate_path))
                     <a href="{{ asset('storage/' . $attempt->certificate_path) }}" class="btn-hero btn-hero-cert" download>
-                        <i class="fas fa-file-pdf"></i> Unduh Sertifikat
+                        <i data-lucide="file-text" style="width:16px;height:16px;"></i> Unduh Sertifikat
                     </a>
                 @endif
             </div>
@@ -484,7 +484,7 @@
     @if ($allAttempts->count() > 1)
         <div class="review-wrap" style="margin-top: 24px;">
             <div class="review-head">
-                <i class="fas fa-history"></i>
+                <i data-lucide="history" style="width:18px;height:18px;color:#f59e0b;margin-right:8px;"></i>
                 Riwayat Attempt
                 <span class="review-head-suffix">{{ $allAttempts->count() }} attempts</span>
             </div>
@@ -513,9 +513,9 @@
                                     </td>
                                     <td>
                                         @if ($aPassed)
-                                            <span class="text-success fw-semibold"><i class="fas fa-check"></i> Lulus</span>
+                                            <span class="text-success fw-semibold"><i data-lucide="check" style="width:16px;height:16px;"></i> Lulus</span>
                                         @else
-                                            <span class="text-danger fw-semibold"><i class="fas fa-times"></i> Gagal</span>
+                                            <span class="text-danger fw-semibold"><i data-lucide="x" style="width:16px;height:16px;"></i> Gagal</span>
                                         @endif
                                     </td>
                                     <td style="color: #a0aec0; font-size: 0.85rem;">
@@ -533,7 +533,7 @@
     @if ($attempt->relationLoaded('answers') && $attempt->answers->isNotEmpty())
         <div class="review-wrap">
             <div class="review-head">
-                <i class="fas fa-clipboard-check"></i>
+                <i data-lucide="clipboard-check" style="width:18px;height:18px;color:#f59e0b;margin-right:8px;"></i>
                 Review Jawaban
                 <span class="review-head-suffix">{{ $attempt->answers->count() }} soal</span>
             </div>
@@ -550,11 +550,11 @@
                         <span class="review-q-num">Soal {{ $i + 1 }}</span>
                         @if ($answer->is_correct)
                             <span class="review-badge review-badge-correct">
-                                <i class="fas fa-check me-1"></i>Benar
+                                <i data-lucide="check" style="width:14px;height:14px;margin-right:4px;"></i>Benar
                             </span>
                         @else
                             <span class="review-badge review-badge-wrong">
-                                <i class="fas fa-times me-1"></i>Salah
+                                <i data-lucide="x" style="width:14px;height:14px;margin-right:4px;"></i>Salah
                             </span>
                         @endif
                     </div>
@@ -633,5 +633,8 @@
             card.style.animationDelay = (delay + index * 150) + 'ms';
         });
     });
+</script>
+<script>
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 </script>
 @endpush

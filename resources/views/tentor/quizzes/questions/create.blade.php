@@ -230,19 +230,19 @@
             <a href="{{ route('tentor.quizzes.questions.index', $quiz->id) }}"
                class="back-link d-inline-flex align-items-center gap-2 text-decoration-none mb-3"
                style="color: #718096; font-size: 0.88rem; font-weight: 500; padding: 8px 16px; border-radius: 10px; transition: all 0.25s ease;">
-                <i class="fas fa-arrow-left"></i> Back to Questions
+                <i data-lucide="arrow-left" style="width:16px;height:16px;"></i> Back to Questions
             </a>
 
             @if ($errors->any())
                 <div class="alert alert-danger alert-dismissible fade show" style="border-radius: 12px;">
-                    <i class="fas fa-exclamation-circle me-1"></i> Please fix the errors below.
+                    <i data-lucide="alert-circle" style="width:14px;height:14px;margin-right:4px;"></i> Please fix the errors below.
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
 
             <div class="form-card shadow-sm">
                 <div class="card-header">
-                    <i class="fas fa-plus-circle me-2" style="color: #4e73df;"></i>
+                    <i data-lucide="plus-circle" style="width:16px;height:16px;margin-right:8px;color:#4e73df;"></i>
                     Add Question to: {{ $quiz->title }}
                 </div>
                 <div class="card-body">
@@ -252,7 +252,7 @@
                         {{-- Question Text --}}
                         <div class="mb-4">
                             <label for="question_text" class="form-label-custom">
-                                <i class="fas fa-question-circle label-icon"></i>Question Text
+                                <i data-lucide="help-circle" class="label-icon" style="color:#4e73df;"></i>Question Text
                             </label>
                             <textarea class="form-control form-input @error('question_text') is-invalid @enderror"
                                       id="question_text" name="question_text"
@@ -265,14 +265,14 @@
                         {{-- Question Type --}}
                         <div class="mb-4">
                             <label class="form-label-custom">
-                                <i class="fas fa-tag label-icon"></i>Question Type
+                                <i data-lucide="tag" class="label-icon" style="color:#4e73df;"></i>Question Type
                             </label>
                             <div class="type-selector" id="typeSelector">
                                 <div class="type-option">
                                     <input type="radio" name="type" id="type-single" value="single"
                                         {{ old('type', 'single') === 'single' ? 'checked' : '' }}>
                                     <label for="type-single">
-                                        <i class="fas fa-dot-circle type-icon"></i>
+                                        <i data-lucide="circle" class="type-icon" style="width:24px;height:24px;color:#4e73df;"></i>
                                         <span class="type-name">Single Choice</span>
                                         <span class="type-desc">One correct answer</span>
                                     </label>
@@ -281,7 +281,7 @@
                                     <input type="radio" name="type" id="type-multiple" value="multiple"
                                         {{ old('type') === 'multiple' ? 'checked' : '' }}>
                                     <label for="type-multiple">
-                                        <i class="fas fa-check-double type-icon"></i>
+                                        <i data-lucide="check-check" class="type-icon" style="width:24px;height:24px;color:#4e73df;"></i>
                                         <span class="type-name">Multiple Choice</span>
                                         <span class="type-desc">Multiple correct answers</span>
                                     </label>
@@ -290,7 +290,7 @@
                                     <input type="radio" name="type" id="type-truefalse" value="true_false"
                                         {{ old('type') === 'true_false' ? 'checked' : '' }}>
                                     <label for="type-truefalse">
-                                        <i class="fas fa-toggle-on type-icon"></i>
+                                        <i data-lucide="toggle-right" class="type-icon" style="width:24px;height:24px;color:#4e73df;"></i>
                                         <span class="type-name">True / False</span>
                                         <span class="type-desc">Two-option question</span>
                                     </label>
@@ -303,14 +303,14 @@
 
                         {{-- True/False Note --}}
                         <div class="tf-note" id="tfNote" style="{{ old('type') === 'true_false' ? '' : 'display: none;' }}">
-                            <i class="fas fa-info-circle"></i>
+                            <i data-lucide="info" style="width:16px;height:16px;"></i>
                             True/False questions automatically use "True" and "False" as the only options.
                         </div>
 
                         {{-- Options --}}
                         <div class="mb-4">
                             <label class="form-label-custom">
-                                <i class="fas fa-list label-icon"></i>Answer Options
+                                <i data-lucide="list" class="label-icon" style="color:#4e73df;"></i>Answer Options
                                 <span class="text-muted" style="font-weight: 400; font-size: 0.78rem;">(min. 2)</span>
                             </label>
 
@@ -321,7 +321,7 @@
                             <input type="hidden" id="optionsData" name="options">
 
                             <button type="button" class="btn-add-option mt-2" id="addOptionBtn" style="display: none;">
-                                <i class="fas fa-plus me-1"></i> Add Option
+                                <i data-lucide="plus" style="width:14px;height:14px;margin-right:4px;"></i> Add Option
                             </button>
 
                             @error('options')
@@ -336,10 +336,10 @@
                         <div class="d-flex gap-3 mt-4 pt-3 border-top">
                             <a href="{{ route('tentor.quizzes.questions.index', $quiz->id) }}"
                                class="btn btn-outline-secondary btn-secondary-custom px-4">
-                                <i class="fas fa-arrow-left me-1"></i>Cancel
+                                <i data-lucide="arrow-left" style="width:14px;height:14px;margin-right:4px;"></i>Cancel
                             </a>
                             <button type="submit" class="btn btn-primary btn-primary-custom flex-grow-1">
-                                <i class="fas fa-check-circle me-2"></i>Save Question
+                                <i data-lucide="check-circle" style="width:16px;height:16px;margin-right:8px;"></i>Save Question
                             </button>
                         </div>
                     </form>
@@ -350,6 +350,9 @@
 @endsection
 
 @push('scripts')
+<script>
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+</script>
 <script>
 (function() {
     const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -502,7 +505,7 @@
                     </div>
                     ${!isTF && options.length > 2
                         ? `<button type="button" class="btn-remove-option" data-key="${opt.key}" title="Remove option">
-                                <i class="fas fa-times"></i>
+                                <i data-lucide="x" style="width:16px;height:16px;"></i>
                            </button>`
                         : ''}
                 </div>

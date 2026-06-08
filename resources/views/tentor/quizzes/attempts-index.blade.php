@@ -3,33 +3,13 @@
 @section('title', 'Quiz Attempts - Eduria')
 @section('page-title', 'Attempts — ' . $quiz->title)
 
-@push('styles')
-<style>
-    .back-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        color: #718096;
-        text-decoration: none;
-        font-size: 0.88rem;
-        font-weight: 500;
-        padding: 8px 16px;
-        border-radius: 10px;
-        transition: all 0.25s ease;
-        margin-bottom: 16px;
-    }
-    .back-link:hover {
-        background: rgba(78,115,223,0.06);
-        color: #4e73df;
-    }
-</style>
-@endpush
+@section('breadcrumb')
+    <a href="{{ route('tentor.quizzes.index') }}">Quizzes</a>
+    <i data-lucide="chevron-right"></i>
+    <span class="current">Attempts</span>
+@endsection
 
 @section('content')
-    <a href="{{ route('tentor.quizzes.index') }}" class="back-link">
-        <i class="fas fa-arrow-left"></i> Kembali ke Quizzes
-    </a>
-
     <div class="content-card shadow-sm">
         <div class="card-header">
             <span>Daftar Siswa yang Mengerjakan</span>
@@ -37,14 +17,14 @@
         <div class="card-body p-0">
             @if ($attempts->count() > 0)
                 <div class="table-responsive">
-                    <table class="table table-hover mb-0" style="font-size: 0.9rem;">
-                        <thead class="table-light">
+                    <table class="table-admin mb-0" data-sortable>
+                        <thead>
                             <tr>
-                                <th>Nama Siswa</th>
-                                <th>Skor</th>
-                                <th>Status</th>
-                                <th>Tanggal</th>
-                                <th class="text-end">Aksi</th>
+                                <th data-sort="name">Nama Siswa</th>
+                                <th data-sort="score">Skor</th>
+                                <th data-sort="status">Status</th>
+                                <th data-sort="date">Tanggal</th>
+                                <th style="width: 60px;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -68,11 +48,20 @@
                                         @endif
                                     </td>
                                     <td class="text-muted">{{ $attempt->created_at->format('d M Y H:i') }}</td>
-                                    <td class="text-end">
-                                        <a href="{{ route('tentor.quizzes.attempts.show', [$quiz->id, $attempt->id]) }}"
-                                            class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                                            <i class="fas fa-search me-1"></i>Lihat Detail Jawaban
-                                        </a>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn-action-icon" data-bs-toggle="dropdown" aria-expanded="false" title="Actions">
+                                                <i data-lucide="more-vertical"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="border-radius: 12px; border: none; padding: 6px; min-width: 160px;">
+                                                <li>
+                                                    <a href="{{ route('tentor.quizzes.attempts.show', [$quiz->id, $attempt->id]) }}"
+                                                       class="dropdown-item py-2 rounded-2">
+                                                        <i data-lucide="search" style="width:14px;height:14px;margin-right:8px;color:#4e73df;"></i>Lihat Detail Jawaban
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
@@ -81,7 +70,7 @@
                 </div>
             @else
                 <div class="empty-state">
-                    <i class="fas fa-users-slash"></i>
+                    <div class="empty-state-icon-wrap"><i data-lucide="user-x"></i></div>
                     <h6>Belum ada siswa yang mengerjakan</h6>
                     <p>Quiz ini belum dikerjakan oleh siswa manapun.</p>
                 </div>
@@ -89,3 +78,9 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+</script>
+@endpush

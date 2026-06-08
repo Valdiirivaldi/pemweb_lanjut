@@ -156,19 +156,19 @@
             <a href="{{ $selectedCourseId ? route('tentor.courses.show', $selectedCourseId) : route('tentor.courses.index') }}"
                class="back-link d-inline-flex align-items-center gap-2 text-decoration-none mb-3"
                style="color: #718096; font-size: 0.88rem; font-weight: 500; padding: 8px 16px; border-radius: 10px; transition: all 0.25s ease;">
-                <i class="fas fa-arrow-left"></i> Back
+                <i data-lucide="arrow-left" style="width:16px;height:16px;"></i> Back
             </a>
 
             @if ($errors->any())
                 <div class="alert alert-danger alert-dismissible fade show" style="border-radius: 12px;">
-                    <i class="fas fa-exclamation-circle me-1"></i> Please fix the errors below.
+                    <i data-lucide="alert-circle" style="width:14px;height:14px;margin-right:4px;"></i> Please fix the errors below.
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
 
             <div class="form-card shadow-sm">
                 <div class="card-header">
-                    <i class="fas fa-plus-circle me-2" style="color: #4e73df;"></i>Add New Module
+                    <i data-lucide="plus-circle" style="width:16px;height:16px;margin-right:8px;color: #4e73df;"></i>Add New Module
                 </div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('tentor.modules.store') }}" enctype="multipart/form-data">
@@ -188,6 +188,8 @@
 
 @push('scripts')
 <script>
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+
     document.getElementById('fileUploadArea').addEventListener('click', function() {
         document.getElementById('files').click();
     });

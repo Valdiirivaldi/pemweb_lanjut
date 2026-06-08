@@ -162,7 +162,7 @@
 
 @section('content')
     <a href="{{ route('tentor.quizzes.attempts.index', $quiz->id) }}" class="back-link">
-        <i class="fas fa-arrow-left"></i> Kembali ke Daftar Attempt
+        <i data-lucide="arrow-left" style="width:16px;height:16px;"></i> Kembali ke Daftar Attempt
     </a>
 
     <div class="review-container">
@@ -198,7 +198,7 @@
 
         @if ($attempt->answers->isNotEmpty())
             <div class="review-header">
-                <i class="fas fa-clipboard-check"></i>
+                <i data-lucide="clipboard-check" style="width:16px;height:16px;"></i>
                 Review Jawaban
             </div>
 
@@ -242,11 +242,11 @@
                                             <div class="review-option-text">{{ $text }}</div>
                                             <div class="review-option-icon">
                                                 @if ($selected && $isKeyCorrect)
-                                                    <i class="fas fa-check-circle"></i>
+                                                    <i data-lucide="check-circle" style="width:18px;height:18px;color:#10b981;"></i>
                                                 @elseif ($selected && !$isKeyCorrect)
-                                                    <i class="fas fa-times-circle"></i>
+                                                    <i data-lucide="x-circle" style="width:18px;height:18px;color:#ef4444;"></i>
                                                 @elseif (!$selected && $isKeyCorrect)
-                                                    <i class="fas fa-check-circle" style="opacity:0.4;"></i>
+                                                    <i data-lucide="check-circle" style="width:18px;height:18px;opacity:0.4;color:#10b981;"></i>
                                                 @endif
                                             </div>
                                         </div>
@@ -285,11 +285,16 @@
         @else
             <div class="content-card shadow-sm">
                 <div class="card-body text-center py-5">
-                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #cbd5e0; margin-bottom: 16px;"></i>
+                    <div class="empty-state-icon-wrap"><i data-lucide="alert-triangle" style="width:32px;height:32px;color:#cbd5e0;"></i></div>
                     <h6 style="color: #1e3c72; font-weight: 700;">Data jawaban tidak tersedia</h6>
                     <p style="color: #a0aec0; font-size: 0.9rem;">Siswa ini mengerjakan sebelum fitur review diaktifkan.</p>
                 </div>
             </div>
         @endif
     </div>
+@push('scripts')
+<script>
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+</script>
+@endpush
 @endsection

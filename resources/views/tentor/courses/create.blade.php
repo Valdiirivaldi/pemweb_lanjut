@@ -69,7 +69,7 @@
         <div class="col-lg-8">
             <div class="content-card shadow-sm">
                 <div class="card-header">
-                    <span><i class="fas fa-plus-circle me-2"></i>New Course Form</span>
+                    <span><i data-lucide="plus-circle" style="width:14px;height:14px;margin-right:8px;"></i>New Course Form</span>
                 </div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('tentor.courses.store') }}">
@@ -77,10 +77,10 @@
 
                         <div class="mb-4">
                             <label for="title" class="form-label-custom">
-                                <i class="fas fa-heading me-1" style="color: #4e73df;"></i>Course Title
+                                <i data-lucide="type" style="width:14px;height:14px;margin-right:4px;color:#4e73df;"></i>Course Title
                             </label>
                             <div class="input-wrap">
-                                <i class="fas fa-book icon-input"></i>
+                                <i data-lucide="book" class="icon-input" style="width:16px;height:16px;"></i>
                                 <input type="text"
                                        class="form-control form-input @error('title') is-invalid @enderror"
                                        id="title"
@@ -96,7 +96,7 @@
 
                         <div class="mb-4">
                             <label for="description" class="form-label-custom">
-                                <i class="fas fa-align-left me-1" style="color: #4e73df;"></i>Course Description
+                                <i data-lucide="align-left" style="width:14px;height:14px;margin-right:4px;color:#4e73df;"></i>Course Description
                             </label>
                             <textarea class="form-control form-input @error('description') is-invalid @enderror"
                                       id="description"
@@ -111,10 +111,10 @@
                         <div class="d-flex gap-3 mt-4">
                             <a href="{{ route('tentor.courses.index') }}"
                                class="btn btn-outline-secondary btn-secondary-custom px-4">
-                                <i class="fas fa-arrow-left me-1"></i>Back
+                                <i data-lucide="arrow-left" style="width:14px;height:14px;margin-right:4px;"></i>Back
                             </a>
                             <button type="submit" class="btn btn-primary btn-primary-custom flex-grow-1">
-                                <i class="fas fa-check-circle me-2"></i>Save Course
+                                <i data-lucide="check-circle" style="width:14px;height:14px;margin-right:8px;"></i>Save Course
                             </button>
                         </div>
                     </form>
@@ -123,3 +123,9 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    if(typeof lucide!=='undefined')lucide.createIcons();
+</script>
+@endpush

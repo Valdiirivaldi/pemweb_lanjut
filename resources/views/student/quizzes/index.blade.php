@@ -80,7 +80,7 @@
 @section('content')
     <div class="content-card shadow-sm">
         <div class="card-header">
-            <span><i class="fas fa-history me-2" style="color: #4e73df;"></i>Quiz History</span>
+            <span><i data-lucide="history" style="width:16px;height:16px;margin-right:8px;color:#4e73df;"></i>Quiz History</span>
             <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill" style="font-weight: 600;">
                 {{ $quizAttempts->count() }} quizzes
             </span>
@@ -139,14 +139,20 @@
                 </div>
             @else
                 <div class="empty-state">
-                    <i class="fas fa-pencil-alt"></i>
+                    <i data-lucide="pencil" style="width:16px;height:16px;"></i>
                     <h6 style="color: #1e3c72; font-weight: 700;">No Quiz History</h6>
                     <p style="color: #a0aec0; font-size: 0.9rem;">You haven't taken any quizzes yet. Follow your courses to start taking quizzes.</p>
                     <a href="{{ route('siswa.courses.index') }}" class="btn btn-primary btn-sm rounded-pill px-4 mt-2">
-                        <i class="fas fa-book me-1"></i>View My Courses
+                        <i data-lucide="book" style="width:14px;height:14px;margin-right:4px;"></i>View My Courses
                     </a>
                 </div>
             @endif
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+</script>
+@endpush

@@ -68,7 +68,7 @@
         <div class="col-lg-8">
             <div class="content-card shadow-sm">
                 <div class="card-header">
-                    <span><i class="fas fa-edit me-2"></i>Edit Quiz</span>
+                    <span><i data-lucide="pencil" style="width:16px;height:16px;margin-right:8px;"></i>Edit Quiz</span>
                 </div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('tentor.quizzes.update', $quiz) }}">
@@ -81,3 +81,9 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+</script>
+@endpush

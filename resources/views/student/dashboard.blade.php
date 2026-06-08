@@ -264,7 +264,7 @@
                     <h3 id="siswaGreeting">Welcome, {{ $user->name }}!</h3>
                     <p id="siswaGreetingMsg">Keep learning and reach your best achievements!</p>
                 </div>
-                <i class="fas fa-graduation-cap greeting-icon"></i>
+                <i data-lucide="graduation-cap" class="greeting-icon" style="width:40px;height:40px;"></i>
             </div>
         </div>
         <div class="col-lg-4">
@@ -273,7 +273,7 @@
                     <div class="stat-card-flat shadow-sm dash-anim">
                         <div class="d-flex align-items-center gap-3">
                             <div class="stat-icon" style="background: linear-gradient(135deg, #4e73df, #224abe);">
-                                <i class="fas fa-book-open"></i>
+                                <i data-lucide="book-open" style="width:20px;height:20px;"></i>
                             </div>
                             <div>
                                 <div class="stat-number">
@@ -291,10 +291,10 @@
     {{-- Section: My Courses --}}
     <div class="dash-anim">
         <div class="section-header">
-            <h5><i class="fas fa-book" style="color: #4e73df;"></i>My Courses</h5>
+            <h5><i data-lucide="book" style="width:18px;height:18px;color:#4e73df;margin-right:8px;"></i>My Courses</h5>
             @if ($enrolledCourses->count() > 0)
                 <a href="{{ route('siswa.courses.index') }}" class="btn-link-all">
-                    View All <i class="fas fa-arrow-right ms-1" style="font-size: 0.7rem;"></i>
+                    View All <i data-lucide="arrow-right" style="width:12px;height:12px;margin-left:4px;"></i>
                 </a>
             @endif
         </div>
@@ -308,12 +308,12 @@
                                     <div class="card-body">
                                         <div class="d-flex align-items-start gap-3 mb-2">
                                             <div class="course-icon-box">
-                                                <i class="fas fa-book"></i>
+                                                <i data-lucide="book" style="width:18px;height:18px;"></i>
                                             </div>
                                             <div class="flex-grow-1 min-width-0">
                                                 <div class="course-title-sm">{{ $course->title }}</div>
                                                 <div class="course-tentor-sm">
-                                                    <i class="fas fa-chalkboard-teacher me-1"></i>{{ $course->tentor->name ?? '-' }}
+                                                    <i data-lucide="presentation" style="width:12px;height:12px;margin-right:4px;"></i>{{ $course->tentor->name ?? '-' }}
                                                 </div>
                                             </div>
                                         </div>
@@ -324,10 +324,10 @@
                                         @endif
                                         <div class="d-flex justify-content-between align-items-center mt-2">
                                             <small class="text-muted" style="font-size: 0.75rem;">
-                                                <i class="far fa-calendar-alt me-1"></i>{{ $course->created_at->format('d M Y') }}
+                                                <i data-lucide="calendar" style="width:12px;height:12px;margin-right:4px;"></i>{{ $course->created_at->format('d M Y') }}
                                             </small>
                                             <a href="{{ route('siswa.courses.learn', $course->id) }}" class="btn btn-sm btn-primary rounded-pill px-3" style="font-size: 0.78rem; font-weight: 600;">
-                                                <i class="fas fa-arrow-right me-1"></i>Enter
+                                                <i data-lucide="arrow-right" style="width:14px;height:14px;margin-right:4px;"></i>Enter
                                             </a>
                                         </div>
                                     </div>
@@ -337,11 +337,11 @@
                     </div>
                 @else
                     <div class="empty-state" style="padding: 24px 12px;">
-                        <i class="fas fa-book-open" style="font-size: 2.2rem; color: #cbd5e0;"></i>
+                        <div class="empty-state-icon-wrap"><i data-lucide="book-open" style="width:32px;height:32px;color:#cbd5e0;"></i></div>
                         <h6 style="font-size: 0.95rem; color: #1e3c72;">You have no courses yet</h6>
                         <p style="font-size: 0.85rem;">Browse and join courses on the My Courses page.</p>
                         <a href="{{ route('siswa.courses.index') }}" class="btn btn-primary btn-sm rounded-pill px-4 mt-2">
-                            <i class="fas fa-search me-1"></i>Find Courses
+                            <i data-lucide="search" style="width:14px;height:14px;margin-right:4px;"></i>Find Courses
                         </a>
                     </div>
                 @endif
@@ -352,10 +352,10 @@
     {{-- Section: Quiz History --}}
     <div class="dash-anim">
         <div class="section-header">
-            <h5><i class="fas fa-pencil-alt" style="color: #4e73df;"></i>Quiz History</h5>
+            <h5><i data-lucide="pencil" style="width:18px;height:18px;color:#4e73df;margin-right:8px;"></i>Quiz History</h5>
             @if ($quizAttempts->count() > 0)
                 <a href="{{ route('siswa.quizzes.index') }}" class="btn-link-all">
-                    View All <i class="fas fa-arrow-right ms-1" style="font-size: 0.7rem;"></i>
+                    View All <i data-lucide="arrow-right" style="width:12px;height:12px;margin-left:4px;"></i>
                 </a>
             @endif
         </div>
@@ -363,13 +363,13 @@
             <div class="section-card-body">
                 @if ($quizAttempts->count() > 0)
                     <div class="table-responsive">
-                        <table class="table table-hover mb-0" style="font-size: 0.85rem;">
-                            <thead class="table-light">
+                        <table class="table-admin mb-0" data-sortable>
+                            <thead>
                                 <tr>
-                                    <th style="font-weight: 600; color: #718096;">Quiz</th>
-                                    <th style="font-weight: 600; color: #718096;">Course</th>
-                                    <th style="font-weight: 600; color: #718096;">Score</th>
-                                    <th style="font-weight: 600; color: #718096;">Date</th>
+                                    <th data-sort="quiz">Quiz</th>
+                                    <th data-sort="course">Course</th>
+                                    <th data-sort="score">Score</th>
+                                    <th data-sort="date">Date</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -391,7 +391,7 @@
                     </div>
                 @else
                     <div class="empty-state" style="padding: 24px 12px;">
-                        <i class="fas fa-pencil-alt" style="font-size: 2.2rem; color: #cbd5e0;"></i>
+                        <div class="empty-state-icon-wrap"><i data-lucide="pencil" style="width:32px;height:32px;color:#cbd5e0;"></i></div>
                         <h6 style="font-size: 0.95rem; color: #1e3c72;">No quizzes yet</h6>
                         <p style="font-size: 0.85rem;">You haven't taken any quizzes yet.</p>
                     </div>
@@ -403,10 +403,10 @@
     {{-- Section: Sertifikat --}}
     <div class="dash-anim">
         <div class="section-header">
-            <h5><i class="fas fa-certificate" style="color: #4e73df;"></i>Certificates</h5>
+            <h5><i data-lucide="award" style="width:18px;height:18px;color:#4e73df;margin-right:8px;"></i>Certificates</h5>
             @if ($certificates->count() > 0)
                 <a href="{{ route('siswa.certificates.index') }}" class="btn-link-all">
-                    View All <i class="fas fa-arrow-right ms-1" style="font-size: 0.7rem;"></i>
+                    View All <i data-lucide="arrow-right" style="width:12px;height:12px;margin-left:4px;"></i>
                 </a>
             @endif
         </div>
@@ -415,24 +415,24 @@
                 @forelse ($certificates as $cert)
                     <div class="cert-list-item">
                         <div class="cert-icon-sm">
-                            <i class="fas fa-file-pdf"></i>
+                            <i data-lucide="file-text" style="width:18px;height:18px;"></i>
                         </div>
                         <div class="cert-info">
                             <div class="cert-title-sm">{{ $cert->quiz->title ?? 'Certificate' }}</div>
                             <div class="cert-meta-sm">
-                                <i class="far fa-calendar-alt me-1"></i>{{ $cert->created_at->format('d M Y') }}
+                                <i data-lucide="calendar" style="width:12px;height:12px;margin-right:4px;"></i>{{ $cert->created_at->format('d M Y') }}
                                 <span class="mx-2">|</span>
-                                <i class="fas fa-star me-1"></i>Score: {{ $cert->score }}
+                                <i data-lucide="star" style="width:12px;height:12px;margin-right:4px;"></i>Score: {{ $cert->score }}
                             </div>
                         </div>
                         <a href="{{ asset('storage/' . $cert->certificate_path) }}"
                            class="btn-download-sm" target="_blank" download title="Download">
-                            <i class="fas fa-download"></i>
+                            <i data-lucide="download" style="width:16px;height:16px;"></i>
                         </a>
                     </div>
                 @empty
                     <div class="empty-state" style="padding: 24px 12px;">
-                        <i class="fas fa-certificate" style="font-size: 2.2rem; color: #cbd5e0;"></i>
+                        <div class="empty-state-icon-wrap"><i data-lucide="award" style="width:32px;height:32px;color:#cbd5e0;"></i></div>
                         <h6 style="font-size: 0.95rem; color: #1e3c72;">No certificates yet</h6>
                         <p style="font-size: 0.85rem;">Complete quizzes with a passing score to earn certificates.</p>
                     </div>
@@ -443,6 +443,7 @@
 @endsection
 
 @push('scripts')
+<script>if(typeof lucide!=='undefined')lucide.createIcons();</script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var hour = new Date().getHours();

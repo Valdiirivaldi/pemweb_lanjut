@@ -12,13 +12,13 @@
         <div class="card-body p-0">
             @if ($students->count() > 0)
                 <div class="table-responsive">
-                    <table class="table table-hover mb-0" style="font-size: 0.9rem;">
-                        <thead class="table-light">
+                    <table class="table-admin mb-0" data-sortable>
+                        <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Course</th>
-                                <th>Joined</th>
+                                <th data-sort="name">Name</th>
+                                <th data-sort="email">Email</th>
+                                <th data-sort="course">Course</th>
+                                <th data-sort="joined">Joined</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -39,7 +39,7 @@
                 </div>
             @else
                 <div class="empty-state">
-                    <i class="fas fa-users"></i>
+                    <div class="empty-state-icon-wrap"><i data-lucide="users"></i></div>
                     <h6>No participants yet</h6>
                     <p>No students are enrolled in your courses yet. Student enrollment can be managed by Admin.</p>
                 </div>
@@ -47,3 +47,9 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+</script>
+@endpush

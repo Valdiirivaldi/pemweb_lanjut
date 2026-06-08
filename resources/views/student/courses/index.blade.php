@@ -442,14 +442,14 @@
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
             <div>
                 <h4 style="color: #1e3c72; font-weight: 800; margin: 0; font-size: 1.3rem;">
-                    <i class="fas fa-book me-2" style="color: #4e73df;"></i>My Courses
+                    <i data-lucide="book" style="width:18px;height:18px;color:#4e73df;margin-right:8px;"></i>My Courses
                 </h4>
                 <p class="text-muted mb-0" style="font-size: 0.88rem; margin-top: 4px;">
                     Manage your enrolled courses or discover new ones
                 </p>
             </div>
             <div class="result-badge">
-                <i class="fas fa-book-open"></i>
+                <i data-lucide="book-open" style="width:16px;height:16px;"></i>
                 <span>Showing</span>
                 <span class="count-num" id="myCount">{{ $myCourses->count() }}</span>
                 <span>courses</span>
@@ -461,7 +461,7 @@
             <div class="card-body p-4">
                 <form action="{{ route('siswa.courses.index') }}" method="GET" id="searchForm">
                     <div class="search-wrapper">
-                        <i class="fas fa-search search-icon"></i>
+                        <i data-lucide="search" class="search-icon" style="width:16px;height:16px;"></i>
                         <input type="text"
                                name="search"
                                class="search-input form-control"
@@ -471,10 +471,10 @@
                                autocomplete="off">
                         <div class="search-actions">
                             <button type="button" class="btn btn-clear" id="clearSearch" title="Hapus">
-                                <i class="fas fa-times"></i>
+                                <i data-lucide="x" style="width:16px;height:16px;"></i>
                             </button>
                             <button type="submit" class="btn btn-search">
-                                <i class="fas fa-search"></i> Search
+                                <i data-lucide="search" style="width:14px;height:14px;margin-right:4px;"></i> Search
                             </button>
                         </div>
                     </div>
@@ -488,7 +488,7 @@
 <div class="toggle-catalog shadow-sm" id="toggleCatalog">
     <div class="toggle-header" id="toggleTrigger">
         <div class="toggle-label">
-            <div class="toggle-icon"><i class="fas fa-plus"></i></div>
+            <div class="toggle-icon"><i data-lucide="plus-circle" style="width:18px;height:18px;"></i></div>
 Join New Class
             @php
                 $availableCount = $allCourses->count() - $myCourses->count();
@@ -497,13 +497,13 @@ Join New Class
                 {{ $availableCount }} available
             </span>
         </div>
-        <i class="fas fa-chevron-down toggle-arrow"></i>
+        <i data-lucide="chevron-down" class="toggle-arrow" style="width:16px;height:16px;"></i>
     </div>
     <div class="catalog-body">
         @if ($allCourses->count() > 0)
             <div class="pt-3 pb-1">
                 <p class="text-muted mb-0" style="font-size: 0.85rem;">
-                    <i class="fas fa-info-circle me-1" style="color: #4e73df;"></i>
+                    <i data-lucide="info" style="width:14px;height:14px;margin-right:4px;color:#4e73df;"></i>
                     Browse all available courses and join the ones you're interested in.
                 </p>
             </div>
@@ -514,7 +514,7 @@ Join New Class
                          data-enrolled="{{ in_array($course->id, $enrolledIds) ? '1' : '0' }}">
                         <div class="course-card shadow-sm">
                             <div class="card-img-top" style="background: linear-gradient(135deg, {{ $loop->index % 2 === 0 ? '#1e3c72, #2a5298' : '#2a5298, #1e3c72' }});">
-                                <i class="fas fa-graduation-cap course-icon"></i>
+                                <i data-lucide="graduation-cap" class="course-icon" style="width:40px;height:40px;"></i>
                             </div>
                             <div class="card-body">
                                 <h6 class="course-title">{{ $course->title }}</h6>
@@ -524,14 +524,14 @@ Join New Class
                                     <p class="course-description" style="font-style: italic; opacity: 0.6;">No description</p>
                                 @endif
                                 <div class="course-meta">
-                                    <i class="fas fa-chalkboard-teacher"></i>
+                                    <i data-lucide="presentation" style="width:14px;height:14px;"></i>
                                     <span class="tentor-name">{{ $course->tentor->name ?? 'Tentor' }}</span>
                                 </div>
                             </div>
                             <div class="card-footer">
                                 @if (in_array($course->id, $enrolledIds))
                                     <span class="btn-action" style="border: 1.5px solid #10b981; color: #059669; background: rgba(16,185,129,0.06); cursor: default;">
-                                        <i class="fas fa-check-circle"></i> Enrolled
+                                        <i data-lucide="check-circle" style="width:14px;height:14px;margin-right:4px;"></i> Enrolled
                                     </span>
                                 @else
                                     <form action="{{ route('siswa.courses.enroll') }}" method="POST" class="enroll-form">
@@ -540,7 +540,7 @@ Join New Class
                                         <button type="submit" class="btn-action btn-primary">
                                             <span class="spinner-enroll"></span>
                                             <span class="btn-text">
-                                                <i class="fas fa-plus-circle"></i> Join Class
+                                                <i data-lucide="plus-circle" style="width:14px;height:14px;margin-right:4px;"></i> Join Class
                                             </span>
                                         </button>
                                     </form>
@@ -551,13 +551,13 @@ Join New Class
                 @endforeach
             </div>
             <div class="empty-search-state" id="catalogEmpty" style="display: none;">
-                <i class="fas fa-search empty-icon"></i>
+                <i data-lucide="search" class="empty-icon" style="width:48px;height:48px;"></i>
                 <h6>Course Not Found</h6>
                 <p>No courses match your search.</p>
             </div>
         @else
             <div class="empty-state" style="padding: 20px 0;">
-                <i class="fas fa-book-open" style="font-size: 2.2rem;"></i>
+                <div class="empty-state-icon-wrap"><i data-lucide="book-open" style="width:32px;height:32px;"></i></div>
                 <h6 style="font-size: 0.95rem;">No Courses Yet</h6>
                 <p style="font-size: 0.85rem;">No courses are available at this time.</p>
             </div>
@@ -567,7 +567,7 @@ Join New Class
 
 {{-- My Enrolled Courses --}}
 <div class="section-divider">
-    <i class="fas fa-bookmark" style="color: #4e73df;"></i> My Enrolled Courses
+    <i data-lucide="bookmark" style="width:16px;height:16px;color:#4e73df;"></i> My Enrolled Courses
 </div>
 
 <div class="row g-4" id="myCourseGrid">
@@ -575,7 +575,7 @@ Join New Class
         <div class="col-12 col-md-6 col-lg-4 my-card-wrap card-entry" data-title="{{ strtolower($course->title) }}">
             <div class="course-card shadow-sm">
                 <div class="card-img-top" style="background: linear-gradient(135deg, {{ $loop->index % 2 === 0 ? '#1e3c72, #2a5298' : '#2a5298, #1e3c72' }});">
-                    <i class="fas fa-graduation-cap course-icon"></i>
+                    <i data-lucide="graduation-cap" class="course-icon" style="width:40px;height:40px;"></i>
                 </div>
                 <div class="card-body">
                     <h6 class="course-title">{{ $course->title }}</h6>
@@ -585,13 +585,13 @@ Join New Class
                         <p class="course-description" style="font-style: italic; opacity: 0.6;">No description</p>
                     @endif
                     <div class="course-meta">
-                        <i class="fas fa-chalkboard-teacher"></i>
+                        <i data-lucide="presentation" style="width:14px;height:14px;"></i>
                         <span class="tentor-name">{{ $course->tentor->name ?? 'Tentor' }}</span>
                     </div>
                 </div>
                 <div class="card-footer">
                     <a href="{{ route('siswa.courses.learn', $course->id) }}" class="btn-action btn-primary">
-                        <i class="fas fa-arrow-right"></i> Enter Class
+                        <i data-lucide="arrow-right" style="width:14px;height:14px;"></i> Enter Class
                     </a>
                 </div>
             </div>
@@ -599,7 +599,7 @@ Join New Class
     @empty
         <div class="col-12">
             <div class="empty-state" style="padding: 40px 20px;">
-                <i class="fas fa-book-open" style="font-size: 3rem; color: #cbd5e0;"></i>
+                <div class="empty-state-icon-wrap"><i data-lucide="book-open" style="width:44px;height:44px;color:#cbd5e0;"></i></div>
                 <h6 style="color: #1e3c72; font-weight: 700;">No Courses Yet</h6>
                 <p style="color: #a0aec0; font-size: 0.9rem;">You haven't joined any courses yet. Click "Join New Class" above to get started!</p>
             </div>
@@ -608,7 +608,7 @@ Join New Class
 </div>
 
 <div class="empty-search-state" id="myEmpty" style="display: none;">
-    <i class="fas fa-search empty-icon"></i>
+    <i data-lucide="search" class="empty-icon" style="width:48px;height:48px;"></i>
     <h6>Course Not Found</h6>
     <p>No courses match your search "<span id="mySearchQuery" style="font-weight: 600; color: #4e73df;"></span>".</p>
 </div>
@@ -731,5 +731,8 @@ Join New Class
             }, 5000);
         });
     })();
+</script>
+<script>
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 </script>
 @endpush

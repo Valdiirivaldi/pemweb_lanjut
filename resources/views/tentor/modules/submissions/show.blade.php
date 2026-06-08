@@ -7,7 +7,7 @@
     <a href="{{ route('tentor.modules.submissions.index', $module->id) }}"
        class="back-link d-inline-flex align-items-center gap-2 text-decoration-none mb-3"
        style="color:#718096;font-size:0.88rem;font-weight:500;padding:8px 16px;border-radius:10px;">
-        <i class="fas fa-arrow-left"></i> Back to Submissions
+        <i data-lucide="arrow-left" style="width:16px;height:16px;"></i> Back to Submissions
     </a>
 
     <div class="row justify-content-center">
@@ -15,7 +15,7 @@
             <div class="content-card shadow-sm">
                 <div class="card-header">
                     <span class="fw-bold">
-                        <i class="fas fa-user me-2" style="color:#4e73df;"></i>{{ $submission->siswa->name }}
+                        <i data-lucide="user" style="width:16px;height:16px;margin-right:8px;color:#4e73df;"></i>{{ $submission->siswa->name }}
                     </span>
                 </div>
                 <div class="card-body">
@@ -33,7 +33,7 @@
                             <td>
                                 @if ($submission->file_path)
                                     <a href="{{ asset('storage/' . $submission->file_path) }}" target="_blank">
-                                        <i class="fas fa-download me-1"></i>{{ $submission->file_name ?? 'Download' }}
+                                        <i data-lucide="download" style="width:14px;height:14px;margin-right:4px;"></i>{{ $submission->file_name ?? 'Download' }}
                                     </a>
                                 @else
                                     <span class="text-muted">No file uploaded</span>
@@ -45,7 +45,7 @@
                             <td>
                                 @if ($submission->link_url)
                                     <a href="{{ $submission->link_url }}" target="_blank">
-                                        <i class="fas fa-external-link-alt me-1"></i>{{ $submission->link_url }}
+                                        <i data-lucide="external-link" style="width:14px;height:14px;margin-right:4px;"></i>{{ $submission->link_url }}
                                     </a>
                                 @else
                                     <span class="text-muted">No link provided</span>
@@ -66,3 +66,9 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+</script>
+@endpush

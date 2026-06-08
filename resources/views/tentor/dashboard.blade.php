@@ -198,7 +198,7 @@
             <div class="stat-card shadow-sm d-flex align-items-center gap-4 animate-on-scroll"
                  style="background: linear-gradient(135deg, #2a5298, #1e3c72); color: #fff;">
                 <div>
-                    <i class="fas fa-chalkboard-teacher" style="font-size: 2.5rem; opacity: 0.3;"></i>
+                    <i data-lucide="presentation" style="width:40px;height:40px;opacity:0.3;"></i>
                 </div>
                 <div>
                     <h4 class="fw-bold mb-1" style="color: #fff;" id="tentorGreeting">Welcome, {{ $user->name }}!</h4>
@@ -216,7 +216,7 @@
             <div class="stat-card shadow-sm animate-on-scroll">
                 <div class="d-flex align-items-center gap-3 mb-3">
                     <div class="stat-icon" style="background: linear-gradient(135deg, #4e73df, #224abe);">
-                        <i class="fas fa-book-open"></i>
+                        <i data-lucide="book-open" style="width:16px;height:16px;"></i>
                     </div>
                 </div>
                 <div class="stat-number">
@@ -229,7 +229,7 @@
             <div class="stat-card shadow-sm animate-on-scroll delay-1">
                 <div class="d-flex align-items-center gap-3 mb-3">
                     <div class="stat-icon" style="background: linear-gradient(135deg, #1cc88a, #13855c);">
-                        <i class="fas fa-user-graduate"></i>
+                        <i data-lucide="graduation-cap" style="width:16px;height:16px;"></i>
                     </div>
                 </div>
                 <div class="stat-number">
@@ -242,7 +242,7 @@
             <div class="stat-card shadow-sm animate-on-scroll delay-2">
                 <div class="d-flex align-items-center gap-3 mb-3">
                     <div class="stat-icon" style="background: linear-gradient(135deg, #f6c23e, #d4a217);">
-                        <i class="fas fa-question-circle"></i>
+                        <i data-lucide="help-circle" style="width:16px;height:16px;"></i>
                     </div>
                 </div>
                 <div class="stat-number">
@@ -257,18 +257,18 @@
     <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
         <div>
             <h5 style="color: #1e3c72; font-weight: 700; margin: 0; font-size: 1.1rem;">
-                <i class="fas fa-book me-2" style="color: #4e73df;"></i>My Courses
+                <i data-lucide="book" style="width:16px;height:16px;margin-right:8px;color:#4e73df;"></i>My Courses
             </h5>
         </div>
         <a href="{{ route('tentor.courses.create') }}" class="btn btn-primary rounded-pill px-3" style="height: 38px; font-weight: 600; font-size: 0.85rem;">
-            <i class="fas fa-plus me-1"></i>Create Course
+            <i data-lucide="plus" style="width:14px;height:14px;margin-right:4px;"></i>Create Course
         </a>
     </div>
 
     <div class="content-card shadow-sm animate-on-scroll delay-3">
         <div class="card-body p-4">
             <div class="search-wrapper mb-4">
-                <i class="fas fa-search search-icon"></i>
+                <i data-lucide="search" class="search-icon" style="width:16px;height:16px;"></i>
                 <input type="text" class="search-input form-control" id="searchInput"
                        placeholder="Search course name..." autocomplete="off">
             </div>
@@ -281,19 +281,17 @@
                 </div>
 
                 <div class="empty-state" id="searchEmpty" style="display: none; padding: 20px;">
-                    <div style="font-size: 3rem; color: #cbd5e0; margin-bottom: 12px;">
-                        <i class="fas fa-search"></i>
-                    </div>
+                    <div class="empty-state-icon-wrap"><i data-lucide="search" style="width:32px;height:32px;"></i></div>
                     <h6 style="color: #1e3c72; font-weight: 700;">No courses found</h6>
                     <p style="color: #a0aec0; font-size: 0.9rem;">No courses match your search. Try a different keyword.</p>
                 </div>
             @else
                 <div class="empty-state">
-                    <i class="fas fa-book-open" style="font-size: 3rem; color: #cbd5e0;"></i>
+                    <div class="empty-state-icon-wrap"><i data-lucide="book-open" style="width:32px;height:32px;"></i></div>
                     <h6>No courses yet</h6>
                     <p>You haven't created any courses yet. Click "Create Course" to get started.</p>
                     <a href="{{ route('tentor.courses.create') }}" class="btn btn-primary rounded-pill px-4 mt-2">
-                        <i class="fas fa-plus me-1"></i>Create Course
+                        <i data-lucide="plus" style="width:14px;height:14px;margin-right:4px;"></i>Create Course
                     </a>
                 </div>
             @endif
@@ -302,6 +300,9 @@
 @endsection
 
 @push('scripts')
+<script>
+    if(typeof lucide!=='undefined')lucide.createIcons();
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var hour = new Date().getHours();

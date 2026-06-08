@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -131,9 +132,16 @@ class AdminEnrollmentController extends Controller
      * Menghapus pendaftaran (enrollment) siswa dari kelas.
      * Baris pada tabel pivot course_user akan dihapus secara permanen.
      */
-    public function destroy(int $id): RedirectResponse
+    public function destroy(int $id): RedirectResponse|JsonResponse
     {
         DB::table('course_user')->where('id', $id)->delete();
+
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => __('messages.enrollment.deleted'),
+            ]);
+        }
 
         return redirect()->route('admin.enrollments.index')
             ->with('success', __('messages.enrollment.deleted'));

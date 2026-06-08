@@ -2,81 +2,75 @@
 
 @php
     $isEdit = !is_null($module);
+    $courseId = old('course_id', $isEdit ? ($module->course_id ?? '') : ($selectedCourseId ?? ''));
 @endphp
 
-<div class="mb-4">
-    <label for="course_id" class="form-label-custom">
-        <i class="fas fa-book label-icon"></i>Course
-    </label>
-    <select class="form-control form-input @error('course_id') is-invalid @enderror"
-            id="course_id" name="course_id" required>
-        <option value="">-- Select Course --</option>
+<div class="mb-3 form-floating-custom">
+    <select id="course_id" name="course_id" required
+            class="@error('course_id') is-invalid @enderror{{ $courseId ? ' has-value' : '' }}">
+        <option value=""></option>
         @foreach ($courses as $course)
             <option value="{{ $course->id }}"
-                {{ (old('course_id', $isEdit ? $module->course_id : $selectedCourseId) == $course->id) ? 'selected' : '' }}>
+                {{ ($courseId == $course->id) ? 'selected' : '' }}>
                 {{ $course->title }}
             </option>
         @endforeach
     </select>
+    <label for="course_id"><i data-lucide="book" style="width:14px;height:14px;margin-right:6px;"></i>Course</label>
     @error('course_id')
-        <small class="text-danger mt-1 d-block">{{ $message }}</small>
+        <div class="invalid-feedback">{{ $message }}</div>
     @enderror
 </div>
 
-<div class="mb-4">
-    <label for="title" class="form-label-custom">
-        <i class="fas fa-heading label-icon"></i>Module Title
-    </label>
-    <input type="text" class="form-control form-input @error('title') is-invalid @enderror"
-           id="title" name="title" value="{{ old('title', $isEdit ? $module->title : '') }}"
-           placeholder="e.g., Introduction to Variables" required>
+<div class="mb-3 form-floating-custom">
+    <input type="text" id="title" name="title"
+           value="{{ old('title', $isEdit ? $module->title : '') }}"
+           placeholder=" "
+           class="@error('title') is-invalid @enderror" required>
+    <label for="title"><i data-lucide="type" style="width:14px;height:14px;margin-right:6px;"></i>Module Title</label>
     @error('title')
-        <small class="text-danger mt-1 d-block">{{ $message }}</small>
+        <div class="invalid-feedback">{{ $message }}</div>
     @enderror
 </div>
 
-<div class="mb-4">
-    <label for="content" class="form-label-custom">
-        <i class="fas fa-align-left label-icon"></i>Content
-    </label>
-    <textarea class="form-control form-input @error('content') is-invalid @enderror"
-              id="content" name="content"
-              placeholder="Write the module content here... You can use plain text or HTML.">{{ old('content', $isEdit ? $module->content : '') }}</textarea>
+<div class="mb-3 form-floating-custom">
+    <textarea id="content" name="content" placeholder=" "
+              class="@error('content') is-invalid @enderror"
+              style="height:120px;">{{ old('content', $isEdit ? $module->content : '') }}</textarea>
+    <label for="content"><i data-lucide="align-left" style="width:14px;height:14px;margin-right:6px;"></i>Content</label>
     @error('content')
-        <small class="text-danger mt-1 d-block">{{ $message }}</small>
+        <div class="invalid-feedback">{{ $message }}</div>
     @enderror
-    <div class="form-hint">Optional. Type the lesson content manually.</div>
+    <small class="text-muted" style="font-size:0.75rem;margin-top:2px;display:block;">Optional. Type the lesson content manually.</small>
 </div>
 
-<div class="mb-4">
-    <label for="video_url" class="form-label-custom">
-        <i class="fas fa-video label-icon"></i>Video URL
-    </label>
-    <input type="url" class="form-control form-input @error('video_url') is-invalid @enderror"
-           id="video_url" name="video_url" value="{{ old('video_url', $isEdit ? $module->video_url : '') }}"
-           placeholder="e.g., https://www.youtube.com/watch?v=...">
+<div class="mb-3 form-floating-custom">
+    <input type="url" id="video_url" name="video_url"
+           value="{{ old('video_url', $isEdit ? $module->video_url : '') }}"
+           placeholder=" "
+           class="@error('video_url') is-invalid @enderror">
+    <label for="video_url"><i data-lucide="video" style="width:14px;height:14px;margin-right:6px;"></i>Video URL</label>
     @error('video_url')
-        <small class="text-danger mt-1 d-block">{{ $message }}</small>
+        <div class="invalid-feedback">{{ $message }}</div>
     @enderror
-    <div class="form-hint">Optional. Paste a YouTube or Vimeo video link.</div>
+    <small class="text-muted" style="font-size:0.75rem;margin-top:2px;display:block;">Optional. Paste a YouTube or Vimeo video link.</small>
 </div>
 
-<div class="mb-4">
-    <label for="link_url" class="form-label-custom">
-        <i class="fas fa-link label-icon"></i>Reference Link
-    </label>
-    <input type="url" class="form-control form-input @error('link_url') is-invalid @enderror"
-           id="link_url" name="link_url" value="{{ old('link_url', $isEdit ? $module->link_url : '') }}"
-           placeholder="e.g., https://example.com/reference">
+<div class="mb-3 form-floating-custom">
+    <input type="url" id="link_url" name="link_url"
+           value="{{ old('link_url', $isEdit ? $module->link_url : '') }}"
+           placeholder=" "
+           class="@error('link_url') is-invalid @enderror">
+    <label for="link_url"><i data-lucide="link" style="width:14px;height:14px;margin-right:6px;"></i>Reference Link</label>
     @error('link_url')
-        <small class="text-danger mt-1 d-block">{{ $message }}</small>
+        <div class="invalid-feedback">{{ $message }}</div>
     @enderror
-    <div class="form-hint">Optional. Any external resource link.</div>
+    <small class="text-muted" style="font-size:0.75rem;margin-top:2px;display:block;">Optional. Any external resource link.</small>
 </div>
 
-<div class="mb-4">
+<div class="mb-3">
     <label class="form-label-custom">
-        <i class="fas fa-file label-icon"></i>File Attachments
+        <i data-lucide="file" style="width:14px;height:14px;margin-right:6px;color:#4e73df;"></i>File Attachments
     </label>
 
     @if ($isEdit && $module->files->isNotEmpty())
@@ -84,7 +78,7 @@
             <div style="font-size:0.82rem; font-weight:600; color:#4a5568; margin-bottom:6px;">Current files:</div>
             @foreach ($module->files as $file)
                 <div class="current-file d-inline-flex align-items-center gap-2 me-2 mb-1">
-                    <i class="fas fa-paperclip"></i>
+                    <i data-lucide="paperclip" style="width:16px;height:16px;"></i>
                     <a href="{{ asset('storage/' . $file->file_path) }}" target="_blank">
                         {{ $file->file_name }}
                     </a>
@@ -94,7 +88,7 @@
                         @method('DELETE')
                         <button type="submit" class="btn btn-sm text-danger border-0 bg-transparent p-0 ms-1"
                                 title="Delete file" style="line-height:1;">
-                            <i class="fas fa-times"></i>
+                            <i data-lucide="x" style="width:16px;height:16px;"></i>
                         </button>
                     </form>
                 </div>
@@ -103,7 +97,7 @@
     @endif
 
     <div class="file-upload-area" id="fileUploadArea">
-        <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+        <div class="upload-icon"><i data-lucide="cloud-upload" style="width:16px;height:16px;"></i></div>
         <div class="upload-text" id="uploadText">
             Click to choose files
         </div>
@@ -123,9 +117,15 @@
 <div class="d-flex gap-3 mt-4 pt-3 border-top">
     <a href="{{ $backUrl ?? '#' }}"
        class="btn btn-outline-secondary btn-secondary-custom px-4">
-        <i class="fas fa-arrow-left me-1"></i>{{ $isEdit ? 'Cancel' : 'Cancel' }}
+        <i data-lucide="arrow-left" style="width:14px;height:14px;margin-right:4px;"></i>{{ $isEdit ? 'Cancel' : 'Cancel' }}
     </a>
     <button type="submit" class="btn btn-primary btn-primary-custom flex-grow-1">
-        <i class="fas fa-check-circle me-2"></i>{{ $isEdit ? 'Update Module' : 'Save Module' }}
+        <i data-lucide="check-circle" style="width:16px;height:16px;margin-right:8px;"></i>{{ $isEdit ? 'Update Module' : 'Save Module' }}
     </button>
 </div>
+
+@push('scripts')
+<script>
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+</script>
+@endpush

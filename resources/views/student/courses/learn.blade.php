@@ -286,31 +286,31 @@
 
 @section('content')
     <a href="{{ route('siswa.courses.index') }}" class="back-link">
-        <i class="fas fa-arrow-left"></i> Back to My Courses
+        <i data-lucide="arrow-left" style="width:14px;height:14px;margin-right:4px;"></i> Back to My Courses
     </a>
 
     {{-- Course Hero --}}
     <div class="course-hero shadow-sm mb-4">
         <div class="position-relative" style="z-index: 1;">
-            <h3><i class="fas fa-book me-2"></i>{{ $course->title }}</h3>
+            <h3><i data-lucide="book" style="width:18px;height:18px;margin-right:8px;"></i>{{ $course->title }}</h3>
             <div class="hero-tentor">
-                <i class="fas fa-chalkboard-teacher me-1"></i>{{ $course->tentor->name ?? 'Tentor' }}
+                <i data-lucide="presentation" style="width:12px;height:12px;margin-right:4px;"></i>{{ $course->tentor->name ?? 'Tentor' }}
             </div>
             @if ($course->description)
                 <div class="hero-desc">{{ $course->description }}</div>
             @endif
             <div class="hero-stats">
                 <div class="hero-stat">
-                    <i class="fas fa-layer-group"></i>
+                    <i data-lucide="layers" style="width:16px;height:16px;"></i>
                     <span>{{ $course->modules->count() }} Modules</span>
                 </div>
                 <div class="hero-stat">
-                    <i class="fas fa-question-circle"></i>
+                    <i data-lucide="help-circle" style="width:16px;height:16px;"></i>
                     <span>{{ $course->quizzes->count() }} Quizzes</span>
                 </div>
             </div>
         </div>
-        <i class="fas fa-graduation-cap hero-icon"></i>
+        <i data-lucide="graduation-cap" class="hero-icon" style="width:40px;height:40px;"></i>
     </div>
 
     {{-- Module List --}}
@@ -321,7 +321,7 @@
                     <div class="module-header" data-target="module-body-{{ $module->id }}">
                         <div class="module-num">{{ $index + 1 }}</div>
                         <div class="module-title">{{ $module->title }}</div>
-                        <i class="fas fa-chevron-down module-toggle-icon"></i>
+                        <i data-lucide="chevron-down" class="module-toggle-icon" style="width:16px;height:16px;"></i>
                     </div>
                     <div class="module-body" id="module-body-{{ $module->id }}">
                         @if ($module->video_url)
@@ -346,7 +346,7 @@
                             </div>
                         @else
                             <div class="text-muted mb-3" style="font-size: 0.88rem; font-style: italic;">
-                                <i class="fas fa-video-slash me-1"></i>No video available for this module.
+                                <i data-lucide="video-off" style="width:14px;height:14px;margin-right:4px;"></i>No video available for this module.
                             </div>
                         @endif
 
@@ -360,7 +360,7 @@
                             <div class="mb-3">
                                 <a href="{{ $module->link_url }}" target="_blank"
                                    class="btn-pdf" style="display:inline-flex; align-items:center; gap:8px; padding:10px 20px; border-radius:12px; font-weight:600; font-size:0.85rem; background:rgba(22,160,133,0.08); color:#16a085; border:1.5px solid rgba(22,160,133,0.15); text-decoration:none; transition:all 0.25s ease;">
-                                    <i class="fas fa-external-link-alt"></i> Open Reference Link
+                                    <i data-lucide="external-link" style="width:14px;height:14px;margin-right:4px;"></i> Open Reference Link
                                 </a>
                             </div>
                         @endif
@@ -385,7 +385,7 @@
                                        class="btn-pdf"
                                        target="_blank"
                                        download>
-                                        <i class="fas fa-download"></i> {{ $file->file_name }}
+                                        <i data-lucide="download" style="width:14px;height:14px;margin-right:4px;"></i> {{ $file->file_name }}
                                     </a>
                                 @endforeach
                             </div>
@@ -395,14 +395,14 @@
                         @php $mySubmission = $module->submissions->where('siswa_id', $user->id)->first(); @endphp
                         <div class="mt-3 pt-3 border-top">
                             <h6 class="fw-bold mb-2" style="color:#1e3c72;">
-                                <i class="fas fa-upload me-1"></i>My Submission
+                                <i data-lucide="upload" style="width:14px;height:14px;margin-right:4px;"></i>My Submission
                             </h6>
 
                             @if ($mySubmission)
                                 <div style="font-size:0.88rem;">
                                     @if ($mySubmission->file_path)
                                         <div class="mb-1">
-                                            <i class="fas fa-file me-1 text-muted"></i>
+                                            <i data-lucide="file" style="width:12px;height:12px;margin-right:4px;"></i>
                                             <a href="{{ asset('storage/' . $mySubmission->file_path) }}" target="_blank">
                                                 {{ $mySubmission->file_name }}
                                             </a>
@@ -410,22 +410,22 @@
                                     @endif
                                     @if ($mySubmission->link_url)
                                         <div class="mb-1">
-                                            <i class="fas fa-link me-1 text-muted"></i>
+                                            <i data-lucide="link" style="width:12px;height:12px;margin-right:4px;"></i>
                                             <a href="{{ $mySubmission->link_url }}" target="_blank">{{ $mySubmission->link_url }}</a>
                                         </div>
                                     @endif
                                     @if ($mySubmission->notes)
                                         <div class="text-muted mt-1" style="font-size:0.82rem;">
-                                            <i class="fas fa-comment me-1"></i>{{ $mySubmission->notes }}
+                                            <i data-lucide="message-square" style="width:12px;height:12px;margin-right:4px;"></i>{{ $mySubmission->notes }}
                                         </div>
                                     @endif
                                     <div class="text-muted mt-1" style="font-size:0.78rem;">
-                                        <i class="fas fa-clock me-1"></i>Submitted {{ $mySubmission->submitted_at->diffForHumans() }}
+                                        <i data-lucide="clock" style="width:12px;height:12px;margin-right:4px;"></i>Submitted {{ $mySubmission->submitted_at->diffForHumans() }}
                                     </div>
                                 </div>
                                 <button class="btn btn-sm btn-outline-primary rounded-pill px-3 mt-2"
                                         onclick="toggleEditSubmission({{ $module->id }})">
-                                    <i class="fas fa-edit me-1"></i>Edit
+                                    <i data-lucide="pencil" style="width:14px;height:14px;margin-right:4px;"></i>Edit
                                 </button>
                                 <div id="edit-submission-{{ $module->id }}" style="display:none;" class="mt-2">
                                     <form method="POST" action="{{ route('siswa.modules.submissions.store', $module->id) }}"
@@ -447,7 +447,7 @@
                                                       placeholder="Add notes...">{{ $mySubmission->notes }}</textarea>
                                         </div>
                                         <button type="submit" class="btn btn-sm btn-primary rounded-pill px-3">
-                                            <i class="fas fa-save me-1"></i>Update Submission
+                                            <i data-lucide="save" style="width:14px;height:14px;margin-right:4px;"></i>Update Submission
                                         </button>
                                     </form>
                                 </div>
@@ -471,7 +471,7 @@
                                                   placeholder="Add notes about your submission..."></textarea>
                                     </div>
                                     <button type="submit" class="btn btn-sm btn-primary rounded-pill px-3">
-                                        <i class="fas fa-upload me-1"></i>Submit
+                                        <i data-lucide="upload" style="width:14px;height:14px;margin-right:4px;"></i>Submit
                                     </button>
                                 </form>
                             @endif
@@ -484,7 +484,7 @@
                 <div class="content-card shadow-sm" style="border-radius: 16px;">
                     <div class="card-body">
                         <div class="empty-state">
-                            <i class="fas fa-layer-group" style="font-size: 3rem;"></i>
+                            <div class="empty-state-icon-wrap"><i data-lucide="layers" style="width:44px;height:44px;"></i></div>
                             <h6 style="color: #1e3c72; font-weight: 700;">No Materials Yet</h6>
                             <p style="color: #a0aec0; font-size: 0.9rem;">The tentor hasn't added any modules to this course yet. Please check back later.</p>
                         </div>
@@ -497,26 +497,26 @@
     {{-- Quiz List --}}
     <div class="mt-5 mb-2">
         <h5 class="fw-bold text-dark mb-3">
-            <i class="fas fa-question-circle me-2" style="color: #f59e0b;"></i>Course Quizzes
+            <i data-lucide="help-circle" style="width:18px;height:18px;color:#f59e0b;margin-right:8px;"></i>Course Quizzes
         </h5>
 
         @forelse ($course->quizzes as $quiz)
             <div class="quiz-card shadow-sm mb-3">
                 <div class="quiz-body">
                     <div class="quiz-icon">
-                        <i class="fas fa-pencil-alt"></i>
+                        <i data-lucide="pencil" style="width:18px;height:18px;"></i>
                     </div>
                     <div class="quiz-info flex-grow-1">
                         <h6>{{ $quiz->title }}</h6>
                         <div class="quiz-meta">
-                            <span><i class="fas fa-list"></i>{{ $quiz->questions->count() }} Questions</span>
-                            <span><i class="fas fa-clock"></i>{{ $quiz->time_limit }} min</span>
+                            <span><i data-lucide="list" style="width:12px;height:12px;margin-right:4px;"></i>{{ $quiz->questions->count() }} Questions</span>
+                            <span><i data-lucide="clock" style="width:12px;height:12px;margin-right:4px;"></i>{{ $quiz->time_limit }} min</span>
                             @php
                                 $attempted = $quiz->attempts->first();
                             @endphp
                             @if ($attempted)
                                 <span class="text-{{ $attempted->score >= $quiz->passing_score ? 'success' : 'danger' }}">
-                                    <i class="fas {{ $attempted->score >= $quiz->passing_score ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
+                                    <i data-lucide="{{ $attempted->score >= $quiz->passing_score ? 'check-circle' : 'x-circle' }}" style="width:12px;height:12px;"></i>
                                     Score: {{ $attempted->score }}%
                                 </span>
                             @endif
@@ -524,11 +524,11 @@
                     </div>
                     @if ($attempted)
                         <a href="{{ route('siswa.quiz-attempts.show', $attempted) }}" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-semibold" style="font-size: 0.78rem;">
-                            <i class="fas fa-history me-1"></i>Review
+                            <i data-lucide="history" style="width:14px;height:14px;margin-right:4px;"></i>Review
                         </a>
                     @endif
                     <a href="{{ route('siswa.quizzes.show', $quiz) }}" class="btn-start-quiz">
-                        <i class="fas fa-play me-1"></i>{{ $attempted ? 'Retry' : 'Start' }}
+                        <i data-lucide="play" style="width:14px;height:14px;margin-right:4px;"></i>{{ $attempted ? 'Retry' : 'Start' }}
                     </a>
                 </div>
             </div>
@@ -536,7 +536,7 @@
             <div class="content-card shadow-sm" style="border-radius: 16px;">
                 <div class="card-body">
                     <div class="empty-state">
-                        <i class="fas fa-question-circle" style="font-size: 3rem;"></i>
+                        <div class="empty-state-icon-wrap"><i data-lucide="help-circle" style="width:44px;height:44px;"></i></div>
                         <h6 style="color: #1e3c72; font-weight: 700;">No Quizzes Yet</h6>
                         <p style="color: #a0aec0; font-size: 0.9rem;">The tentor hasn't added any quizzes for this course yet.</p>
                     </div>
@@ -581,5 +581,8 @@
         var el = document.getElementById('edit-submission-' + moduleId);
         if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
     }
+</script>
+<script>
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 </script>
 @endpush

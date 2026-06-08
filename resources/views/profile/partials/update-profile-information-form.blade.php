@@ -6,23 +6,21 @@
     @csrf
     @method('patch')
 
-    <div class="mb-3">
-        <label for="name" class="form-label fw-semibold" style="color:#1e3c72;font-size:0.88rem;">Name</label>
-        <input id="name" name="name" type="text"
-               class="form-control"
-               value="{{ old('name', $user->name) }}" required autofocus autocomplete="name"
-               style="border-radius:10px;border:2px solid #e2e8f0;padding:10px 14px;">
+    <div class="mb-3 form-floating-custom">
+        <input type="text" id="name" name="name"
+               value="{{ old('name', $user->name) }}" placeholder=" " required
+               autocomplete="name">
+        <label for="name">Name</label>
         @error('name')
             <small class="text-danger mt-1 d-block">{{ $message }}</small>
         @enderror
     </div>
 
-    <div class="mb-3">
-        <label for="email" class="form-label fw-semibold" style="color:#1e3c72;font-size:0.88rem;">Email</label>
-        <input id="email" name="email" type="email"
-               class="form-control"
-               value="{{ old('email', $user->email) }}" required autocomplete="username"
-               style="border-radius:10px;border:2px solid #e2e8f0;padding:10px 14px;">
+    <div class="mb-3 form-floating-custom">
+        <input type="email" id="email" name="email"
+               value="{{ old('email', $user->email) }}" placeholder=" " required
+               autocomplete="username">
+        <label for="email">Email</label>
         @error('email')
             <small class="text-danger mt-1 d-block">{{ $message }}</small>
         @enderror
@@ -46,14 +44,13 @@
     </div>
 
     <div class="d-flex align-items-center gap-3">
-        <button type="submit" class="btn btn-primary rounded-pill px-4"
-                style="background:linear-gradient(135deg,#4e73df,#224abe);border:none;font-weight:600;">
-            <i class="fas fa-check me-1"></i> Save
+        <button type="submit" class="btn btn-primary btn-pill px-4">
+            <i data-lucide="check" style="width:14px;height:14px;margin-right:6px;"></i> Save
         </button>
 
         @if (session('status') === 'profile-updated')
             <small class="text-success fw-semibold">
-                <i class="fas fa-check-circle me-1"></i>Saved.
+                <i data-lucide="check-circle" style="width:14px;height:14px;margin-right:4px;vertical-align:middle;"></i>Saved.
             </small>
         @endif
     </div>

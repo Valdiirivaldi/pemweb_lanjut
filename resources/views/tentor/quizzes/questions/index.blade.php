@@ -94,17 +94,17 @@
 
 @section('content')
     <a href="{{ route('tentor.quizzes.index') }}" class="back-link">
-        <i class="fas fa-arrow-left"></i> Back to Quizzes
+        <i data-lucide="arrow-left" style="width:16px;height:16px;"></i> Back to Quizzes
     </a>
 
     <div class="question-card shadow-sm">
         <div class="card-header">
             <span class="header-title">
-                <i class="fas fa-question-circle me-2" style="color: #4e73df;"></i>
+                <i data-lucide="help-circle" style="width:16px;height:16px;margin-right:8px;color:#4e73df;"></i>
                 {{ $questions->count() }} Questions
             </span>
             <a href="{{ route('tentor.quizzes.questions.create', $quiz->id) }}" class="btn btn-primary rounded-pill px-3" style="height: 36px; font-size: 0.82rem; font-weight: 600;">
-                <i class="fas fa-plus me-1"></i>Add Question
+                <i data-lucide="plus" style="width:14px;height:14px;margin-right:4px;"></i>Add Question
             </a>
         </div>
         <div class="card-body p-0">
@@ -129,7 +129,7 @@
                     <div class="d-flex gap-2 flex-shrink-0">
                         <a href="{{ route('tentor.quizzes.questions.edit', [$quiz->id, $question->id]) }}"
                            class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                            <i class="fas fa-pen me-1"></i>Edit
+                            <i data-lucide="pen" style="width:14px;height:14px;margin-right:4px;"></i>Edit
                         </a>
                         <form action="{{ route('tentor.quizzes.questions.destroy', [$quiz->id, $question->id]) }}"
                               method="POST" class="d-inline"
@@ -137,21 +137,26 @@
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3">
-                                <i class="fas fa-trash me-1"></i>Delete
+                                <i data-lucide="trash-2" style="width:14px;height:14px;margin-right:4px;"></i>Delete
                             </button>
                         </form>
                     </div>
                 </div>
             @empty
                 <div class="empty-state" style="padding: 40px 20px;">
-                    <i class="fas fa-question-circle" style="font-size: 3rem; color: #cbd5e0;"></i>
+                    <div class="empty-state-icon-wrap"><i data-lucide="help-circle" style="width:32px;height:32px;color:#cbd5e0;"></i></div>
                     <h6>No questions yet</h6>
                     <p>This quiz has no questions. Click "Add Question" to get started.</p>
                     <a href="{{ route('tentor.quizzes.questions.create', $quiz->id) }}" class="btn btn-primary rounded-pill px-4 mt-2" style="font-size: 0.88rem;">
-                        <i class="fas fa-plus me-1"></i>Add Question
+                        <i data-lucide="plus" style="width:14px;height:14px;margin-right:4px;"></i>Add Question
                     </a>
                 </div>
             @endforelse
         </div>
     </div>
+@push('scripts')
+<script>
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+</script>
+@endpush
 @endsection
