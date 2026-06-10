@@ -199,36 +199,26 @@
                                                             <span class="text-muted">—</span>
                                                         @endif
                                                     </td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <button class="btn-action-icon" data-bs-toggle="dropdown" aria-expanded="false" title="Actions">
-                                                                <i data-lucide="more-vertical"></i>
+                                                    <td style="white-space: nowrap;">
+                                                        <form action="{{ route('admin.enrollments.toggle-access', $en->id) }}" method="POST" style="display:inline">
+                                                            @csrf
+                                                            <button type="submit" class="btn-action-icon {{ $isActive ? 'lock' : 'unlock' }}"
+                                                                    data-ajax-action="toggle-access"
+                                                                    data-confirm="{{ $isActive ? 'Lock access for this enrollment?' : 'Unlock access for this enrollment?' }}"
+                                                                    title="{{ $isActive ? 'Lock Access' : 'Unlock Access' }}">
+                                                                <i data-lucide="{{ $isActive ? 'lock' : 'unlock' }}"></i>
                                                             </button>
-                                                            <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="border-radius: 12px; border: none; padding: 6px; min-width: 160px;">
-                                                                <li>
-                                                                    <form action="{{ route('admin.enrollments.toggle-access', $en->id) }}" method="POST">
-                                                                        @csrf
-                                                                        <button type="submit" class="dropdown-item py-2 rounded-2"
-                                                                                data-ajax-action="toggle-access"
-                                                                                data-confirm="{{ $isActive ? 'Lock access for this enrollment?' : 'Unlock access for this enrollment?' }}">
-                                                                            <i data-lucide="{{ $isActive ? 'lock' : 'unlock' }}" style="width:14px;height:14px;margin-right:8px;color:{{ $isActive ? '#e74c3c' : '#27ae60' }};"></i>
-                                                                            {{ $isActive ? 'Lock Access' : 'Unlock Access' }}
-                                                                        </button>
-                                                                    </form>
-                                                                </li>
-                                                                <li>
-                                                                    <form action="{{ route('admin.enrollments.destroy', $en->id) }}" method="POST">
-                                                                        @csrf
-                                                                        @method('DELETE')
-                                                                        <button type="submit" class="dropdown-item py-2 rounded-2 text-danger"
-                                                                                data-ajax-action="delete"
-                                                                                data-confirm="Delete this enrollment?">
-                                                                            <i data-lucide="trash-2" style="width:14px;height:14px;margin-right:8px;"></i>Delete
-                                                                        </button>
-                                                                    </form>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
+                                                        </form>
+                                                        <form action="{{ route('admin.enrollments.destroy', $en->id) }}" method="POST" style="display:inline">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn-action-icon delete"
+                                                                    data-ajax-action="delete"
+                                                                    data-confirm="Delete this enrollment?"
+                                                                    title="Delete">
+                                                                <i data-lucide="trash-2"></i>
+                                                            </button>
+                                                        </form>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -321,6 +311,7 @@
                                             <th>Course Name</th>
                                             <th>Assigned Tentor</th>
                                             <th>Created</th>
+                                            <th style="width: 60px;">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -339,6 +330,27 @@
                                                     @endif
                                                 </td>
                                                 <td class="text-muted" style="font-size:0.85rem;">{{ $c->created_at->format('d M Y') }}</td>
+                                                <td style="white-space: nowrap;">
+                                                    <button type="button" class="btn-action-icon edit"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#editTentorModal"
+                                                            data-course-id="{{ $c->id }}"
+                                                            data-course-title="{{ $c->title }}"
+                                                            data-tentor-id="{{ $c->tentor_id ?? '' }}"
+                                                            title="Edit">
+                                                        <i data-lucide="pencil"></i>
+                                                    </button>
+                                                    <form action="{{ route('admin.enrollments.remove-tentor', $c->id) }}" method="POST" style="display:inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn-action-icon delete"
+                                                                data-ajax-action="remove-tentor"
+                                                                data-confirm="Remove tentor from {{ $c->title }}?"
+                                                                title="Remove">
+                                                            <i data-lucide="trash-2"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -357,5 +369,69 @@
                 </div>
             </div>
         </div>
+
+        {{-- Edit Tentor Modal --}}
+        <div class="modal fade" id="editTentorModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content" style="border-radius: 16px; border: none; padding: 8px;">
+                    <div class="modal-header border-0 pb-0">
+                        <h6 class="modal-title fw-bold"><i data-lucide="chalkboard" style="width:16px;height:16px;margin-right:8px;color:#4e73df;"></i>Change Tentor</h6>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form id="editTentorForm" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="modal-body">
+                            <p class="text-muted small mb-3" id="editTentorCourseName"></p>
+                            <div class="form-floating-custom">
+                                <select id="edit_tentor_id" name="tentor_id" required>
+                                    <option value=""></option>
+                                    @foreach ($tentors as $t)
+                                        <option value="{{ $t->id }}">{{ $t->name }} ({{ $t->email }})</option>
+                                    @endforeach
+                                </select>
+                                <label for="edit_tentor_id">Select Tentor</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer border-0 pt-0">
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn-pill" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-sm btn-primary btn-pill">
+                                <i data-lucide="check" style="width:14px;height:14px;margin-right:4px;"></i>Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {{-- Edit Tentor Modal Script --}}
+        @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var editModal = document.getElementById('editTentorModal');
+                if (!editModal) return;
+
+                editModal.addEventListener('show.bs.modal', function(e) {
+                    var btn = e.relatedTarget;
+                    var courseId = btn.getAttribute('data-course-id');
+                    var courseTitle = btn.getAttribute('data-course-title');
+                    var tentorId = btn.getAttribute('data-tentor-id');
+
+                    document.getElementById('editTentorCourseName').textContent = 'Course: ' + courseTitle;
+                    document.getElementById('editTentorForm').action = '{{ url('admin/enrollments/tentor') }}/' + courseId;
+                    document.getElementById('edit_tentor_id').value = tentorId;
+                });
+
+                document.getElementById('editTentorForm')?.addEventListener('submit', function(e) {
+                    var select = document.getElementById('edit_tentor_id');
+                    if (!select.value) {
+                        e.preventDefault();
+                        Swal.fire({ icon: 'error', title: 'Please select a tentor', toast: true, position: 'top-end', timer: 3000, showConfirmButton: false });
+                        return;
+                    }
+                });
+            });
+        </script>
+        @endpush
     @endif
 @endsection

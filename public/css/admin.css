@@ -496,6 +496,36 @@ body {
   transition: color 0.3s ease;
 }
 
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.stat-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.stat-number {
+  font-weight: 800;
+  font-size: 1.8rem;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.stat-label {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
 .stat-card-trend {
   font-size: 0.75rem;
   font-weight: 600;
@@ -1059,6 +1089,36 @@ body {
 
 [data-theme="dark"] .dropdown-divider {
   border-color: var(--border-default);
+}
+
+/* ── Click Dropdown for Action Menus ── */
+.dropdown-hover {
+  position: relative;
+}
+
+.dropdown-hover .dropdown-menu {
+  display: none;
+  position: absolute;
+  z-index: 1000;
+  top: 100%;
+  right: 0;
+  left: auto;
+  margin-top: 2px;
+  min-width: 140px;
+  padding: 6px;
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  background: #fff;
+}
+
+.dropdown-hover .dropdown-menu.show {
+  display: block;
+}
+
+[data-theme="dark"] .dropdown-hover .dropdown-menu {
+  background: var(--bg-surface);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
 
 [data-theme="dark"] .form-control,
@@ -1630,7 +1690,6 @@ body {
 }
 
 .btn-action-icon:hover {
-  transform: scale(1.12);
 }
 
 .btn-primary {

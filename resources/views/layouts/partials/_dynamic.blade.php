@@ -97,6 +97,18 @@
                         }
                     } else if (action === 'toggle-access' && res.row) {
                         updateRow(btn, res.row);
+                    } else if (action === 'remove-tentor') {
+                        var row = btn.closest('tr');
+                        if (row) {
+                            var tentorCell = row.querySelectorAll('td')[1];
+                            if (tentorCell) {
+                                tentorCell.innerHTML = '<span class="badge bg-secondary bg-opacity-10 text-secondary" style="font-size:0.8rem;"><i data-lucide="x" style="width:12px;height:12px;margin-right:4px;"></i>No tentor</span>';
+                            }
+                            // Update the edit button data
+                            var editBtn = row.querySelector('[data-bs-target="#editTentorModal"]');
+                            if (editBtn) editBtn.setAttribute('data-tentor-id', '');
+                            if (typeof lucide !== 'undefined') lucide.createIcons();
+                        }
                     }
                     if (res.reload) {
                         setTimeout(function() { window.location.reload(); }, 500);
@@ -130,14 +142,14 @@
             }
         }
         if (data.actions_html) {
-            var actionCell = row.querySelector('.dropdown');
+            var cells = row.querySelectorAll('td');
+            var actionCell = cells[cells.length - 1];
             if (actionCell) {
-                var temp = document.createElement('div');
-                temp.innerHTML = data.actions_html;
-                actionCell.outerHTML = temp.innerHTML;
+                actionCell.innerHTML = data.actions_html;
             }
         }
         if (typeof lucide !== 'undefined') lucide.createIcons();
+        initHoverDropdowns();
     }
 
     /* ── 4. Live Search with Debounce ── */
@@ -224,6 +236,7 @@
             container.innerHTML = newContainer.innerHTML;
             if (typeof lucide !== 'undefined') lucide.createIcons();
             initSortable();
+            initHoverDropdowns();
         }
     }
 
@@ -244,11 +257,49 @@
         return false;
     };
 
+    /* ── 5. Click Toggle Dropdown for Action Menus ── */
+    function initHoverDropdowns() {
+        document.querySelectorAll('.dropdown-hover:not([data-dd-init])').forEach(function(container) {
+            container.setAttribute('data-dd-init', '1');
+            var btn = container.querySelector('.btn-action-icon');
+            var menu = container.querySelector('.dropdown-menu');
+            if (!btn || !menu) return;
+
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                var isOpen = menu.classList.contains('show');
+                // Close all other dropdowns
+                document.querySelectorAll('.dropdown-hover .dropdown-menu.show').forEach(function(m) {
+                    if (m !== menu) m.classList.remove('show');
+                });
+                if (isOpen) {
+                    menu.classList.remove('show');
+                } else {
+                    menu.classList.add('show');
+                }
+            });
+        });
+
+        // Close on click outside (single document listener)
+        if (!window._ddClickOutsideInit) {
+            window._ddClickOutsideInit = true;
+            document.addEventListener('click', function(e) {
+                document.querySelectorAll('.dropdown-hover .dropdown-menu.show').forEach(function(menu) {
+                    var container = menu.closest('.dropdown-hover');
+                    if (!container || !container.contains(e.target)) {
+                        menu.classList.remove('show');
+                    }
+                });
+            });
+        }
+    }
+
     /* ── Init on page load ── */
     document.addEventListener('DOMContentLoaded', function() {
         initSortable();
         initAjaxActions();
         initLiveSearch();
+        initHoverDropdowns();
     });
 
 })();

@@ -153,6 +153,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('enrollments.store');
         Route::post('/enrollments/assign-tentor', [AdminEnrollmentController::class, 'assignTentor'])
             ->name('enrollments.assign-tentor');
+        Route::put('/enrollments/tentor/{course}', [AdminEnrollmentController::class, 'updateTentor'])
+            ->name('enrollments.update-tentor');
+        Route::delete('/enrollments/tentor/{course}', [AdminEnrollmentController::class, 'removeTentor'])
+            ->name('enrollments.remove-tentor');
         Route::delete('/enrollments/{id}', [AdminEnrollmentController::class, 'destroy'])
             ->name('enrollments.destroy');
 

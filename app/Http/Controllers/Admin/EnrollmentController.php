@@ -70,31 +70,19 @@ class EnrollmentController extends Controller
                     'unlocked_by_html' => $newStatus === 'active'
                         ? e($unlockedByName) . '<br><small style="font-size:0.7rem;">' . e($dt) . '</small>'
                         : '<span class="text-muted">—</span>',
-                    'actions_html' => '<div class="dropdown">
-                        <button class="btn-action-icon" data-bs-toggle="dropdown" title="Actions">
-                            <i data-lucide="more-vertical"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="border-radius:12px;border:none;padding:6px;min-width:160px;">
-                            <li>
-                                <form action="' . route('admin.enrollments.toggle-access', $id) . '" method="POST">
-                                    ' . csrf_field() . '
-                                    <button type="submit" class="dropdown-item py-2 rounded-2" data-ajax-action="toggle-access" data-confirm="' . ($newStatus === 'active' ? 'Lock access for this enrollment?' : 'Unlock access for this enrollment?') . '">
-                                        <i data-lucide="' . $lockedIcon . '" style="width:14px;height:14px;margin-right:8px;color:' . $lockedColor . ';"></i>
-                                        ' . $lockedLabel . '
-                                    </button>
-                                </form>
-                            </li>
-                            <li>
-                                <form action="' . route('admin.enrollments.destroy', $id) . '" method="POST">
-                                    ' . csrf_field() . '
-                                    ' . method_field('DELETE') . '
-                                    <button type="submit" class="dropdown-item py-2 rounded-2 text-danger" data-ajax-action="delete" data-confirm="Delete this enrollment?">
-                                        <i data-lucide="trash-2" style="width:14px;height:14px;margin-right:8px;"></i>Delete
-                                    </button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>',
+                    'actions_html' => '<form action="' . route('admin.enrollments.toggle-access', $id) . '" method="POST" style="display:inline">
+                            ' . csrf_field() . '
+                            <button type="submit" class="btn-action-icon ' . ($newStatus === 'active' ? 'lock' : 'unlock') . '" data-ajax-action="toggle-access" data-confirm="' . ($newStatus === 'active' ? 'Lock access for this enrollment?' : 'Unlock access for this enrollment?') . '" title="' . $lockedLabel . '">
+                                <i data-lucide="' . $lockedIcon . '"></i>
+                            </button>
+                        </form>
+                        <form action="' . route('admin.enrollments.destroy', $id) . '" method="POST" style="display:inline">
+                            ' . csrf_field() . '
+                            ' . method_field('DELETE') . '
+                            <button type="submit" class="btn-action-icon delete" data-ajax-action="delete" data-confirm="Delete this enrollment?" title="Delete">
+                                <i data-lucide="trash-2"></i>
+                            </button>
+                        </form>',
                 ]
             ]);
         }

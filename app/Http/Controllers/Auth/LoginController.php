@@ -28,7 +28,7 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
 
-        $request->session()->flash('login-success', [
+        session()->flash('login-success', [
             'name' => Auth::user()->name,
             'role' => Auth::user()->role,
         ]);

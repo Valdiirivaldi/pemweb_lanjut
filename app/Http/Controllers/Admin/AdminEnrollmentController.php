@@ -129,6 +129,54 @@ class AdminEnrollmentController extends Controller
     }
 
     /**
+     * Memperbarui tentor yang ditugaskan ke sebuah course.
+     */
+    public function updateTentor(Request $request, int $courseId): RedirectResponse|JsonResponse
+    {
+        $request->validate([
+            'tentor_id' => ['required', 'exists:users,id'],
+        ]);
+
+        $tentor = User::findOrFail($request->tentor_id);
+        abort_if(!$tentor->isTentor(), 400, 'The selected user is not an instructor.');
+
+        $course = Course::findOrFail($courseId);
+        $course->tentor_id = $request->tentor_id;
+        $course->save();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => __('messages.enrollment.assigned', ['course' => $course->title]),
+                'tentor_name' => $tentor->name,
+            ]);
+        }
+
+        return redirect()->route('admin.enrollments.index', ['tab' => 'tentor'])
+            ->with('success', __('messages.enrollment.assigned', ['course' => $course->title]));
+    }
+
+    /**
+     * Menghapus tentor dari sebuah course (set tentor_id menjadi null).
+     */
+    public function removeTentor(int $courseId): RedirectResponse|JsonResponse
+    {
+        $course = Course::findOrFail($courseId);
+        $course->tentor_id = null;
+        $course->save();
+
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Tentor has been removed from the course.',
+            ]);
+        }
+
+        return redirect()->route('admin.enrollments.index', ['tab' => 'tentor'])
+            ->with('success', 'Tentor has been removed from the course.');
+    }
+
+    /**
      * Menghapus pendaftaran (enrollment) siswa dari kelas.
      * Baris pada tabel pivot course_user akan dihapus secara permanen.
      */

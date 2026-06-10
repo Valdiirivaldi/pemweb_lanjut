@@ -89,30 +89,19 @@
                                         @endif
                                     </td>
                                     <td class="text-muted" style="font-size:0.85rem;">{{ $u->created_at->format('d M Y') }}</td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button class="btn-action-icon" data-bs-toggle="dropdown" aria-expanded="false" title="Actions">
-                                                <i data-lucide="more-vertical"></i>
+                                    <td style="white-space: nowrap;">
+                                        <a href="{{ route('admin.users.edit', $u->id) }}" class="btn-action-icon edit" title="Edit">
+                                            <i data-lucide="pencil"></i>
+                                        </a>
+                                        <form action="{{ route('admin.users.destroy', $u->id) }}" method="POST" style="display:inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-action-icon delete"
+                                                    data-ajax-action="delete"
+                                                    data-confirm="Are you sure you want to delete account {{ $u->name }}?">
+                                                <i data-lucide="trash-2"></i>
                                             </button>
-                                            <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="border-radius: 12px; border: none; padding: 6px; min-width: 140px;">
-                                                <li>
-                                                    <a href="{{ route('admin.users.edit', $u->id) }}" class="dropdown-item py-2 rounded-2">
-                                                        <i data-lucide="pencil" style="width:14px;height:14px;margin-right:8px;color:#4e73df;"></i>Edit
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <form action="{{ route('admin.users.destroy', $u->id) }}" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="dropdown-item py-2 rounded-2 text-danger"
-                                                                data-ajax-action="delete"
-                                                                data-confirm="Are you sure you want to delete account {{ $u->name }}?">
-                                                            <i data-lucide="trash-2" style="width:14px;height:14px;margin-right:8px;"></i>Delete
-                                                        </button>
-                                                    </form>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
