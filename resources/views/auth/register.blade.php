@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Daftar - Eduria</title>
+    <title>Register - Eduria</title>
     <script>if(localStorage.getItem('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -420,12 +420,12 @@
             <a href="{{ route('home') }}">
                 <i class="fas fa-graduation-cap"></i>Eduria
             </a>
-            <p>Platform Belajar Bahasa Inggris Online</p>
+            <p>Online English Learning Platform</p>
         </div>
 
         <div class="card-register">
-            <h3>Buat Akun Baru</h3>
-            <p class="subtitle">Daftar untuk mulai belajar di Eduria</p>
+            <h3>Create New Account</h3>
+            <p class="subtitle">Register to start learning at Eduria</p>
 
             @if ($errors->any())
                 <div class="alert-error show" role="alert">
@@ -443,12 +443,12 @@
                            id="name"
                            name="name"
                            value="{{ old('name') }}"
-                           placeholder="Nama Lengkap"
+                           placeholder="Full Name"
                            autocomplete="name"
                            autofocus
                            required>
                     <label for="name">
-                        <i class="far fa-user me-1"></i>Nama Lengkap
+                        <i class="far fa-user me-1"></i>Full Name
                     </label>
                     @error('name')
                         <div style="font-size:0.78rem;color:#e53e3e;margin-top:4px">
@@ -467,7 +467,7 @@
                            autocomplete="email"
                            required>
                     <label for="email">
-                        <i class="far fa-envelope me-1"></i>Alamat Email
+                        <i class="far fa-envelope me-1"></i>Email Address
                     </label>
                     @error('email')
                         <div style="font-size:0.78rem;color:#e53e3e;margin-top:4px">
@@ -481,18 +481,18 @@
                            class="form-control @error('password') is-invalid @enderror"
                            id="password"
                            name="password"
-                           placeholder="Buat password"
+                           placeholder="Create password"
                            autocomplete="new-password"
                            minlength="8"
                            required>
                     <label for="password">
-                        <i class="fas fa-lock me-1"></i>Kata Sandi
+                        <i class="fas fa-lock me-1"></i>Password
                     </label>
                     <button type="button"
                             class="password-toggle"
                             id="togglePassword"
                             tabindex="-1"
-                            aria-label="Tampilkan kata sandi">
+                            aria-label="Toggle password visibility">
                         <i class="far fa-eye-slash" id="toggleIcon"></i>
                     </button>
                     @error('password')
@@ -516,19 +516,19 @@
                     </div>
                     <div class="criteria-list" id="criteriaList">
                         <span class="criteria-item" data-criterion="length8">
-                            <i class="far fa-circle"></i> 8+ karakter
+                            <i class="far fa-circle"></i> 8+ characters
                         </span>
                         <span class="criteria-item" data-criterion="length12">
-                            <i class="far fa-circle"></i> 12+ karakter
+                            <i class="far fa-circle"></i> 12+ characters
                         </span>
                         <span class="criteria-item" data-criterion="case">
-                            <i class="far fa-circle"></i> Huruf besar & kecil
+                            <i class="far fa-circle"></i> Uppercase & lowercase
                         </span>
                         <span class="criteria-item" data-criterion="digit">
-                            <i class="far fa-circle"></i> Angka
+                            <i class="far fa-circle"></i> Number
                         </span>
                         <span class="criteria-item" data-criterion="special">
-                            <i class="far fa-circle"></i> Simbol
+                            <i class="far fa-circle"></i> Symbol
                         </span>
                     </div>
                 </div>
@@ -538,30 +538,30 @@
                            class="form-control"
                            id="password_confirmation"
                            name="password_confirmation"
-                           placeholder="Konfirmasi password"
+                           placeholder="Confirm password"
                            autocomplete="new-password"
                            required>
                     <label for="password_confirmation">
-                        <i class="fas fa-lock me-1"></i>Konfirmasi Kata Sandi
+                        <i class="fas fa-lock me-1"></i>Confirm Password
                     </label>
                 </div>
 
                 <button type="submit" class="btn btn-register">
-                    <i class="fas fa-user-plus me-2"></i>Daftar
+                    <i class="fas fa-user-plus me-2"></i>Register
                 </button>
             </form>
 
-            <div class="divider">atau</div>
+            <div class="divider">or</div>
 
             <p class="text-center mb-0" style="font-size: 0.9rem; color: #718096;">
-                Sudah punya akun?
-                <a href="{{ route('login') }}" class="auth-link">Login di sini</a>
+                Already have an account?
+                <a href="{{ route('login') }}" class="auth-link">Login here</a>
             </p>
         </div>
 
         <div class="back-link">
             <a href="{{ route('home') }}">
-                <i class="fas fa-arrow-left"></i>Kembali ke Beranda
+                <i class="fas fa-arrow-left"></i>Back to Home
             </a>
         </div>
     </div>
@@ -622,9 +622,9 @@
                 });
 
                 var label, iconClass;
-                if (score <= 2) { label = 'Lemah'; iconClass = 'fas fa-exclamation-triangle'; }
-                else if (score <= 3) { label = 'Sedang'; iconClass = 'fas fa-minus-circle'; }
-                else { label = 'Kuat'; iconClass = 'fas fa-shield-halved'; }
+                if (score <= 2) { label = 'Weak'; iconClass = 'fas fa-exclamation-triangle'; }
+                else if (score <= 3) { label = 'Medium'; iconClass = 'fas fa-minus-circle'; }
+                else { label = 'Strong'; iconClass = 'fas fa-shield-halved'; }
 
                 strengthLabel.textContent = label;
                 strengthIcon.className = iconClass;
@@ -637,7 +637,7 @@
                 passInput.type = isPassword ? 'text' : 'password';
                 toggleIcon.className = isPassword ? 'far fa-eye' : 'far fa-eye-slash';
                 toggleBtn.setAttribute('aria-label',
-                    isPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'
+                    isPassword ? 'Hide password' : 'Show password'
                 );
             });
 

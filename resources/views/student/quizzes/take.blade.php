@@ -215,7 +215,7 @@
 
 @section('content')
     <a href="{{ route('siswa.courses.learn', $quiz->course) }}" class="back-link">
-        <i data-lucide="arrow-left" style="width:16px;height:16px;"></i> Kembali ke Kelas
+        <i data-lucide="arrow-left" style="width:16px;height:16px;"></i> Back to Class
     </a>
 
     @php
@@ -273,8 +273,8 @@
                 <div class="content-card shadow-sm" style="border-radius: 14px;">
                     <div class="card-body text-center py-5">
                         <div class="empty-state-icon-wrap"><i data-lucide="alert-triangle" style="width:32px;height:32px;color:#cbd5e0;"></i></div>
-                        <h6 style="color: #1e3c72; font-weight: 700;">Soal belum tersedia</h6>
-                        <p style="color: #a0aec0; font-size: 0.9rem;">Tentor belum menambahkan soal untuk kuis ini.</p>
+                        <h6 style="color: #1e3c72; font-weight: 700;">Questions not available</h6>
+                        <p style="color: #a0aec0; font-size: 0.9rem;">The instructor has not added questions for this quiz yet.</p>
                     </div>
                 </div>
             @endforelse
@@ -283,7 +283,7 @@
                 <div class="quiz-footer">
                     <div class="total-questions"><i data-lucide="list" style="width:14px;height:14px;margin-right:4px;"></i><span id="answeredCount">0</span> / {{ $total }} answered</div>
                     <button type="submit" class="btn-submit-quiz">
-                        <i data-lucide="send" style="width:16px;height:16px;margin-right:8px;"></i>Submit Jawaban
+                        <i data-lucide="send" style="width:16px;height:16px;margin-right:8px;"></i>Submit Answers
                     </button>
                 </div>
             @endif

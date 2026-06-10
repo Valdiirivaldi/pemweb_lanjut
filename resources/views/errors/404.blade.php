@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -69,9 +69,9 @@
     <div class="error-card">
         <div class="brand"><i class="fas fa-graduation-cap"></i>Eduria</div>
         <div class="error-code">404</div>
-        <div class="error-title">Halaman Tidak Ditemukan</div>
-        <div class="error-message">Halaman yang Anda cari tidak ditemukan atau telah dipindahkan.</div>
-        <a href="{{ route('home') }}" class="btn-home"><i class="fas fa-home"></i>Kembali ke Beranda</a>
+        <div class="error-title">Page Not Found</div>
+        <div class="error-message">The page you are looking for was not found or has been moved.</div>
+        <a href="{{ route('home') }}" class="btn-home"><i class="fas fa-home"></i>Back to Home</a>
     </div>
 </body>
 </html>

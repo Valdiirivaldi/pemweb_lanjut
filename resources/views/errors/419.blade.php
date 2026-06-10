@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -69,9 +69,9 @@
     <div class="error-card">
         <div class="brand"><i class="fas fa-graduation-cap"></i>Eduria</div>
         <div class="error-code">419</div>
-        <div class="error-title">Sesi Berakhir</div>
-        <div class="error-message">Sesi Anda telah berakhir. Silakan login kembali untuk melanjutkan.</div>
-        <a href="{{ route('login') }}" class="btn-home"><i class="fas fa-sign-in-alt"></i>Login Kembali</a>
+        <div class="error-title">Session Expired</div>
+        <div class="error-message">Your session has expired. Please log in again to continue.</div>
+        <a href="{{ route('login') }}" class="btn-home"><i class="fas fa-sign-in-alt"></i>Login Again</a>
     </div>
 </body>
 </html>

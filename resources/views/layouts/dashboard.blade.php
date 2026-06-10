@@ -173,7 +173,7 @@
             });
         }
 
-        /* ── Counter Animation ── */
+        /* ── Counter Animation (ease-out) ── */
         document.addEventListener('DOMContentLoaded', function() {
             var counters = document.querySelectorAll('.counter-animate');
             if (counters.length) {
@@ -183,13 +183,17 @@
                             var el = entry.target;
                             var target = parseInt(el.getAttribute('data-target'));
                             if (target === 0) { el.textContent = '0'; return; }
-                            var current = 0;
-                            var step = Math.max(1, Math.ceil(target / 30));
-                            var interval = setInterval(function() {
-                                current += step;
-                                if (current >= target) { current = target; clearInterval(interval); }
+                            var startTime = performance.now();
+                            var duration = Math.min(1200, Math.max(400, target * 12));
+                            function tick(now) {
+                                var elapsed = now - startTime;
+                                var progress = Math.min(1, elapsed / duration);
+                                var eased = 1 - Math.pow(1 - progress, 3);
+                                var current = Math.round(eased * target);
                                 el.textContent = current;
-                            }, 30);
+                                if (progress < 1) requestAnimationFrame(tick);
+                            }
+                            requestAnimationFrame(tick);
                             observer.unobserve(el);
                         }
                     });

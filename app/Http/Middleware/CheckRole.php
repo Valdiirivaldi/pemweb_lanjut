@@ -23,7 +23,7 @@ class CheckRole
         $user = $request->user();
 
         if (!$user || !in_array($user->role, $roles)) {
-            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengakses halaman ini.');
+            abort(403, 'Access denied. You do not have permission to access this page.');
         }
 
         return $next($request);

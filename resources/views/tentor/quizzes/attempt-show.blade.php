@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Review Jawaban - Eduria')
-@section('page-title', 'Review Jawaban — ' . $attempt->siswa->name)
+@section('title', 'Review Answers - Eduria')
+@section('page-title', 'Review Answers — ' . $attempt->siswa->name)
 
 @push('styles')
 <style>
@@ -162,21 +162,21 @@
 
 @section('content')
     <a href="{{ route('tentor.quizzes.attempts.index', $quiz->id) }}" class="back-link">
-        <i data-lucide="arrow-left" style="width:16px;height:16px;"></i> Kembali ke Daftar Attempt
+        <i data-lucide="arrow-left" style="width:16px;height:16px;"></i> Back to Attempt List
     </a>
 
     <div class="review-container">
         <div class="attempt-info-card">
             <div class="attempt-info-row">
-                <span class="attempt-info-label">Nama Siswa</span>
+                <span class="attempt-info-label">Student Name</span>
                 <span class="attempt-info-value">{{ $attempt->siswa->name }}</span>
             </div>
             <div class="attempt-info-row">
-                <span class="attempt-info-label">Kuis</span>
+                <span class="attempt-info-label">Quiz</span>
                 <span class="attempt-info-value">{{ $quiz->title }}</span>
             </div>
             <div class="attempt-info-row">
-                <span class="attempt-info-label">Skor</span>
+                <span class="attempt-info-label">Score</span>
                 <span class="attempt-info-value">{{ $attempt->score }}%</span>
             </div>
             <div class="attempt-info-row">
@@ -184,14 +184,14 @@
                 <span class="attempt-info-value">
                     @php $passed = $attempt->score >= (int) ($quiz->passing_score ?? 70); @endphp
                     @if ($passed)
-                        <span class="badge bg-success">Lulus</span>
+                        <span class="badge bg-success">Passed</span>
                     @else
-                        <span class="badge bg-danger">Gagal</span>
+                        <span class="badge bg-danger">Failed</span>
                     @endif
                 </span>
             </div>
             <div class="attempt-info-row">
-                <span class="attempt-info-label">Tanggal</span>
+                <span class="attempt-info-label">Date</span>
                 <span class="attempt-info-value">{{ $attempt->created_at->format('d M Y H:i') }}</span>
             </div>
         </div>
@@ -199,7 +199,7 @@
         @if ($attempt->answers->isNotEmpty())
             <div class="review-header">
                 <i data-lucide="clipboard-check" style="width:16px;height:16px;"></i>
-                Review Jawaban
+                Review Answers
             </div>
 
             <div class="accordion" id="reviewAccordion">
@@ -212,11 +212,11 @@
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#{{ $accordionId }}" aria-expanded="false">
-                                <span class="review-q-num">Soal {{ $i + 1 }}</span>
+                                <span class="review-q-num">Question {{ $i + 1 }}</span>
                                 @if ($answer->is_correct)
-                                    <span class="badge bg-success ms-2">Benar</span>
+                                    <span class="badge bg-success ms-2">Correct</span>
                                 @else
-                                    <span class="badge bg-danger ms-2">Salah</span>
+                                    <span class="badge bg-danger ms-2">Incorrect</span>
                                 @endif
                             </button>
                         </h2>
@@ -265,13 +265,13 @@
                                             ->implode(', ');
                                     @endphp
                                     <div class="review-answer-row">
-                                        <span class="review-answer-label">Jawaban siswa:</span>
+                                        <span class="review-answer-label">Student's answer:</span>
                                         <span class="review-answer-value text-{{ $answer->is_correct ? 'success' : 'danger' }}">
-                                            {{ $studentAnswer ?: '(Tidak dijawab)' }}
+                                            {{ $studentAnswer ?: '(Not answered)' }}
                                         </span>
                                     </div>
                                     <div class="review-answer-row">
-                                        <span class="review-answer-label">Kunci jawaban:</span>
+                                        <span class="review-answer-label">Correct answer:</span>
                                         <span class="review-answer-value text-success">
                                             {{ $correctAnswer ?: '(Tidak ada)' }}
                                         </span>
@@ -286,8 +286,8 @@
             <div class="content-card shadow-sm">
                 <div class="card-body text-center py-5">
                     <div class="empty-state-icon-wrap"><i data-lucide="alert-triangle" style="width:32px;height:32px;color:#cbd5e0;"></i></div>
-                    <h6 style="color: #1e3c72; font-weight: 700;">Data jawaban tidak tersedia</h6>
-                    <p style="color: #a0aec0; font-size: 0.9rem;">Siswa ini mengerjakan sebelum fitur review diaktifkan.</p>
+<h6 style="color: #1e3c72; font-weight: 700;">Answer data not available</h6>
+                                    <p style="color: #a0aec0; font-size: 0.9rem;">This student took the quiz before the review feature was enabled.</p>
                 </div>
             </div>
         @endif

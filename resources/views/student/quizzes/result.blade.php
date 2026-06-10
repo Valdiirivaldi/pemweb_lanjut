@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Hasil Kuis - Eduria')
-@section('page-title', 'Hasil Kuis')
+@section('title', 'Quiz Result - Eduria')
+@section('page-title', 'Quiz Result')
 
 @push('styles')
 <style>
@@ -431,7 +431,7 @@
     @endphp
 
     <a href="{{ route('siswa.courses.learn', $attempt->quiz->course) }}" class="back-link">
-        <i data-lucide="arrow-left" style="width:16px;height:16px;"></i> Kembali ke Kelas
+        <i data-lucide="arrow-left" style="width:16px;height:16px;"></i> Back to Class
     </a>
 
     <div class="hero-score-wrap" data-anim="hero">
@@ -440,41 +440,41 @@
                 <i data-lucide="{{ $passed ? 'check-circle' : 'x-circle' }}" style="width:16px;height:16px;"></i>
             </div>
 
-            <div class="hero-title">{{ $passed ? 'Selamat!' : 'Tetap Semangat!' }}</div>
-            <div class="hero-subtitle">{{ $passed ? 'Kamu berhasil lulus kuis ini.' : 'Jangan menyerah, coba lagi!' }}</div>
+            <div class="hero-title">{{ $passed ? 'Congratulations!' : 'Keep Going!' }}</div>
+            <div class="hero-subtitle">{{ $passed ? 'You passed this quiz.' : 'Don\'t give up, try again!' }}</div>
 
             <div class="hero-score {{ $passed ? 'passed' : 'failed' }}">{{ $attempt->score }}%</div>
 
             <div class="hero-status {{ $passed ? 'passed' : 'failed' }}">
                 <i data-lucide="{{ $passed ? 'check' : 'x' }}" style="width:16px;height:16px;"></i>
-                {{ $passed ? 'Lulus' : 'Gagal' }}
+                {{ $passed ? 'Passed' : 'Failed' }}
             </div>
 
             <div class="hero-meta">
                 <div class="meta-row">
-                    <span class="meta-label">Kelas</span>
+                    <span class="meta-label">Class</span>
                     <span class="meta-value">{{ $attempt->quiz->course->title }}</span>
                 </div>
                 <div class="meta-row">
-                    <span class="meta-label">Kuis</span>
+                    <span class="meta-label">Quiz</span>
                     <span class="meta-value">{{ $attempt->quiz->title }}</span>
                 </div>
                 <div class="meta-row">
-                    <span class="meta-label">Skor Minimal</span>
+                    <span class="meta-label">Minimum Score</span>
                     <span class="meta-value">{{ $passingScore }}%</span>
                 </div>
             </div>
 
             <div class="hero-actions">
                 <a href="{{ route('siswa.quizzes.show', $attempt->quiz) }}" class="btn-hero btn-hero-retry">
-                    <i data-lucide="rotate-ccw" style="width:16px;height:16px;"></i> Coba Lagi
+                    <i data-lucide="rotate-ccw" style="width:16px;height:16px;"></i> Try Again
                 </a>
                 <a href="{{ route('siswa.courses.learn', $attempt->quiz->course) }}" class="btn-hero btn-hero-outline">
-                    <i data-lucide="book" style="width:16px;height:16px;"></i> Ke Kelas
+                    <i data-lucide="book" style="width:16px;height:16px;"></i> To Class
                 </a>
                 @if ($passed && !empty($attempt->certificate_path))
                     <a href="{{ asset('storage/' . $attempt->certificate_path) }}" class="btn-hero btn-hero-cert" download>
-                        <i data-lucide="file-text" style="width:16px;height:16px;"></i> Unduh Sertifikat
+                        <i data-lucide="file-text" style="width:16px;height:16px;"></i> Download Certificate
                     </a>
                 @endif
             </div>
@@ -485,7 +485,7 @@
         <div class="review-wrap" style="margin-top: 24px;">
             <div class="review-head">
                 <i data-lucide="history" style="width:18px;height:18px;color:#f59e0b;margin-right:8px;"></i>
-                Riwayat Attempt
+                Attempt History
                 <span class="review-head-suffix">{{ $allAttempts->count() }} attempts</span>
             </div>
             <div class="content-card shadow-sm" style="border-radius: var(--radius-card);">
@@ -496,7 +496,7 @@
                                 <th>Attempt</th>
                                 <th>Score</th>
                                 <th>Status</th>
-                                <th>Tanggal</th>
+                                <th>Date</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -513,9 +513,9 @@
                                     </td>
                                     <td>
                                         @if ($aPassed)
-                                            <span class="text-success fw-semibold"><i data-lucide="check" style="width:16px;height:16px;"></i> Lulus</span>
+                                            <span class="text-success fw-semibold"><i data-lucide="check" style="width:16px;height:16px;"></i> Passed</span>
                                         @else
-                                            <span class="text-danger fw-semibold"><i data-lucide="x" style="width:16px;height:16px;"></i> Gagal</span>
+                                            <span class="text-danger fw-semibold"><i data-lucide="x" style="width:16px;height:16px;"></i> Failed</span>
                                         @endif
                                     </td>
                                     <td style="color: #a0aec0; font-size: 0.85rem;">
@@ -534,7 +534,7 @@
         <div class="review-wrap">
             <div class="review-head">
                 <i data-lucide="clipboard-check" style="width:18px;height:18px;color:#f59e0b;margin-right:8px;"></i>
-                Review Jawaban
+                Review Answers
                 <span class="review-head-suffix">{{ $attempt->answers->count() }} soal</span>
             </div>
 
@@ -547,14 +547,14 @@
                 @endphp
                 <div class="review-float" data-anim="review">
                     <div class="review-float-head">
-                        <span class="review-q-num">Soal {{ $i + 1 }}</span>
+                        <span class="review-q-num">Question {{ $i + 1 }}</span>
                         @if ($answer->is_correct)
                             <span class="review-badge review-badge-correct">
-                                <i data-lucide="check" style="width:14px;height:14px;margin-right:4px;"></i>Benar
+                                <i data-lucide="check" style="width:14px;height:14px;margin-right:4px;"></i>Correct
                             </span>
                         @else
                             <span class="review-badge review-badge-wrong">
-                                <i data-lucide="x" style="width:14px;height:14px;margin-right:4px;"></i>Salah
+                                <i data-lucide="x" style="width:14px;height:14px;margin-right:4px;"></i>Incorrect
                             </span>
                         @endif
                     </div>
@@ -596,13 +596,13 @@
                                     ->implode(', ');
                             @endphp
                             <div class="review-essay-row">
-                                <span class="review-essay-label">Jawaban kamu:</span>
+                                <span class="review-essay-label">Your answer:</span>
                                 <span class="review-essay-value text-{{ $answer->is_correct ? 'success' : 'danger' }}">
-                                    {{ $studentAnswer ?: '(Tidak dijawab)' }}
+                                    {{ $studentAnswer ?: '(Not answered)' }}
                                 </span>
                             </div>
                             <div class="review-essay-row">
-                                <span class="review-essay-label">Kunci jawaban:</span>
+                                <span class="review-essay-label">Correct answer:</span>
                                 <span class="review-essay-value" style="color:#059669;">
                                     {{ $correctAnswer ?: '(Tidak ada)' }}
                                 </span>

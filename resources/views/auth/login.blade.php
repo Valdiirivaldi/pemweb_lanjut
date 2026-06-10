@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Masuk - Eduria</title>
+    <title>Login - Eduria</title>
     <script>if(localStorage.getItem('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -449,12 +449,12 @@
             <a href="{{ route('home') }}">
                 <i class="fas fa-graduation-cap"></i>Eduria
             </a>
-            <p>Platform Belajar Bahasa Inggris Online</p>
+            <p>Online English Learning Platform</p>
         </div>
 
         <div class="card-login">
-            <h3>Selamat Datang</h3>
-            <p class="subtitle">Masuk ke akun Eduria Anda</p>
+            <h3>Welcome Back</h3>
+            <p class="subtitle">Sign in to your Eduria account</p>
 
             @if (session('error'))
                 <div class="alert-error show" role="alert">
@@ -477,18 +477,18 @@
                     <input type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" id="email" name="email"
                         placeholder="nama@email.com" value="{{ old('email') }}" autocomplete="email" autofocus required>
                     <label for="email">
-                        <i class="far fa-envelope me-1"></i>Alamat Email
+                        <i class="far fa-envelope me-1"></i>Email Address
                     </label>
                 </div>
 
                 <div class="floating-group">
                     <input type="password" class="form-control" id="password" name="password"
-                        placeholder="Masukkan password" autocomplete="current-password" minlength="8" required>
+                        placeholder="Enter your password" autocomplete="current-password" minlength="8" required>
                     <label for="password">
-                        <i class="fas fa-lock me-1"></i>Kata Sandi
+                        <i class="fas fa-lock me-1"></i>Password
                     </label>
                     <button type="button" class="password-toggle" id="togglePassword" tabindex="-1"
-                        aria-label="Tampilkan kata sandi">
+                        aria-label="Toggle password visibility">
                         <i class="far fa-eye-slash" id="toggleIcon"></i>
                     </button>
                 </div>
@@ -507,19 +507,19 @@
                     </div>
                     <div class="criteria-list" id="criteriaList">
                         <span class="criteria-item" data-criterion="length8">
-                            <i class="far fa-circle"></i> 8+ karakter
+                            <i class="far fa-circle"></i> 8+ characters
                         </span>
                         <span class="criteria-item" data-criterion="length12">
-                            <i class="far fa-circle"></i> 12+ karakter
+                            <i class="far fa-circle"></i> 12+ characters
                         </span>
                         <span class="criteria-item" data-criterion="case">
-                            <i class="far fa-circle"></i> Huruf besar & kecil
+                            <i class="far fa-circle"></i> Uppercase & lowercase
                         </span>
                         <span class="criteria-item" data-criterion="digit">
-                            <i class="far fa-circle"></i> Angka
+                            <i class="far fa-circle"></i> Number
                         </span>
                         <span class="criteria-item" data-criterion="special">
-                            <i class="far fa-circle"></i> Simbol
+                            <i class="far fa-circle"></i> Symbol
                         </span>
                     </div>
                 </div>
@@ -528,32 +528,32 @@
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="remember" name="remember">
                         <label class="form-check-label" for="remember" style="font-size: 0.9rem; color: #4a5568;">
-                            Ingat saya
+                            Remember me
                         </label>
                     </div>
                     @if (Route::has('password.request'))
                         <a href="{{ route('password.request') }}" class="auth-link" style="font-size: 0.85rem;">
-                            Lupa password?
+                            Forgot password?
                         </a>
                     @endif
                 </div>
 
                 <button type="submit" class="btn btn-login">
-                    <i class="fas fa-arrow-right-to-bracket me-2"></i>Masuk
+                    <i class="fas fa-arrow-right-to-bracket me-2"></i>Login
                 </button>
             </form>
 
-            <div class="divider">atau</div>
+            <div class="divider">or</div>
 
             <p class="text-center mb-0" style="font-size: 0.9rem; color: #718096;">
-                Belum punya akun?
-                <a href="{{ route('register') }}" class="auth-link">Daftar Sekarang</a>
+                Don't have an account?
+                <a href="{{ route('register') }}" class="auth-link">Register Now</a>
             </p>
         </div>
 
         <div class="back-link">
             <a href="{{ route('home') }}">
-                <i class="fas fa-arrow-left"></i>Kembali ke Beranda
+                <i class="fas fa-arrow-left"></i>Back to Home
             </a>
         </div>
     </div>
@@ -614,11 +614,11 @@
                 });
 
                 var label, iconClass;
-                if (score <= 1) { label = 'Lemah'; iconClass = 'fas fa-exclamation-triangle'; }
-                else if (score === 2) { label = 'Kurang'; iconClass = 'fas fa-exclamation-circle'; }
-                else if (score === 3) { label = 'Sedang'; iconClass = 'fas fa-minus-circle'; }
-                else if (score === 4) { label = 'Kuat'; iconClass = 'fas fa-check-circle'; }
-                else { label = 'Sangat Kuat'; iconClass = 'fas fa-shield-halved'; }
+                if (score <= 1) { label = 'Weak'; iconClass = 'fas fa-exclamation-triangle'; }
+                else if (score === 2) { label = 'Fair'; iconClass = 'fas fa-exclamation-circle'; }
+                else if (score === 3) { label = 'Medium'; iconClass = 'fas fa-minus-circle'; }
+                else if (score === 4) { label = 'Strong'; iconClass = 'fas fa-check-circle'; }
+                else { label = 'Very Strong'; iconClass = 'fas fa-shield-halved'; }
 
                 strengthLabel.textContent = label;
                 strengthIcon.className = iconClass;
@@ -631,7 +631,7 @@
                 passInput.type = isPassword ? 'text' : 'password';
                 toggleIcon.className = isPassword ? 'far fa-eye' : 'far fa-eye-slash';
                 toggleBtn.setAttribute('aria-label',
-                    isPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'
+                    isPassword ? 'Hide password' : 'Show password'
                 );
             });
 

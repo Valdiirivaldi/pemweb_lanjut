@@ -149,7 +149,7 @@
                                 </div>
 
                                 <div class="table-responsive">
-                                    <table class="table-admin mb-0" data-sortable>
+                                    <table class="table-admin mb-0 animate-rows" data-sortable>
                                         <thead>
                                             <tr>
                                                 <th style="width: 32px;"></th>
@@ -315,7 +315,7 @@
                     <div class="content-card-body p-0">
                         @if (count($courses) > 0)
                             <div class="table-responsive">
-                                <table class="table-admin mb-0">
+                                <table class="table-admin mb-0 animate-rows">
                                     <thead>
                                         <tr>
                                             <th>Course Name</th>

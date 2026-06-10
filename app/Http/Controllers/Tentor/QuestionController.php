@@ -21,7 +21,7 @@ class QuestionController extends Controller
     private function ensureQuizOwnership(Quiz $quiz): void
     {
         if ($quiz->course->tentor_id !== Auth::id()) {
-            abort(403, 'Anda tidak memiliki akses ke quiz ini.');
+            abort(403, 'You do not have access to this quiz.');
         }
     }
 

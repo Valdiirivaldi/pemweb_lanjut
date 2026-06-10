@@ -76,7 +76,7 @@ class AdminEnrollmentController extends Controller
         ]);
 
         $siswa = User::findOrFail($request->user_id);
-        abort_if(!$siswa->isSiswa(), 400, 'User yang dipilih bukan siswa.');
+        abort_if(!$siswa->isSiswa(), 400, 'The selected user is not a student.');
 
         $exists = DB::table('course_user')
             ->where('user_id', $request->user_id)
@@ -118,7 +118,7 @@ class AdminEnrollmentController extends Controller
         ]);
 
         $tentor = User::findOrFail($request->tentor_id);
-        abort_if(!$tentor->isTentor(), 400, 'User yang dipilih bukan tentor.');
+        abort_if(!$tentor->isTentor(), 400, 'The selected user is not an instructor.');
 
         $course = Course::findOrFail($request->course_id);
         $course->tentor_id = $request->tentor_id;

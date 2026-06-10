@@ -12,7 +12,7 @@
     {{-- Welcome Card --}}
     <div class="row g-4 mb-4">
         <div class="col-12">
-            <div class="stat-card shadow-sm d-flex align-items-center gap-4 animate-on-scroll" style="background: linear-gradient(135deg, #1e3c72, #2a5298); color: #fff;">
+            <div class="stat-card shadow-sm d-flex align-items-center gap-4 animate-on-scroll hover-lift" style="background: linear-gradient(135deg, #1e3c72, #2a5298); color: #fff;">
                 <div>
                     <i data-lucide="shield" style="width:40px;height:40px;opacity:0.3;"></i>
                 </div>
@@ -28,7 +28,7 @@
 
     <div class="row g-4 mb-4">
         <div class="col-md-4">
-            <div class="stat-card shadow-sm animate-on-scroll">
+            <div class="stat-card shadow-sm animate-on-scroll hover-lift">
                 <div class="d-flex align-items-center gap-3 mb-2">
                     <div class="stat-card-icon" style="background: linear-gradient(135deg, #4e73df, #224abe);">
                         <i data-lucide="users"></i>
@@ -89,7 +89,7 @@
     {{-- Quick Actions --}}
     <div class="row g-4 mb-4">
         <div class="col-12">
-            <div class="content-card animate-on-scroll">
+            <div class="content-card animate-on-scroll hover-lift">
                 <div class="content-card-header">
                     <span><i data-lucide="zap" style="width:18px;height:18px;margin-right:8px;"></i>Quick Actions</span>
                 </div>
@@ -123,7 +123,7 @@
                 <div class="content-card-body p-0">
                     @if ($recentUsers->count() > 0)
                         <div class="table-responsive">
-                            <table class="table-admin mb-0" data-sortable>
+                            <table class="table-admin mb-0 animate-rows" data-sortable>
                                 <thead>
                                     <tr>
                                         <th data-sort="name">User</th>
@@ -176,7 +176,7 @@
                 <div class="content-card-body p-0">
                     @if ($recentCourses->count() > 0)
                         <div class="table-responsive">
-                            <table class="table-admin mb-0" data-sortable>
+                            <table class="table-admin mb-0 animate-rows" data-sortable>
                                 <thead>
                                     <tr>
                                         <th data-sort="title">Title</th>
@@ -220,7 +220,7 @@
     {{-- Charts Row --}}
     <div class="row g-4 mt-2">
         <div class="col-lg-4">
-            <div class="content-card animate-on-scroll">
+            <div class="content-card animate-on-scroll hover-lift">
                 <div class="content-card-header">
                     <span><i data-lucide="pie-chart" style="margin-right:8px;"></i>User Role Distribution</span>
                 </div>

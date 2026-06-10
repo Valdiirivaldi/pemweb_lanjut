@@ -363,7 +363,7 @@
             <div class="section-card-body">
                 @if ($quizAttempts->count() > 0)
                     <div class="table-responsive">
-                        <table class="table-admin mb-0" data-sortable>
+                        <table class="table-admin mb-0 animate-rows" data-sortable>
                             <thead>
                                 <tr>
                                     <th data-sort="quiz">Quiz</th>

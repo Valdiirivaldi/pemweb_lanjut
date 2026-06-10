@@ -14,7 +14,7 @@
         <div class="card-body p-0">
             @if ($quizzes->count() > 0)
                 <div class="table-responsive">
-                    <table class="table-admin mb-0" data-sortable>
+                    <table class="table-admin mb-0 animate-rows" data-sortable>
                         <thead>
                             <tr>
                                 <th data-sort="title">Quiz Title</th>
@@ -71,8 +71,8 @@
                                                         @method('DELETE')
                                                         <button type="submit" class="dropdown-item py-2 rounded-2 text-danger"
                                                                 data-ajax-action="delete"
-                                                                data-confirm="Yakin ingin menghapus quiz ini? Semua data soal dan attempt akan ikut terhapus.">
-                                                            <i data-lucide="trash-2" style="width:14px;height:14px;margin-right:8px;"></i>Hapus
+                                                                data-confirm="Are you sure you want to delete this quiz? All questions and attempts will also be deleted.">
+                                                            <i data-lucide="trash-2" style="width:14px;height:14px;margin-right:8px;"></i>Delete
                                                         </button>
                                                     </form>
                                                 </li>

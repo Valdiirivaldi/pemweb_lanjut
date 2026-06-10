@@ -25,9 +25,9 @@
                     <i data-lucide="graduation-cap" style="width:40px;height:40px;opacity:0.3;"></i>
                 </div>
                 <div>
-                    <h4 class="fw-bold mb-1" style="color: #fff;" id="greeting">Selamat, {{ $user->name }}!</h4>
+                    <h4 class="fw-bold mb-1" style="color: #fff;" id="greeting">Welcome, {{ $user->name }}!</h4>
                     <p class="mb-0" style="color: rgba(255,255,255,0.7); font-size: 0.9rem;" id="greetingMsg">
-                        Selamat datang di Dashboard Eduria.
+                        Welcome to Eduria Dashboard.
                     </p>
                 </div>
             </div>
@@ -55,11 +55,11 @@
 
             if (greetingEl) {
                 var name = @json($user->name);
-                var greet = 'Selamat ';
-                if (hour >= 3 && hour < 11) greet += 'Pagi';
-                else if (hour >= 11 && hour < 15) greet += 'Siang';
-                else if (hour >= 15 && hour < 18) greet += 'Sore';
-                else greet += 'Malam';
+                var greet = 'Good ';
+                if (hour >= 3 && hour < 11) greet += 'Morning';
+                else if (hour >= 11 && hour < 15) greet += 'Afternoon';
+                else if (hour >= 15 && hour < 18) greet += 'Evening';
+                else greet += 'Night';
                 greetingEl.textContent = greet + ', ' + name + '!';
             }
         });

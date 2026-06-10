@@ -33,7 +33,7 @@
     {{-- Stat Cards --}}
     <div class="row g-4 mb-4">
         <div class="col-md-4">
-            <div class="stat-card shadow-sm animate-on-scroll">
+            <div class="stat-card shadow-sm animate-on-scroll hover-lift">
                 <div class="d-flex align-items-center gap-3 mb-3">
                     <div class="stat-icon" style="background: linear-gradient(135deg, #4e73df, #224abe);">
                         <i data-lucide="book-open" style="width:16px;height:16px;"></i>

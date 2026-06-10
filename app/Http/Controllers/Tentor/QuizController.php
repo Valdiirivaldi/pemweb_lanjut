@@ -55,7 +55,7 @@ class QuizController extends Controller
         ]);
 
         $course = Course::findOrFail($request->course_id);
-        abort_if($course->tentor_id !== Auth::id(), 403, 'Anda tidak memiliki akses ke course ini.');
+        abort_if($course->tentor_id !== Auth::id(), 403, 'You do not have access to this course.');
 
         Quiz::create([
             'course_id'      => $request->course_id,
@@ -98,7 +98,7 @@ class QuizController extends Controller
         ]);
 
         $course = Course::findOrFail($request->course_id);
-        abort_if($course->tentor_id !== Auth::id(), 403, 'Anda tidak memiliki akses ke course ini.');
+        abort_if($course->tentor_id !== Auth::id(), 403, 'You do not have access to this course.');
 
         $quiz->update([
             'course_id'      => $request->course_id,

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -401,10 +401,10 @@
                         <i class="fas fa-star me-1"></i>                         ONLINE LEARNING #1 PLATFORM
                     </p>
                     <h1 class="hero-title">
-                        Ayo <span class="typed-text"></span>
+                        Let's <span class="typed-text"></span>
                     </h1>
                     <p class="hero-sub mt-3">
-                        Eduria adalah platform belajar bahasa Inggris with experienced tutors, complete materials, dan fun learning experience.
+                        Eduria is an English learning platform with experienced tutors, complete materials, and a fun learning experience.
                     </p>
                     <div class="d-flex flex-wrap gap-3 mt-4">
                         <a href="#keunggulan" class="btn btn-cta">
@@ -434,9 +434,9 @@
         <div class="container py-5">
             <div class="text-center mb-5" data-aos="fade-up">
                     <p class="text-primary fw-semibold mb-1">WHY CHOOSE US</p>
-                    <h2 class="section-title section-title-center">Kenapa Harus Eduria?</h2>
+                    <h2 class="section-title section-title-center">Why Eduria?</h2>
                     <p class="text-muted mx-auto" style="max-width: 540px;">
-                        We provide complete learning solutions untuk membantu kamu sukses.
+                        We provide complete learning solutions to help you succeed.
                     </p>
             </div>
             <div class="row g-4">
@@ -483,7 +483,7 @@
             <div class="row align-items-center g-5">
                 <div class="col-lg-6" data-aos="zoom-in" data-aos-duration="1000">
                     <img src="https://cdn-icons-png.flaticon.com/512/4228/4228690.png"
-                         alt="Tentang Eduria"
+                         alt="About Eduria"
                          class="img-fluid floating"
                          style="max-width: 420px; filter: drop-shadow(0 10px 40px rgba(78, 115, 223, 0.15));">
                 </div>
@@ -534,10 +534,10 @@
         <div class="container py-5 text-center position-relative" style="z-index: 2;">
             <div data-aos="flip-up" data-aos-duration="1000">
                 <p class="text-warning fw-semibold mb-1" style="letter-spacing: 2px;">READY TO SUCCEED?</p>
-                <h2 class="text-white fw-bold" style="font-size: 2.4rem;">Join Eduria Sekarang!</h2>
-                <p class="text-white-50 mx-auto mb-4" style="max-width: 540px;">
-                    Contact us via WhatsApp untuk info dan pendaftaran.
-                    Tim kami siap membantu you!
+<h2 class="text-white fw-bold" style="font-size: 2.4rem;">Join Eduria Now!</h2>
+                 <p class="text-white-50 mx-auto mb-4" style="max-width: 540px;">
+                     Contact us via WhatsApp for info and registration.
+                     Our team is ready to help you!
                 </p>
                 <a href="https://wa.me/628972551888" class="btn btn-wa" target="_blank">
                     <i class="fab fa-whatsapp fa-lg me-2"></i>Contact WhatsApp

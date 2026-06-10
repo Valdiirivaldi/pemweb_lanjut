@@ -12,19 +12,19 @@
 @section('content')
     <div class="content-card shadow-sm">
         <div class="card-header">
-            <span>Daftar Siswa yang Mengerjakan</span>
+            <span>Students Who Have Taken the Quiz</span>
         </div>
         <div class="card-body p-0">
             @if ($attempts->count() > 0)
                 <div class="table-responsive">
-                    <table class="table-admin mb-0" data-sortable>
+                    <table class="table-admin mb-0 animate-rows" data-sortable>
                         <thead>
                             <tr>
-                                <th data-sort="name">Nama Siswa</th>
-                                <th data-sort="score">Skor</th>
+                                <th data-sort="name">Student Name</th>
+                                <th data-sort="score">Score</th>
                                 <th data-sort="status">Status</th>
-                                <th data-sort="date">Tanggal</th>
-                                <th style="width: 60px;">Aksi</th>
+                                <th data-sort="date">Date</th>
+                                <th style="width: 60px;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -42,9 +42,9 @@
                                     </td>
                                     <td>
                                         @if ($passed)
-                                            <span class="badge bg-success">Lulus</span>
+                                            <span class="badge bg-success">Passed</span>
                                         @else
-                                            <span class="badge bg-danger">Gagal</span>
+                                            <span class="badge bg-danger">Failed</span>
                                         @endif
                                     </td>
                                     <td class="text-muted">{{ $attempt->created_at->format('d M Y H:i') }}</td>
@@ -57,7 +57,7 @@
                                                 <li>
                                                     <a href="{{ route('tentor.quizzes.attempts.show', [$quiz->id, $attempt->id]) }}"
                                                        class="dropdown-item py-2 rounded-2">
-                                                        <i data-lucide="search" style="width:14px;height:14px;margin-right:8px;color:#4e73df;"></i>Lihat Detail Jawaban
+                                                        <i data-lucide="search" style="width:14px;height:14px;margin-right:8px;color:#4e73df;"></i>View Answer Details
                                                     </a>
                                                 </li>
                                             </ul>
@@ -71,8 +71,8 @@
             @else
                 <div class="empty-state">
                     <div class="empty-state-icon-wrap"><i data-lucide="user-x"></i></div>
-                    <h6>Belum ada siswa yang mengerjakan</h6>
-                    <p>Quiz ini belum dikerjakan oleh siswa manapun.</p>
+<h6>No attempts yet</h6>
+                                    <p>This quiz has not been attempted by any student yet.</p>
                 </div>
             @endif
         </div>

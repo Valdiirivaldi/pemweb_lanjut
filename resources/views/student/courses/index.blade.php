@@ -470,7 +470,7 @@
                                value="{{ $search ?? '' }}"
                                autocomplete="off">
                         <div class="search-actions">
-                            <button type="button" class="btn btn-clear" id="clearSearch" title="Hapus">
+                            <button type="button" class="btn btn-clear" id="clearSearch" title="Clear">
                                 <i data-lucide="x" style="width:16px;height:16px;"></i>
                             </button>
                             <button type="submit" class="btn btn-search">

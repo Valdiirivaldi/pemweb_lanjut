@@ -133,7 +133,7 @@
                         </a>
                         <form action="{{ route('tentor.quizzes.questions.destroy', [$quiz->id, $question->id]) }}"
                               method="POST" class="d-inline"
-                               onsubmit="return confirmDelete(this, 'Hapus soal ini? Tindakan ini tidak dapat dibatalkan.');">
+                               onsubmit="return confirmDelete(this, 'Delete this question? This action cannot be undone.');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3">

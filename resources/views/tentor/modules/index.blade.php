@@ -11,7 +11,7 @@
         <div class="card-body p-0">
             @if ($modules->count() > 0)
                 <div class="table-responsive">
-                    <table class="table-admin mb-0" data-sortable>
+                    <table class="table-admin mb-0 animate-rows" data-sortable>
                         <thead>
                             <tr>
                                 <th data-sort="title">Module Title</th>

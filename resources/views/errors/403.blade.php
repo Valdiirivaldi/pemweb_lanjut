@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -69,9 +69,9 @@
     <div class="error-card">
         <div class="brand"><i class="fas fa-graduation-cap"></i>Eduria</div>
         <div class="error-code">403</div>
-        <div class="error-title">Akses Ditolak</div>
-        <div class="error-message">Anda tidak memiliki izin untuk mengakses halaman ini.</div>
-        <a href="{{ route('home') }}" class="btn-home"><i class="fas fa-home"></i>Kembali ke Beranda</a>
+        <div class="error-title">Access Denied</div>
+        <div class="error-message">You do not have permission to access this page.</div>
+        <a href="{{ route('home') }}" class="btn-home"><i class="fas fa-home"></i>Back to Home</a>
     </div>
 </body>
 </html>
